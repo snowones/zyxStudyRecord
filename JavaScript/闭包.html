@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		
+	<script type="text/javascript">
+		
+		
+		
+		//定义对象的方法
+		//1 直接通过new object定义
+		
+		var zyx = new Object();
+		zyx.name = 'zyx';
+		zyx.age = '18';
+		console.log(zyx.name);
+		
+		
+		//2通过function定义
+		//定义对象  对象内的函数和变量都要通过this绑定 
+		function people(){
+			this.peopleNum = 10;
+			this.live = function(){
+				this.peopleNum = this.peopleNum + 1;
+			}
+			this.die = function(){
+				this.peopleNum = this.peopleNum - 1;
+			}
+		}
+		
+		var num = new people();
+		console.log(num);
+		console.log(num.peopleNum);
+		num.die();
+		num.die();
+		num.die();
+		console.log(num.peopleNum);
+		
+		//一个闭包  重点在于函数返回一个函数
+		function mySelf(){
+			let counter = 0 ;
+			const myFunction = function(){
+				//在这个函数中调用counter  这个counter和这个函数作用域合在一起形成了一个闭包
+				counter = counter +1;
+				return counter;
+			}
+			return myFunction;  //返回这个函数
+		}
+		
+		const zyxCreater = mySelf();//执行
+		var a1 = zyxCreater();
+		var a2 = zyxCreater();
+		var a3 = zyxCreater();
+		console.log(a1,a2,a3);//1，2，3
+		//说明闭包会储存函数创建时作用域中的所有变量 
+		//也因此当mySelf函数执行过后，内部定义的counter变量没有被垃圾回收机制处理掉
+		
+		
+		//实际开始遇见的问题
+//		   var nodes = document.getElementsByTagName('div');
+//		    var len = nodes.length;
+//		    for (var i = 0; i < len; i++) {
+//		        nodes[i].onclick = function () {
+//		            alert(i);
+//		        }
+         //最后其实每个i的值都一样
+         
+         //这时可以给绑定click方法封装一个闭包 就可以了
+         
+         // 重点 怎么去清理闭包 释放变量
+//			把用到闭包的这个函数的变量或是方法做一个内存的重新指向  
+//			直接把这个变量或是方法=null  就清理了闭包
+    
+		
+		
+	</script>
+	</body>
+</html>

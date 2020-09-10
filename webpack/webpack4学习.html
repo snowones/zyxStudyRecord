@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			1 webpack 是什么
+			webpack可以看做一个模块打包机，他做的事情事分析我们的项目结构，找到我们的JavaScript模块以及一些浏览器不能直接
+			，运行的扩展语言如（Scss、Less、TypeScript等），并将其打包成为合适的格式以供浏览器使用。
+			
+			它能做什么:
+			1 代码的转化(如es6转成es5)  2文件优化(如代码压缩)	3代码分割(如开发多页面应用时，公共模块的抽离) 4模块合并
+			5自动刷新(就是热部署，不用每次改完代码都打包一次)	6代码校验 	7自动发布(可以自己配置打包完成自动发布到服务器上)
+		-->
+		<!--
+			2webpack核心模块 path
+			path 是webpack的内置模块  不需要单独下载 直接引入就行
+			let path = require('path');
+			module.exports = {
+				mode:'development'，//默认production模式下代码是压缩的 我们可以设置为开发模式 更发方便看我们打包后的代码
+				entry:'',//入口文件位置
+				output:{//出口
+					filename:'main.js',//打包后的文件名称
+					path:path.resolve(__dirname,'dist'),//打包后的文件路径  这里我们就需要引入wepack的path模块  因为这个要求文件的绝对路径我们需要一个工具把路径进行解析
+					//path:path.resolve('dist')  意思就是以当前目录 解析除一个dist目录 可以直接console.log(path.resolve('dist'));
+					//正常配置时我们经常加一个(__dirname,'dist') __dirname的意思就是以当前目录 加不加都行
+				}
+			}
+		-->
+		<!--
+			3webpack-dev-server 
+			正常情况下我们都是通过webpack-dev-server来启动项目的而不是去build 去真正的打包
+			如果靠打包去启动服务调试 我们每次改代码都需要打包一次 然后双击index.html来打开网页查看
+			webpack-dev-server 是干什么的
+			它并不会去真实的打包一个文件 而是生成一个我们所谓的内存中的打包
+			
+			我们一般会去page.json里配置 "dev":"webpack-dev-server"
+			
+			
+		-->
+		<!--
+			4HtmlWebpackPlugin
+				注意一点  我们打包好的文件比如main.js 是需要我们建一个index.html来引入main.js然后再打开index.html
+				
+				首先我们配置下wepack的开发启动
+				webpack启动配置：
+				webpack.config.js
+				module.exports = {
+					//省略其他配置
+					devServer:{//开发服务器配置
+						port:3000,//端口号
+						open:true,//一帮我们都设计这个 打包后自动打开网页 否则打包完我们需要手动打开浏览器然后输入地址
+						progress:true,//在内存中打包时如果我们想要看到进度条
+						contentBase:'./build' ,//不配置这个的话我们打开localhost:3000打开的是整个项目的根目录
+						compress:true,//打包后的文件压缩
+					}
+				}
+				这样我们启动完 输入localhost:3000会打开我们根目录下的build文件 
+				但是此时我们根目录下没有index.html  这时我们就需要HtmlWebpackPlugin来帮我们再build目录下映射一个index.html
+				
+				let HtmlWebpackPlugin = require('html-wepack-plugin')//引入插件
+				module.exports = {
+					//省略其他配置
+					plugins:[//数组，放置所有webpack插件
+						new HtmlWebpackPlugin({//插件是一个类 我们可以直接new它
+							template:'./src/index.html',//模板 这个插件为了在build下建立一个index.html 它需要一个模板 一般都是src下的index.html
+							filename:'index.html',//模板被打包出来后的名字
+							minfy:{//在production环境下我们main.js的代码会被压缩 同时我们可以在这里配置 让index.html也被压缩
+								removeAttributeQuptes:true,//去掉属性上的双引号
+								collapseWhitespace:true，//折叠空号 代码压缩成一行
+							}
+							hash:true// 给引入的文件加入hash戳 防止缓存文件导致文件没更新  比如引入main.js 就自动改为了 main.js?xxxxxxxxxx
+							//output也可以这么设置
+							output:{//出口
+								filename:'main.[hash].js',//打包后的文件名称
+								//这样每次打包都会新生成一个不同的main.js
+							}
+						})
+					]
+				}
+				
+				这时我们配完后 打开localhost:3000就直接进入了build下的index.html了
+				
+				
+				
+		-->
+		<!--
+			5 简单的处理样式 css-loader、style-loader、less-loader、sass-loader
+				1为什么不能在模板文件中引入css  因为模板文件会原封不动打包到build文件内  而css文件是无法打包到build文件中的 所以我们应该把css当作一个模块引入
+				2我们如何把css当作一个模块引入
+				webpack默认css不是一个可以解析的模块 这时我们需要一个合适loader来解析我们的css
+					1 css-loader 这个是主要为了解析css文件中的@import语法，（css文件引css文件）
+					2 style-loader 上面那个loader处理完后使用 把css文件插入到head中 也就是为了引入css文件到html文件
+					3 less-loader 把less语法解析成css语法
+					4 sass-loader
+					也就是以style{
+						
+					}的方式插入到我们build下的index.html中
+					为什么要这么多loader处理同一类文件 因为loader的设计理念是 希望单一 一个loader只处理一个事情
+				module.exports = {
+					//省略其他配置
+					module:{//模块
+						rules:[//规则
+							{test:/\.css$/,use:[style-loader,css-loader]},//所有以.css结尾的文件使用以下loader 注意loader的使用是有顺序的 从右到左  从下到上 
+							//我们需要先用css-loader 处理完css文件再用style-loader把css插入html里
+							{test:/\.less$/,use:[style-loader,css-loader,less-loader]} 解析less和上面不同的就是我们需要先把less解析成css然后再进行一边刚才的
+							同理还有处理scss
+							loader的写法 可以直接use:"" 或是use:[,,] 
+							或是use:[ //对象的写法可以给loader里加一些参数
+								{
+									loader:'style-loader',
+									option:{
+										insertAt:'top',
+										//就是插入到哪个位置 我们其实可以在index.html模板文件中直接写入style 
+										style{
+											插入后的
+										}
+										style{
+											我们直接在模板文件里写的
+										}
+										//只有我们把style-loader插入的css放到上面 我们直接写的css才可能不被覆盖掉 正常我们肯定是插入到下面
+									}
+								},
+								"style-loader"
+							]
+						]
+					}
+				}
+			 
+		-->
+		<!--
+			6 其他处理样式 mini-css-extract-plugin   autoprefixer插件和postcss-loader  optimize-css-assets-webpack-plugin和uglifyjs-webpack-plugin
+				注意插件的使用是没有先后顺序的
+				
+				1 mini-css-extract-plugin:我们正常插入css是以style的方式插入的 通过这个插件可以帮助我们打包时生成一个css文件 然后以link的方式引入index.html
+				let MiniCssExtractPlugin = require('mini-css-extract-plugin');
+				module.exports = {
+					plugins:[
+						new MinCssExtractPlugin({
+							filename:'main.css',//link引入的css文件的名称
+						})
+					]
+				}
+				引入这个插件后是通过loader的方式使用这个插件的
+				比如我们想把上面的less文件以main.css的方式引入就可以
+				{test:/\.less$/,use:[MinCssExtractPlugin.loader,css-loader,less-loader]}
+				
+				2  autoprefixer插件和postcss-loader
+				postcss-loader可以帮助我们给样式增加浏览器前缀 比如-webkit-xx 
+				比如上面处理less 我们就可以将less转化后 给他添加前缀再去做其他的
+				{test:/\.less$/,use:[MinCssExtractPlugin.loader,css-loader,postcss-loader,less-loader]}
+				
+				但是使用这个loader我们需要单独下载一个插件 叫autoprefixer并对他进行单独配置
+				建一个postcss.config.js
+				module.exports = {
+					plugins:[
+						require('autoprefixer')
+					]
+				}
+				然后运行就会自动给我们的样式加入浏览器前缀了
+				
+				3 
+					这俩 时webpack4时需要用的 webpack5.0在生成环境下可以自动压缩css了
+					1 optimize-css-assets-webpack-plugin 插件 压缩css文件 也就是我们通过mini-css-extract-plugin打包生成的css文件
+					2 uglifyjs-webpack-plugin 压缩js 文件 正常情况我们不需要这个 但是使用上面哪个插件后 我们就需要使用这个插件来压缩js
+					
+				let optimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
+				//这个插件我们不再plugin里使用 我们再optimization优化项里使用
+				let ugligfyjsWebpackPlugin = require('uglifyjs-webpack-plugin')
+				module.exports = {
+					optimization:{
+						minimizer:[
+							{
+								new optimizeCssAssetsWebpackPlugin({
+									
+								})//这样写完运行我们的css文件 就会被压缩  但是此时我们的js的压缩就自动取消了 我们需要重新配置下js 的压缩
+								//这是webpack官方对optimize-css-assets-webpack-plugin这个插件的解释  可以直接复制它的代码压缩js就行
+								//使用 uglifyjs-webpack-plugin
+								new ugligfyjsWebpackPlugin({
+									//参数直接复制的官网的
+									cache:true,//是否是缓存
+									parallel:true,//是否并发打包
+									sourceMap:true,//是否源码映射
+								})
+								
+							}
+						]
+					}
+				}
+				
+		-->
+		<!--
+			7 babel
+			1 babel-loader 2 @babel/core(babel的核心模块 帮助我们转换源代码) 3 @babel/preset-env(具体转换方法 这个包是把es6转换为es6)
+			module.exports = {
+				mode:'production',
+				entry:'index.js',
+				output:'main.js',
+				module:{
+					rules:[
+						{
+							test:/\.js$/,
+							use:[
+								{
+									loader:'babel-loader',
+									options:{
+										preset:[//预设
+											'@babel/preset-env',
+										],
+										plugins:[
+											//还可以配置很多其他的小插件  有些特殊的语法如装饰符@xxx 需要但需下载插件去解析
+										]
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+			
+		-->
+		<!--
+			8 eslint(帮助我们校验js语法是否符合规范)    eslint-loader
+				安装这个跟less、scss很像 需要先安装eslint的包 然后安装eslint-loader的包
+				
+				module.exports = {
+					mudules:{
+						rules:[
+							{
+								test:/\.js$/,
+								use:{
+									loader:"eslint-loader",
+									options:{
+										enforce:'pre' //post  这个属性有两个值 pre和post 意思为这个loader在最前执行还是最后执行
+										//正常loader是 从左到右从上到下执行 不写在一起 方便修改 不想校验了直接把这个loader注释掉就行
+									}
+								}
+							}
+						]
+					}
+				}
+		-->
+		<!--
+			9  变量的全局引入(比如jquery 如果$不全局引入的话 每个模块写代码时我们都需要require jquery)
+				第一种方法 把$暴露给你windows对象 
+				expose-loader
+				module:{
+					rules:[
+						{
+							test:require.resolve('jquery'),
+							use:'expose-loader?$'   //这样就把$暴露给你windows对象 
+						}
+					]
+				}
+				
+				第二种方法 给每个模块注入$对象
+				webpack.providePlugin 插件 
+				
+				let  webpack = require('webpack')
+				
+				plugins:[
+					new webpack.providePlugin:{ //提供插件
+						$:'jquery',//把jquery提供成一个$符号
+					}
+				]
+				
+				第三种方式在模板文件中直接通过script标签引入 jquery的 cdn文件 因为模板index.html会原封不动打包到dist下
+				
+			
+		-->
+		<!--
+			10 图片处理  file-loader和url-loader(二者做的事一样,但是处理方式不同) html-withimg-loader(中国人写的)
+				1 在js中使用图片 可以通过import img from './img.png' 把图片通过模块的方式导入 然后这是我们就需要file-loader 处理.png的格式
+				file-loader 会默认在内部生成一张图片 到build目录下 把生成的图片名字返回回来
+				url-loader 是帮我们直接把图片资源处理成base64的形式
+				//我们可以直接使用file-loader或是url-loader 也可以进行限制 在图片小于多少k时使用url-loader把图片转为base64 其他时候使用file-loader
+				module:{
+					rules:[
+						{
+							test:\/.(png|jpg|gif)$\,
+							use:"file-loader"
+						},
+						{
+							test:\/.(png|jpg|gif)$\,
+							use:[
+								{
+									loader:url-loader,
+									option:{
+										limit:200*1024
+									}
+								}
+							]
+						}
+					]
+				}
+				
+				2 在css中使用图片的话 css-loader 会自动帮我们进行转化 
+				比如background:url("./xx.png")  会自动转为background:url(require('./xx.png'))
+				然后file-loader就会生效
+				
+				3 在模板index.html中直接引入img
+				这时我们可以使用html-withimg-loader 一个中国人写的 帮助我们解析html里的图片文件其效果跟file-loader是一样的
+		-->
+		<!--
+			11 资源分类 比如图片放在一个目录下、css放在一个目录下
+				这个在loader 下的option里配置
+				比如图片
+				{
+					test:\/.(png|jpg|gif)$\,
+					use:[
+						{
+							loader:url-loader,
+							option:{
+								limit:200*1024,
+								outputPath:'img/' //这样打包好的文件就会在dist/img目录下
+							}
+						}
+					]
+				}
+				
+				还有就是在引入的资源前统一加一个路径 比如 './img/xx.png' 变成'http://www.xxxx.xx/index/img/xx.png'
+				
+				在全局的output里设置 如果单独设置图片 也可以在处理图片的loader option里单独设置publicPath
+				module.exports = {
+					mode:'',
+					entry:'',
+					output:{
+						filename:'',
+						path:'',
+						publicPath:'http://www.xxx.xxx'
+					}
+				}
+		-->
+		<!--
+			12 打包多页面应用
+				打包多页面应用就需要有多入口和多出口
+				还有就是配置html-webpack-plugin(通过模板文件.html 打包文件)
+				let htmlWebpackPlugin = require('html-webpack-plugin');
+				module.export = {
+					mode:'development',
+					entry:{
+						home:'./src/home.html',
+						other:'./src/other.html'
+					} ,
+					output: {
+						//[name] 代表home或是other  
+						filename:'[name].js',
+						path:path.resolve(__dirname,'dist')
+					},
+					plugins:[
+						new htmlWebpackPlugin({
+							templete:'.index.html',//这两个文件 都用index.html 作为引入模板
+							filename:'home.html'//这里不能使用[name].html 但是我们可以new两次这个插件
+							chunks:['home'],//代码块 只引入home.js 不设置这个一个index.html会引入两个script 一个home一个other
+						}),
+						new htmlWebpackPlugin({
+							templete:'.index.html',//这两个文件 都用index.html 作为引入模板
+							filename:'other.html'//这里不能使用[name].html 但是我们可以new两次这个插件
+							chunks:['other'],//代码块 只引入home.js 不设置这个一个index.html会引入两个script 一个home一个other
+							//也可chunks:['other','home']
+						}),
+					]
+				}
+		-->
+		<!--
+			13 配置source-map(源码映射) 
+			因为我们正常打包运行的代码会就行压缩 如果我们代码出错了 在控制台里我们查看错误只能看到那一行压缩的代码出错无法调试
+			这时我们可以配置source-map 帮助我们进行调试
+			三种source-map
+			1 devtool:'source-map'  增加映射文件(新增一个文件 xxx.js.map) 也就是我们查看错误 直接查看到对象的映射文件上 然后显示第几行第几列的具体报错
+			2 devtool:'eval-source-map'  不会产生映射文件 但是会显示行和列
+			3 devtool:'cleap-module-source-map'  会产生映射文件 但是不会显示列 只显示哪一行出错
+			4 devtool:'cleap-module-eval-source-map'  不会产生映射文件 不会显示列 只显示哪一行出错
+		-->
+		<!--
+			webpack  watch 热部署(也就是每次改完代码直接保存 就能打包好文件)
+			直接配置里加一个
+			watch:true
+			还可以添加一些配置 比如防抖
+		-->
+		<!--
+			14 三个小插件的用法
+				cleanWebpackPlugin copyWebpackPlugin bannerWebpackPlugin(内置的)
+				
+				1 cleanWebpackPlugin
+					帮助我们清空目录 正常我们打包后的文件是覆盖dist目录的 如果我们把默认出口文件从main.js改为index.js
+					下次打包后dist目录下就会有一个main.js 和 index.js 俩文件 
+					这时我们可以使用cleanWebpackPlugin清空dist目录 
+				
+				2 copyWebpackPlugin
+					打包时帮我们把一些文件复制又指定的位置  比如我们建一个doc目录放文档 我们想打包时把它也放到dist目录下我们就可以用这个
+				3 bannerWebpackPlugin(版权声明插件)
+					就是在代码前注释这时xxx xxx时间写的 
+					注意 他是webpack内置的插件 我们需要先引入webpack
+				let cleanWebpackPlugin = require('clean-webpack-plugin');
+				let copeWebpackPlugin = require('copy-webpack-plugin');
+				let webpack = require('webpack');
+				module.exports = {
+					plugins:[
+						new cleanWebpackPlugin('./dist'),//直接传一个路径
+						new copyWebpackPlugin([
+							{from:'doc',to:'./dist'},//从doc目录下复制到dist目录下 
+							{},
+							{}
+						]),
+						new webpack.BannerPlugin('zyx 2020');
+					]
+				}
+				
+		-->
+		<!--
+			15 webpack跨域
+				webpack自带的express框架
+				我们需要建立一个service.js 通过express启动后端服务
+				首先我们这里跨域的原因是因为端口号不同  前端服务启动在8080端口 后端服务启动在3000端口上
+				
+					第一步
+						首先我们创建一个index.js 手写出来ajax
+						index.js
+						let xhr = new XMLHttpRequest();
+						
+						xhr.open('GET','./api/user',true);//设置请求  true是指是否异步   这样写其实默认访问的时localhost:8080/api/user 但我们的服务器启动的是3000端口
+						
+						xhr.onload  = function(){  //请求成功时打印结果
+							console.log(xhr.resquest);
+						}
+						
+						xhr.send();//发送请求
+					第二步
+						配置服务
+						sevice.js	
+						let express = require('express');
+						let app = express();
+						
+						app.get('/api/user',(req,res)=>{ //写一个接口  当我们访问localhost:3000/api/user时返回name:'zyx'
+							res.json({name:'zyx'})
+						})
+				
+						app.listen(3000);//监听3000端口
+					
+					第三步 
+					
+					第一种方式配置代理
+						http-proxy
+						webpack配置代理 帮助我们把请求转发到3000端口
+						webpack.config.js
+						
+						module.exports = {
+							//省略
+							//配置服务
+							devService:{
+								proxy:{
+									'/api':'http://localhost:3000' //配置代理
+								}
+							}
+						}
+					第二种方式 我们通过devService的钩子函数  //但是这种就不属于服务端做的了  属于前端自己模拟了数据
+						module.exports = {
+							//省略
+							//配置服务
+							devService:{
+								before(app){  //app等于service里的 let app = express();的app
+									app.get('/api/user',(req,res)=>{ 
+										res.json({name:'zyx'})
+									})//这样等于实在devService里开放了一个接口 也就是在8080端口
+								},
+							}
+						}
+					
+					第三种 我们把node服务和webpack开放在同一个端口下  也就是在node里开启webpack服务
+					在service.js启动webpack
+					let express = require('express');
+					let app  = express();
+					//引入webpack
+					let webpack = require('webpack');
+					//然后我们需要一个中间件
+					let middle = require('webpack-dev-middleware');//这个中间件帮助我们在服务端启动webpack
+					
+					let config = require('./webpack.config.js');//拿到webpack配置对象
+					
+					let compiler = webpack(config); //compiler的意思是编译程序 编译后的结果
+					
+					app.use(middle(compiler));
+					
+					app.get('/user',(req,res)=>{
+						res.json({name:'zyx'})
+					})
+					
+					app.listen(3000);
+					
+					//这时我们启动node服务 直接就帮助我们启动了一个webpack 
+					//启动 node service.js
+		-->
+		<!--
+			16 resolve 
+				1 解析模块时指定node_module位置  正常情况下我们会去当前目录下寻找node_moudule 如果没有找到我们要的模块就会去上一级目录寻找 这里可以直接指定
+				2 起别名 比如我们想引入bootstrap的css 就需要import from 'bootstrap/dist/css/bootstrap.css' 这时我们就可以起别名
+				3 配置后缀  我们引入文件经常时 import from './index' 而省略了.js 或是.css 这就是因为我们配置了后缀
+					module.exports = {
+						//省略
+						resolve：{
+							modules:[path.resolve('node_modules')],//指定modules位置  
+							mainField:['style','main'],//寻找文件的入口顺序
+							//page.json内 有模块的入口文件的地址 分为 style:'xxx' main:'xxxx' 
+							//这样我们引入比如bootstrap就会先去找style那个路径的文件 也就是.css文件 否则就会直接去找main下的js文件
+							alias:{//别名
+								bootstrap:'bootstrap/dist/css/bootstrap.css',
+							},
+							extensions:['js','css','json'],//我们这样配置后缀的意思就是 先会去找目录下的.js文件 如果找不到就去找.css文件 再找不到就去找.json文件
+							
+						}
+					}
+		-->
+		<!--
+			17 自定义环境变量 definePlugin(webpack 内置插件)
+				比如我们常遇见了一个情况
+				let url = '';
+				if(DEV){   //DEV就是环境变量 判断当前是开发环境还是上线环境
+					url = 'localhost:8080/xx'  //当我们开发的时候我们请求这个地址
+				}else{
+					url = 'https://www.madong.cn/xx' //当我们上线时我们时这个地址
+				}
+				
+				我们可以通过 webpack.definePlugin 来定义这个变量
+					
+					module.exports = {
+						plugins:[
+							new wepack.DefinePlugin({
+								DEV:"'dev'",这里我们传入的是'dev'  通常我们不这么写 我们可以 JSON.String('dev');
+							})
+						]
+					}
+		-->
+		<!--
+			18 将webpack.config.js 拆分成不同的文件 
+				比如我们拆分成 webpack.base.js webpack.dev.js webpack.pro.js  
+				第一个文件配置基础配置 dev配置开发环境下的特殊配置 pro配置生成环境下的特殊配置
+				如何链接 通过webpack-merge 这个包 （可以使用他的smart方法）
+				let {smart} require('webpack-merge')
+				//先把 base 引入  加入这个是webpack.dev.js 就可以在这里吧 base和dev结合起来
+				let base =require(./webpack.base.js)
+				//结合
+				module.export = smart(base,{
+						mode:'production',
+						devServer:{
+							
+						},
+						devtool:'source-map',//示例 比如现在这个文件是配开发环境，我们就可以单独配置上源码映射 而生存环境就不需要
+				})
+		-->
+		<!--
+			19webpack优化手段
+			
+			1.noParse 
+				让webpack不去解析某个包 正常情况下webpack会进去每个模块去解析他时候还有依赖项然后继续去解析
+				但是，比如我们引入的Jquery，它本身就是我们引入的一个包，并不需要依赖任何文件，所以webpack没
+				有必要去解析它
+				module.export = {
+					mode:'',
+					entry:'',
+					module:{
+						noParse:/jquery/,//不去解析jquery的依赖库
+					}
+				}
+			2.exclude排除、include包含
+				比如我们配置rules时
+				{
+					test:/\.js$/,  //这时我们就会去去解析全部.js文件，并且他是全部文件夹都解析，比如node_modules这种完全没必要的
+					exclude:/node_module/,//第一种方式 我们配置排除node_module这个文件
+					include:path.resolve('src'),//第二种方式 我们配置只检查src目录
+				}
+			3.webpak.IgnorePlugin 打包时忽略一些文件
+				有时我们使用一个包，只是使用其中很少的功能，那个包所引入的一些大文件我们完全没有用到，就可以去忽略掉
+				new webpack.IgnorePlugin(/\.\/locale/,/momentt/)
+				忽略moment包所引入的locale文件（这个文件是语言包，引入了全部的语言，我们可以只引入中文）
+			4.动态链接库（重点）
+				动态链接库有什么用:我们每次npm start启动时都很慢 每次都把全部的东西重新打包一遍然后运行
+				通过动态链接库 我们可以提前把像react、react-dom等等提前打包好，每次npm start时直接引入，
+				整个运行速度就会大大提高
+		-->
+		<!--
+			20 webpcak自带的优化
+				
+		-->
+		<!--
+			21多线程打包（第三方模块happypack）
+			需要注意 并不是多线程打包就一定会快 在小型项目种使用多线程打包速度反而有可能变慢
+			只有大型项目才需要配置这个
+			module:{
+				rules:[
+					{
+						//css文件全部使用多线程打包
+						test:/\.css$/,
+						use:'Happypack/loader?id=css'
+					},
+					{
+						test:/\.js$/,
+						exclude:/node_modules/,
+						include:path.resolve('src'),
+						use:'Happypack/loader?id=js'
+					}
+				]
+			},
+			plugins:[
+				//设置多线程打包css
+				new Happypack({
+					is:'css',
+					use:['style-loader','css-loader']
+				}),
+				//设置多线程打包js
+				new Happypack({
+					id:'js',
+					use:[{
+						loader:'babel-loader',
+						options:[
+							presets:[
+								'@babel/preset-env',
+								'@babel/preset-react'
+							]
+						]
+					}]
+				})
+			]
+		-->
+		<!--
+			1.安装什么 后面加 -D表示 development 开发依赖  上线发布时不需要下载这个依赖
+			2.webpack不配置mode的话默认为 production（生产环境）
+			3.不配置出口文件的话 默认为dist目录下的main.js为出口文件
+			4.默认配置文件的名字叫 webpack.config.js
+				这个默认配置文件名是可以换的 
+				1 可以 npx webpack --config  webpack.config.my.js这样配置文件名我们就应该起为 webpack.config.my.js
+				2 同理我们可以配置这个脚本 在page.json里配置
+				"script":{
+					"build":"wepack --config webpack.config.my.js"  //然后直接npm run build =  npx webpack --config  webpack.config.my.js
+					//如果想要在npm run build后面继续穿参数 我们不能 npm run build --xxxx 这样webpack认为这不是一个参数会报错
+					应该 npm run build -- --xxxx
+				}
+			5.webpack时node写出来的，我们需要采用node语法来写webpack的配置
+		-->
+		
+	</body>
+</html>

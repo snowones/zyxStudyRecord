@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			一句话解释state和props的区别
+			state是组件内部维护的一组用于反映组件ui变化的状态集合 是可变的
+			props一般存在于子组件 通过父组件的state变化传递给子组件作业propss来更新视图
+		
+		
+		
+			state使用细节  
+			1 state必须是一个对象
+			2 this.setState方法一般情况是异步的  注意<一般情况下>
+			特殊 在一些异步函数中 (定时器，ajax,Promise)中setState是同步的
+			3 非受控组件
+			例如input option radio  他们的状态是不受react控制的  而是控件本身具有的  我们把这样的组件称为非受控组件
+			非受控->受控组件的转化
+			3.1把状态绑定到非受控组件的value、checked上
+			3.2监听该组件的onChange事件  用e.target 获取input上面的数据 然后通过setState设置数据给state内的数据
+			4 state是一个组件私有的。组件可以管理自身的state但是不能管理子组件的state
+		
+			
+			
+			什么时候可以定义一个state或者说是一个变量可否可以作为一个state
+			state不能定义过多，因为如果使用了state就会给这个变量增加一些响应式挂载
+			
+			1 如果这个变量是通过props从父组件获取 他就不是一个状态
+			2 如果这个变量可以通过其他状态state或是属性props 通过数据处理得到 那么他不是一个状态
+			3 如果变量在render中没有使用到  那么他就不是一个状态
+			4 如果变量在整个生命周期中都保持不变 那么他不是一个状态
+			
+			
+			props使用
+			1children 
+			被一个组件包含的内容，在组件内部可以通过props.children  来获取this.props.children
+			
+			
+			
+			生命周期
+			1 componentWillReceiveProps(nextProps)
+				父组件的更新会触发子组件的这个函数
+				nextProps  父组件更新带来的数据
+			2 shouldComponentUpdata(nextProps,nextState)
+				是否需要渲染
+				Return false/true
+				
+				
+			refs
+			1给元素添加一个ref属性，并且指定名称，通过this.refs名称，即可拿到对象
+			如果是原生DOM，获取的就是DOM
+			如果是组件，获取的就是组件
+			
+			
+			虚拟DOM
+			1 虚拟DOM是一个真实DOM的JS对象  当react要render是  会生成一个对象数 新旧对象树进行对比 进行有条件的更新
+			2 key diff只会同时比较两个原宿  某些时候会让一些不必要修改的原宿重新修改，但是你可以使用key来声明某个稳定的组件
+		-->
+	</body>
+</html>

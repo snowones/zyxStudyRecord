@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+        		1 背景颜色
+        		2 渐变色背景
+        		3 多背景叠加
+        		4 背景图片和属性        
+        		以下性能问题
+        		4.5（雪碧图 ）是指把多个图片放在一个图片上
+        		5 base64和性能优化
+        		6 多分辨率适配
+        -->
+        <!--
+        	hsl(色相,饱和度,亮度)、
+        	hsla(色相,饱和度,亮度，透明度)
+        	rgba(,,,透明度) 
+        	
+        	linear-gardient()渐变色
+ 				
+ 			多背景 backgroud:背景1,背景2;		
+ 			背景色和背景图叠加不需要逗号  多背景 backgroud:背景色  背景图;
+ 			
+ 			background-repeat:平铺方式;
+ 			background-position:背景图位置;
+ 			background-size:背景图大小;		缩小背景
+ 			
+ 			
+ 			雪碧图: 1设置大小  background-size 然后设置显示的图片的哪个位置 background-position
+ 			background-postion:偏移做标; 其实跟你图片里哪个图标的位置坐标刚好是相反的
+ 			2 如何缩小雪碧图大小    让background-size和background-postion同比例缩小
+ 			
+ 			使用base64优化性能
+ 			base是文本格式  图片可以转成base64格式 转成一段文本   
+ 			这样转过后 文件体积会变大 1图片体积变大成原来的4/3 2css文件也会有所增大 
+ 			所以一般适合一些小的图标
+ 			这样的好处是  会减少http请求次数  优化了传输
+ 			但是同时也会增加 解码的时间  所以不应该过多的用这种方式
+ 			而且维护起来也很麻烦  因为维护时不知道这个图片是什么
+ 			所以使用方式一般是工程化的方式  还正常形式写 但是打包时自动转化成base64格式
+ 			
+ 			
+ 			
+ 			
+ 			
+ 			
+ 			
+        -->
+	</body>
+</html>

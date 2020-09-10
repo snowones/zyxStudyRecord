@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			Redux是React的一个状态管理仓库，为了解决React组件通信和组件间状态共享
+			
+        	react 是单向数据流
+        	也就是 props 只能从父组件一层一层向子组件传递
+        	
+        	而当数据流动复杂时  也就时子组件的状态改变会影响父组件的改变 而父组件改变又会引起其他子组件改变
+        	这时由于 props的单向传递
+        	就需要父组件将需要改变的状态 和能够改变这个状态的函数 用props 一层一层传递下去
+        	然后子组件一改变 一直逐层调用回调函数 完成各个组件的更新
+        	
+        	在这种情况下  就需要使用redux
+        	redux 只能使用dispatch来完成组件的更新
+        	当子组件状态改变时 dispatch监控 然后传到reducer reducer判断是哪钟状态改变 
+        	然后直接去改变store(状态库)里的数据  然后store直接将数据分发到需要改变的组件中
+        	省去了反复回调的麻烦
+        	
+        	面试题 介绍redux
+        	官方的解释是 redux 是javascript的状态容器
+        	我的理解是 redux是为了解决react组件间的通信和组件间的状态共享而提出的一种解决方案  它包括 store+action+reducer
+        	
+        	1 store 用来存储react状态机 （state）的对象 跟组件connect后 store 的改变就会驱动 组件的更新
+        	
+        	2 action 用于接收state的改变命令  是改变state的唯一途径和入口
+        	
+        	3 reducer 是action的处理器 1监控是action的哪种type变化    用于修改store中的state值 返回一个新的state
+        	
+        	1组件间的通信
+        	由于connect后 各个connect组件共享store  
+        	所以各个组件可以通过store来进行数据通信
+        	规则 view由dispatch引起改变 然后 去触发reducer改变 store 然后引起组件的更新
+        	
+        	2通过对象驱动组件进入生命周期
+        	对于一个react组件来说 只能对自己的state改变驱动自己的生命周期
+        	或是通过外部传入props进行驱动
+        	而通过redux可以通过store来改变state 来驱动组件更新
+    
+        	3方便进行数据管理和切片
+        	redux通过对store的管理和控制，可以很方便的实现页面状态的管理和切片
+        	
+        	
+        	redux 三大原则
+			1单一数据源
+			2状态是只读的
+			3状态得修改均有纯函数完成
+        	
+        	
+        	
+     -->
+	</body>
+</html>

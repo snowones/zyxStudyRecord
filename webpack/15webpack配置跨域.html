@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			15 webpack跨域
+				webpack自带的express框架
+				我们需要建立一个service.js 通过express启动后端服务
+				首先我们这里跨域的原因是因为端口号不同  前端服务启动在8080端口 后端服务启动在3000端口上
+				
+					第一步
+						首先我们创建一个index.js 手写出来ajax
+						index.js
+						let xhr = new XMLHttpRequest();
+						
+						xhr.open('GET','./api/user',true);//设置请求  true是指是否异步   这样写其实默认访问的时localhost:8080/api/user 但我们的服务器启动的是3000端口
+						
+						xhr.onload  = function(){  //请求成功时打印结果
+							console.log(xhr.resquest);
+						}
+						
+						xhr.send();//发送请求
+					第二步
+						配置服务
+						sevice.js	
+						let express = require('express');
+						let app = express();
+						
+						app.get('/api/user',(req,res)=>{ //写一个接口  当我们访问localhost:3000/api/user时返回name:'zyx'
+							res.json({name:'zyx'})
+						})
+				
+						app.listen(3000);//监听3000端口
+					
+					第三步 
+					
+					第一种方式配置代理
+						http-proxy
+						webpack配置代理 帮助我们把请求转发到3000端口
+						webpack.config.js
+						
+						module.exports = {
+							//省略
+							//配置服务
+							devService:{
+								proxy:{
+									'/api':'http://localhost:3000' //配置代理
+								}
+							}
+						}
+					第二种方式 我们通过devService的钩子函数  //但是这种就不属于服务端做的了  属于前端自己模拟了数据
+						module.exports = {
+							//省略
+							//配置服务
+							devService:{
+								before(app){  //app等于service里的 let app = express();的app
+									app.get('/api/user',(req,res)=>{ 
+										res.json({name:'zyx'})
+									})//这样等于实在devService里开放了一个接口 也就是在8080端口
+								},
+							}
+						}
+					
+					第三种 我们把node服务和webpack开放在同一个端口下  也就是在node里开启webpack服务
+					在service.js启动webpack
+					let express = require('express');
+					let app  = express();
+					//引入webpack
+					let webpack = require('webpack');
+					//然后我们需要一个中间件
+					let middle = require('webpack-dev-middleware');//这个中间件帮助我们在服务端启动webpack
+					
+					let config = require('./webpack.config.js');//拿到webpack配置对象
+					
+					let compiler = webpack(config); //compiler的意思是编译程序 编译后的结果
+					
+					app.use(middle(compiler));
+					
+					app.get('/user',(req,res)=>{
+						res.json({name:'zyx'})
+					})
+					
+					app.listen(3000);
+					
+					//这时我们启动node服务 直接就帮助我们启动了一个webpack 
+					//启动 node service.js
+		-->
+	</body>
+</html>

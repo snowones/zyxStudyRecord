@@ -1,0 +1,72 @@
+<HTML> <HEAD>
+<title>Tooltip</title> <STYLE type="text/css">
+body{
+font-size:12px;
+}
+.dek { Z-INDEX: 200; VISIBILITY: hidden; POSITION: absolute ; background:#CCCCCC;}
+.bd{
+width:100px; 
+padding:5px;
+}
+.top{
+height:20px;
+width:100px;
+background-color:#333333;
+color:#FFFFFF;
+padding:5px;
+}
+
+</STYLE>
+</HEAD>
+<body>
+<DIV class="dek" id="dek"></DIV>
+
+<SCRIPT>
+
+Xoffset=-20;
+Yoffset= 20;       
+var nav,old,iex=(document.all),yyy=-1000;
+if(navigator.appName=="Netscape"){(document.layers)?nav=true:old=true;}
+
+if(!old)
+{
+var skn=(nav)?document.dek:dek.style;
+if(nav)document.captureEvents(Event.MOUSEMOVE);
+document.οnmοusemοve=get_mouse;
+}
+
+function popup(msg)
+{
+var content="<div class='top'>内容提要</div><div width=100 class='bd'>"+msg+"</div>";
+if(old){alert(msg);return;} 
+else{yyy=Yoffset;
+if(nav){skn.document.write(content);skn.document.close();skn.visibility="visible"}
+if(iex){document.all("dek").innerHTML=content;skn.visibility="visible"}
+}
+}
+
+function get_mouse(e)
+{
+var x=(nav)?e.pageX:event.x+document.body.scrollLeft;skn.left=x+Xoffset;
+var y=(nav)?e.pageY:event.y+document.body.scrollTop;skn.top=y+yyy;
+}
+
+function kill()
+{
+if(!old){yyy=-1000;skn.visibility="hidden";}
+}
+</SCRIPT>
+
+    <span onMouseOver="popup('显示的提示信息,显示的提示信息!!!');" οnmοuseοut="kill();">普通文字上的效果
+</span>
+<div>
+<img src="image4.jpg" onMouseOver="popup('显示的提示信息,显示的提示信息!!!');" οnmοuseοut="kill();"/>
+<p>
+   图片上的效果
+</p>
+</div>
+<div onMouseOver="popup('显示的提示信息,显示的提示信息!!!');" οnmοuseοut="kill();" class="top">
+   层上的效果
+</div>
+</body>
+</HTML>

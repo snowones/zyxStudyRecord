@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		
+		<div id="div" style="background:pink;height:30px;">
+  		<span id="span" style="background:orchid;">点我试试</span>
+		</div>
+		
+		<!--
+        	七、哪些事件可以冒泡哪些不可以（常用）
+
+        冒泡事件
+
+    click
+    dblclick
+    copy
+    cut
+    rag
+    mouseover 指针移动到有监听事件的元素，或其子元素内（有渗透，作用范围渗透到其子元素）
+    mouseout 指针移出元素，或移出他的子元素
+
+	不冒泡事件
+
+    blur
+    focus
+    load
+    unload
+        -->
+		<!--
+			
+			冒泡行为  dom.addEventListener('eventName', fn, false)，默认是false，可不写
+			window.addEventListener('click', function() {
+			  console.log('点击了window')
+			})
+			冒泡行为会一层一层向上冒泡  span div body html document window
+			
+			
+			捕获行为   dom.addEventListener('eventName', fn, true) 加一个true
+			div.addEventListener('click', function(e) {
+  			console.log('点击了div标签')
+			}， true)
+			捕获行为  会先发生被捕获的事件 
+			比如body 加一个捕获行为
+			事件顺序就会改为  body span div document window
+			
+			W3c写法  e.stopPropagation(); 阻止冒泡行为 但是不会影响捕获行为
+			IE 写法  window.e.cancelBubble = true/false  
+		-->
+		<script type="text/javascript">
+			window.addEventListener('click', function() {
+			  console.log('点击了window')
+			})
+			document.addEventListener('click', function() {
+			  console.log('点击了document')
+			})
+			document.documentElement.addEventListener('click', function() {
+			  console.log('点击了html')
+			},true)
+			document.body.addEventListener('click', function() {
+			  console.log('点击了body')
+			})
+			div.addEventListener('click', function(e) {
+			  console.log('点击了div标签')
+			})
+			span.addEventListener('click', function(e) {
+			  console.log('点击了span标签');
+//			   e.stopPropagation();
+				
+
+})
+
+		</script>
+		
+		
+		<!--
+        	浏览器默认行为
+        	有些标签会特殊的响应一些事件
+        	
+        	例如：
+    		<a href="www.baidu.com">，当点击a标签时，他自然会跳转到百度搜索页；
+    		再比如，<input type="checkbox">，当点击该CheckBox时，他就会被勾选中；
+    		<button type="submit">，点击按钮后，页面就会提交表单的信息；
+    			
+    		阻止浏览器默认行为
+    		W3C写法： e.preventDefault()
+    		IE写法： window.event.returnValue = false
+        -->
+        <!--
+        	事件对象
+        	事件对象有很多属性值
+		        target
+		        timeStamp
+		        type（事件类型）
+		        currentTarget（最开始触发事件的节点）
+		        pageX（事件触发的x轴坐标）pageY（事件触发的y轴坐标）
+		        which（鼠标的左、中、右键值（1、4、2））
+		        
+		    这些很有用 比如，e.target.id表示的是触发事件的标签名称
+        -->
+        
+        <script type="text/javascript">
+        	div.addEventListener('click', function(e) {
+				  console.log('=======点击了div标签=======')
+				  console.log('当前目标对象：', e.target)
+				  console.log('当前时间戳：', e.timeStamp)
+				  console.log('当前目标对象节点', e.target.id)
+				  console.log('当前节点（最先开始触发事件的节点）：', e.currentTarget.id)
+				  console.log('当前事件类型：', e.type)
+				  console.log('当前事件发生的横坐标点：', e.pageX)
+				  console.log('当前事件发生的纵坐标点：', e.pageY)
+				  console.log('当前点击鼠标的哪个键：', e.which)
+				  console.log('==========================')
+				}, false)
+        </script>
+	</body>
+</html>

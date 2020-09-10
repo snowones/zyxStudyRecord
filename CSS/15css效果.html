@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			box-shadow
+			营造层次感（立体感）
+			充当没有宽度的边框  这个边框不会占据空间
+			特殊效果如下
+			
+			 box-shadow:5px 5px 10px 10px rgba(0,0,0.2) inset;
+			 
+			 特殊效果  一个div画画  
+			 box-shadow:5px 5px 10px 10px rgba(0,0,0.2) inset,
+			 5px 5px 10px 10px rgba(0,0,0.2) inset,
+			 5px 5px 10px 10px rgba(0,0,0.2) inset,
+			 5px 5px 10px 10px rgba(0,0,0.2) inset,
+			 5px 5px 10px 10px rgba(0,0,0.2) inset,
+			 5px 5px 10px 10px rgba(0,0,0.2) inset;
+			 
+			 通过这种设置  给一个div设置一堆投影  就可以画出一图
+			 
+			text-shadow 文本阴影
+			立体感
+			印刷品质感
+			
+			
+			border-radius
+			
+			圆角矩形  
+			扇形
+			半圆/扇形
+			一些奇怪的角角
+			
+			圆形头像实现  border-radius:50%;
+			
+			background
+			
+			纹理图案
+			渐变 
+			雪碧图动画：非常方便的动画做法  可以把动画过度的两个图片放在一个图片里  然后当需要开始动画时   
+			transition:backgroud-position .4s;
+			.i:hover{
+				background-position:0 -20px;
+			}
+			
+			背景图尺寸适应
+			首先可以指定背景图位置 backgroud-position:center center ; 横线纵向都居中
+			然后设置大小  background-size 可以直接设置 :100% 100%;  但是会被拉伸
+			现在也有不会被拉伸的方案
+			background-size:cover;  会填满整个容器  同时不拉伸 但会隐藏一些部分  可以继续设置backgroud-position
+			还有一种相反的行为
+			backgroud-size:contain; 会把背景图设置到适应这个容器，完整的显示出来   同时不拉伸   但是多处的部分会空白
+			 
+			然后设置重复性  background-repeat
+			
+			
+			clip-path  clip:裁剪         容器大小  定位  占位不变
+			对容器进行裁剪    裁剪掉的部分不显示  
+			按常见的几何图形裁剪   比如 clip-path: inset(100px 50px);按方形裁剪  clip-path: circle(50px at 100px 100px); 按圆形裁剪
+			自定义路径裁剪    ：可以通过svg图形来实现难画的图形    生成一个svg然后直接拿过来用
+			
+			这个属性做动画很简单 裁剪时直接加上动画效果就可以了
+			 
+			3D变换
+	               变换transform
+	           translate位移
+	           scale 缩放
+	           skew  斜切
+	           rotate  旋转
+	           
+	           
+	        3D变换时 可以设置  perspective 透视距离   
+	        transform-style:preserve  3d透视
+	         
+		-->
+
+	</body>
+</html>

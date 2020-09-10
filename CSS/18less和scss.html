@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			less是由node再npm上发布的
+			所以安装less  需要先安装node和npm
+			
+			编译less文件转化为css文件
+			
+			less c 文件名
+		-->
+		<!--
+       		scss 安装
+       		npm install node-sass
+       		
+       		编译 node-sass  文件名
+        -->
+		<!--
+        	less的嵌套写法
+        	
+        	.father{
+        		.son1{
+        			
+        		}
+        		.son2{
+        			fontsize:xxx;
+        			&:hover{
+        				backgroude:red;
+        			}//&符号表示平级  == .son2:hover{  }
+        		}
+        	}
+        -->
+        <!--
+        	scss的嵌套和less基本一模一样
+        -->
+        <!--
+        	变量
+        	
+        	less:
+        	@fontSize:12px;
+ 			@bgColor:red;
+ 			
+ 			.content{
+ 				font-size:@fontSize+10px;
+ 				lighten(@bgColor,40%)  //同时less提供很多操作函数  这个函数是让颜色变浅  接收两个参数  颜色变浅40%
+ 			 			
+ 			}
+ 			scss中的变量跟less变量的差距非常小   只是@换成$ 
+        -->
+        <!--
+        	mixin
+        	
+        	css代码的复用  在css层面    
+        	相当于函数的作用
+        	
+        	.名称（参数）{
+        		
+        	}
+        	如.block(@size){
+        		fontsize:@size;
+        	}
+        	
+        	.content{
+        		.block(12px);
+        	}
+        	
+        	并且在less中  任何class都可以当作函数用
+        	直接   .class名(); 就可以了
+        	 
+        	加括号和不加括号的区别就是 
+        	加括号的会被认为专门是作为（mixin）代码复用而出现的   所以在编译过后的文件中是不会出现这个class的
+        	
+        	
+        	scss中的mixin
+        	
+        	scss中mixin必须为专门的mixin  而不能既是mixin又是普通的类
+        	写法 前面必须带@mixin
+        	@mixin block($fontsize){
+        		
+        	}
+        	而且调用时必须加上@include
+        	.nav{
+        		@include block(55px);
+        	}
+        	
+        	同样的再编译后  不再显示mixin
+        -->
+        <!--
+        	extend
+        	
+        	但是如果每个mixin都不编译出来  而下面css重复调用mixin的话  css文件中会出现大量重复代码  
+        	这时我们可以使用extend  ，编译后会把公共代码写到一起而不会出现这么多重复代码
+        	
+        	所以再场景复杂  代码庞大的情况下我们可以使用extend来优化我们的css代码
+        	.nav:extend(.block){
+        		
+        	}
+        	.content:extend(.block){
+        		
+        	}
+        	这样的写法编译后
+        	.nav,
+        	.content{
+        	  	block代码块里的css样式
+        	}
+        	.nav{
+        		它单独的样式
+        	}
+        	.content{
+        		它单独的样式
+        	}
+        	
+        	在scss中意义是相同的  语法稍有不同
+        	.nav{
+        		@extend .block;
+        		xxxx;
+        	}
+        -->
+        <!--
+        	loop  循环
+        	
+        	首先less本身是不存在循环的  但是他有递归函数  也就和循环效果是相同的
+        	直接使用mixin函数递归
+ 						when 是递归出口
+        	.gen-col(@n) when(@n>0){
+        		.gen-col(@n-1); //递归调用
+        		.col-@{n}{   //生成.col-n  class
+        			width:1000px/128@n
+        		}
+        	}
+        	
+        	.gen-col(12);  //生成 .col-12,.col-11,....,.col-1
+        	
+        	
+        	scss的循环  scss中可以使用if
+        	
+        	@mixin gen-col($n){
+        		@if $n > 0{
+        			@include gencol($n - 1);
+        			.col-#{$n}{
+        				width:1000px/12$n
+        			}
+        		}  
+        	}
+        	
+        -->
+        
+        <!--
+        	css 用本身自己的 import做模块化不是一个好的办法   它会大量增加链接数  增加http请求数 很影响性能
+        	
+        	css本身import引入和link不同
+        	css里import需要写在
+			<style> import "" </style>
+        	
+        	
+        	css预处理对import进行了改进   它会把import整合在一起形成一整个css文件  解决了性能问题
+        	@import"./xxxx";    //less变量文件    变量可跨文件使用 
+        	@import"./xxxx";	//模块1
+        	@import"./xxxx";	//模块2
+        	这样的模块化css  既可以真正意义上的模块化管理  又解决了性能问题  
+        	less预处理器会自动把这些模块化的css整合成一整个css文件
+        	
+        	scss中的模块化  没有什么变化
+        	@import"./xxxx";    //less变量文件    变量可跨文件使用 
+        	@import"./xxxx";	//模块1
+        	@import"./xxxx";	//模块2
+        -->
+	</body>
+</html>

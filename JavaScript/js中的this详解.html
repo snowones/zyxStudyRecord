@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			最重要的一点   谁调用这个函数或是方法  this就指向谁
+		-->
+		<!--
+        	普通函数调用 
+        	正常执行函数时  其实是window对象在调用  所以正常情况下 this指向的是window
+        	
+        	
+        	一个对象中的函数调用   比如方法里调用  this.name  输出的对象的name属性 
+        	这时这个this指向的就是这个对象
+        	
+        -->
+        
+        <!--
+        	如果希望在构造函数中调用    
+        	必须使用new操作符
+        	
+        	比如这样的
+        	 function  Person(name){
+			         this.name=name;
+			     }
+			 var personA=Person("xl");   
+			 
+			 输出personA.name 就会是undefined  因为this指向的是window
+        -->
+	</body>
+</html>

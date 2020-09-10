@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+		1转换为字符串类型的三种方式
+		  var num =110;
+		  var strNum = num.toString();
+		  var strNum = String(num);
+		  var strNum = '' + num;
+		  
+		2 str.split(value,length)   
+		value 根据什么分割字符串   length 分割后形成的数组最大长度（多余的不要了）
+		str.split("");这样表示把字符串中每一字符都分割开
+		如何让一个字符串反转
+		str.split('').reverse().join('');  首先字符串每一项分割成数组 然后数组反转 然后再结合成新的字符串
+		
+		
+		3字符串查找
+		str.inxOf(value,index);  index指开始查找的位置
+		1 str.indexOf('xx')   返回查询的子串在字符串中的第一个字符的下标
+		2 str.lastIndexOf('xx') 从右边开始查询
+		
+		正则查找
+		str.search(regexp); regexp正则匹配 查找成功返回第一个子串的下标  查找失败返回-1
+		
+		4字符串替换
+		var str = 'zifuchuanzyxzifuchuanzyx';
+		var replaceStr = str.replace('zyx','替换');正常情况 只能替换前面那个
+		通过正则
+		var replaceStr = str.replace(/zyx/,'替换');
+		全部替换  g全局标示
+		var replaceStr = str.replace(/zyx/g,'替换');
+		
+		5字符串截取
+		1 str.substring(start,end)
+		2 str.substr(start,length) 
+		一个参数开始位置和结束位置  一个参数是开始位置和长度
+		3str.slice(start,end) 和1功能相同
+		
+		6判断一个字符串中是否含有子串
+		es6 -> str.includes('子串',index)  index 查找开始位置
+		
+		7字符串匹配
+		str.match(regexp)  regexp正则表达式
+		
+		8字符串拼接
+		1直接+号
+		2str.concat(str1,'xxx','strxx'); 参数可为多个字符串 返回一个新的字符串
+		
+		-->
+		<script type="text/javascript">
+			//1 面试题  字符串去重
+			//其实字符串的去重就等于数组的去重  是先把字符串转为数组然后去重在拼成字符串
+			var str = 'sdafsdfasf';
+			// repeat:重复的
+			function removeRepeat(str){
+				var res = [];
+				var arr = str.split('');
+				for(let i = 0;i<arr.length;i++){
+					if(!res.includes(arr[i])){
+						res.push(arr[i])
+					}
+				}
+				res = res.join('');
+				return res;
+			}
+			console.log(removeRepeat(str));
+			//同理  2判断字符串中每个字符的出现次数
+			//先去重 然后得到的每个字符去原字符串转成的数组中判断 每有一次相等就count加1
+			
+			//去重第二种方式 利用es6 new Set 去重
+			function unique(arr){
+				return Array.from(new Set(arr));
+			}
+			console.log(unique(str));
+			//　Array.from()方法就是将一个类数组对象或者可遍历对象转换成一个真正的数组。
+			
+			
+			//字符串个数组去重最简便的代码
+			// 去除数组的重复成员
+			var arr2 = [1,2,1,13,2];
+			var str2 = '123213123';
+			
+			console.log([...new Set(arr2)]);
+			//去除字符串中重复的成员
+			console.log([...new Set	str2)].join(''));
+			
+			// 有一点 new Set()中加入值 不会发生类型转变 也就是 5 !='5'  他内部判断是否相等是 ===
+		</script>
+	</body>
+</html>

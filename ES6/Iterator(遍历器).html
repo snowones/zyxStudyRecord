@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+	<!--
+    	js原有的表示"集合"的数据结构 : 数组Array  对象Object
+    	                 	  新增的 : Map <Set></Set>
+    	并且这四种数据集合可随意嵌套
+    	
+    	因为需要一种统一的接口机制 去处理所有不同的数据结构
+    	
+    	而Iterator 就是这样的接口  为不同的数据结构提供统一的访问机制  任何数据结构只要部署Iterator接口 就可以完成遍历操作
+    	
+    	而for...of循环就是专门为Iterator出现的
+    	
+    	
+    -->
+    <!--
+    	ES6 规定默认的Iterator接口部署在 symbol.iterator属性   也就是一个数据结构只要就这个属性 就是可遍历的
+    	
+    	原生具备 Iterator接口的数据结构如下
+    	1 Array 2 Map 3 Set 4 String 5 TypedArray 6 函数的arguments 对象 7 NodeList对象
+    	
+    	let arr = ['a', 'b', 'c'];
+		let iter = arr[Symbol.iterator]();
+		
+		iter.next() // { value: 'a', done: false }
+		iter.next() // { value: 'b', done: false }
+		iter.next() // { value: 'c', done: false }
+		iter.next() // { value: undefined, done: true }
+		
+		上面代码中，变量arr是一个数组，原生就具有遍历器接口，部署在arr的Symbol.iterator属性上面。
+		所以，调用这个属性，就得到遍历器对象。
+		
+		一般是对象的Iterator接口需要在自己Symbol.iteartor属性上面部署  这样才能使用for...of
+		
+    -->
+	</body>
+</html>

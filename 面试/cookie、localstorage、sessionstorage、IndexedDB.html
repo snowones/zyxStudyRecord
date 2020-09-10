@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+        	Cookie  只有4k大小  每次请求会附加在请求头上   可以设置过期时间
+        	
+        	也因此 Cookie的作用并不是用来存储  而是“维持状态”
+        	原因：HTTP协议是无状态的  也就是HTTP协议自身不能把请求和响应之间的通信状态进行保存
+        	 比如 用户登录状态就无法保存
+        	而Cookie每次请求都会附加在请求头上  很方便的就可以携带各种状态信息
+        	
+        	应用场景 ： 主要是登录状态
+        	在登陆完成后  服务器的响应 在response header中携带着set-cookie的信息
+        	在页面刷新后  客户端去请求时就会带着cookie信息 告诉服务器用户得的登录信息
+        	
+        	
+        	还有 购物车 但我觉得现在应该用localStorage
+        	        用户浏览器数据  现在应该用 sessionStorage
+        	        
+        	        
+        	cookie的问题
+        	
+        	1 小 而且有些浏览器对cookie 的数量也是有限制的
+        	2 cookie会被带入全部请求中  很多时候时没有必要的 会造成很大的性能浪费
+        	3 cookie是明文传递   所有会有很大的安全问题
+        	        
+        -->
+        
+        <!--
+        	localstorage sessionStorage都属于 h5webstorage  大小5M  
+        	sessionStorage每次浏览器关闭都会清除  localStorage必须自己清除
+        	
+        	他俩最重要的区别就是 存储时间  所以所存储的东西是看生命周期适合的东西
+        	比如localStorage  可以存储base64处理的图片的字符串 优化性能 增快页面反应速度  
+        					   购物车内的商品
+        	而sessionStorage  可以存储表单内的信息 这样刷新后就不用重新填写表单
+        					  还可以存储浏览历史（微博的sessionStorage就是做这个用的）
+        					  
+        					  我之前还用这个做过页面之间的传值
+        	
+        	
+        -->
+        <!--
+        	IndexedDB
+        	IndexedDB 是一种低级API  它的存储量很大 一般不会小于250M 甚至来说是无限大的
+        	
+        	1 键值对存储 可以存储任何类型   内部采用对象仓库（object store）
+        	2 异步 操作数量大异步操作不会锁死浏览器
+        	3 支持事务  意味着一系列操作步骤之中，只要有一步失败，整个事务就都取消，数据库回滚到事务发生之前的状态，不存在只改写一部分数据的情况。
+        	4 支持二进制储存
+        	
+        	操作
+        	在IndexedDB大部分操作并不是我们常用的调用方法，返回结果的模式，而是请求——响应的模式。
+
+			建立打开IndexedDB ----window.indexedDB.open("testDB")
+
+        -->
+	</body>
+</html>

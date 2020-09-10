@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+		1 首先  函数Function才有prototype属性  对象(除Object)拥有_proto_
+		
+		大多数情况下_proto_可以理解为“构造器得原型”
+		即:_proto_ ===constructor.prototype
+		
+		JS万物皆对象  而对象都有_proto_属性   (除了Object)
+		而每一个对象的_proto_ 属性都指向它的构造函数对象的的原型 
+		一直到往下找下去一定会到Object这个对象上  		
+		
+		每个对象都会在其内部初始化一个属性，就是prototype(原型)，当我们访问一个对象的属性时，
+		如果这个对象内部不存在这个属性，那么他就会去prototype里找这个属性，这个prototype又会有自己的prototype，
+		于是就这样一直找下去，也就是我们平时所说的原型链的概念。
+
+
+		
+		
+		所以 会形成一条_proto_连起来得链条，递归访问_proto_最终到头
+		并且最后一定是object得_proto_ 所以是null
+		
+		var A = function(){}
+		var a = new A();
+		
+		a._proto_ === A.prototype
+		a._proto_._proto_ === Object.prototype
+		a._proto_._proto_._proto_  === null 
+		
+		
+		注意：
+		1所有构造器constructor 都指向 Function
+		2 Function得prototype都指向一个特殊得匿名函数，而这个特殊得匿名函数的_proto_指向Object.prototype
+		
+		知识点  function、Function、Object、{}
+		function是一个关键词用于定义函数类型
+		而Function实际是一个用于构造函数类型变量的类  或是说是函数类型实例的构造函数(constructor)
+		与之类似的构造函数还有String  Number Object
+		Object比较特殊 用于生成对象类型
+		而他的简写就是{}
+		
+		prototype和length是每一个函数类型自带的两个属性     所有类型的构造函数也是函数(String Object Number)
+		
+		
+		-->
+		<script type="text/javascript">
+			
+			//一个原型链实例
+			var Person = function(){};
+			Person.prototype.type = 'Person';
+			Person.prototype.maxAge = '100';
+			
+			var p = new Person();
+			console.log(p.maxAge);
+			p.name = 'zyx';
+			
+			console.log(Person.prototype.constructor === Person);
+			console.log(p.__proto__===Person.prototype);
+			console.log(Person.prototype);
+			console.log(p.prototype);
+			
+			function foo() {}
+			console.log(foo.prototype); 
+			
+			
+			//Person是一个函数类型的变量，因此自带了prototype属性，
+			//prototype属性中的constructor又指向Person本身；
+			//通过new关键字生成的Person类的实例p1，通过__proto__属性指向了Person的原型。
+			//这里的__proto__只是为了说明实例p1在内部实现的时候与父类之间存在的关联（指向父类的原型），
+			//在实际操作过程中实例可以直接通过.获取父类原型中的属性，从而实现了继承的功能。
+			
+			
+			
+					//简单的实现继承
+					//让子类的prototype属性指向父类 实现继承
+			var father = function(){
+				this.name = 'father';
+			}
+			
+			var child = new father();
+			child.age = '1';
+			console.log(child.name);
+			
+			//还可以这么写
+//			function Child(){            t
+//				his.age = 28;
+//            }
+//			Child.prototype = new Parent();//继承了Parent，通过原型
+//			
+		</script>
+		
+		<!--
+        	原型链的继承就是通过修改原型链的结构，从而让实例对象可以使用整条原型链的全部成员(属性和方法)
+        	使用原型链必须满足属性搜索原则
+        	属性搜索原则
+        	首先在当前对象中查找
+        	如果没有在原型中查找
+        	然后再原型的原型中查找
+        	一直到Object.prototype还没有就返回undefined
+        -->
+	</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			String.prototype.lengthB = function(){
+				var b =0 , a = this.length;   //不理解这里为什么用1，不知道能运行不
+				if(a){  //如果存在字符串
+					for (var i = 0;i<a;i++) {
+						if(this.charCodeAt(i)>255){
+							//如果当前字符得编码大于255，说明他是双字节字符
+							b+=2; //累计加2
+						}else{
+							b++;
+						}
+					}
+					return b;
+				}else{
+					return 0 ;
+				}
+			}
+			
+			var s = "Sting对象得长度";
+			alert(s.lengthB());
+		</script>
+	</head>
+	<body>
+		
+	</body>
+</html>

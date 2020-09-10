@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			td{
+				border: 1px black solid;
+			}
+		</style>
+		<script>
+			var s = "http://www.mysite.cn/index.html";
+			var a = s.indexOf("www");
+			var b = s.indexOf("/",a);
+			var c = s.substring(a,b);
+			var d = s.slice(a,b);
+			alert(c);
+			alert(d);
+			var e = s.substring(b,a);
+			var f = s.slice(b,a);
+			alert(e);
+			alert(f);
+		</script>
+	</head>
+	<body>
+		<table style="border:2px black solid">
+			<tr><th>字符串方法</th><th>说明</th></tr>
+			<tr><td>slice()</td><td>抽取一个子串</td></tr>
+			<tr><td>substr()</td><td>抽取一个子串</td></tr>
+			<tr><td>substring()</td><td>返回字符串的一个子串</td></tr>
+		</table>
+		<ul>
+			<li><h1>substr()方法能够根据指定长度来截取子字符串，它可以包含两个参数，第一个参数表示准备截取的子串的下标，第二个参数表示截取的长度</h1></li>
+			<li><h1>！！！！！！ECMAScript没有标准化该方法，所以被列入不建议选用的方法</h1></li>
+			<li><h1>slice()方法和substring()方法都包含两个参数，一个是起始下标，一个是结束下标，如果起始下标比结束下标大，substring()能够再开始之前交换两个参数位置，但是slice()方法不行</h1></li>
+			<li><h1>如果参数是负数，slice()方法会让起始位置从右侧开始，而substring()方法则无效</h1></li>
+		</ul>
+	</body>
+</html>

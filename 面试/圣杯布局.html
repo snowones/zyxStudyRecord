@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			/* 正常盒子模型   width、height不包括padding  可以设置box-sizing可以设置border-box*/
+			/*margin-left设置百分比是相对于父元素宽度的，这个宽度是不包括padding在内的*/
+		html,body{
+    		height:100%; /*必须这么设置 100%高度才会起效果*/
+		}
+		body {
+  			min-width: 700px;
+  			/*要想保证该布局效果正常显示，由于两侧都具有固定的宽度，
+  			所以需要给定页面一个最小的宽度，但这并不只是简单的200+150=350px。
+  			回想之前left和right使用了position: relative，所以就意味着在center开始的区域，还存在着一个left和right的宽度。
+  			所以页面的最小宽度应该设置为200+150+200+150=700px：
+			*/
+		}
+		#container {
+		  height: 100%;
+		  padding-left: 200px; 
+		  padding-right: 150px;
+		}
+		#container .column {
+		  float: left;
+		}
+		
+		#center {
+		   background: #00FFFF;
+		   width: 100%;
+		   height: 100%;
+		}
+		
+		#left {
+			background: aquamarine;
+			width: 200px;
+			height: 100%;
+			/*margin-left: -200px;*/
+			margin-left: -100%;
+			position: relative;
+  			right: 200px;
+		}
+		
+		#right {
+		  	width:150px;
+		  	background: #CCCCCC; 
+		  	height: 100%;
+		  	margin-left: -150px;
+		  	position: relative;
+  			left: 150px;
+		  	/*margin-right: -150px;*/ /*看不懂这段*/
+		}
+		
+		#footer {
+		  clear: both;
+		}
+		</style>
+	</head>
+	<body>
+		<div id="header"></div>
+		<div id="container">
+		  <div id="center" class="column">中间</div>
+		  <div id="left" class="column">左</div>
+		  <div id="right" class="column">右</div>
+		</div>
+		<div id="footer"></div>
+
+	</body>
+</html>

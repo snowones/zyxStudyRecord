@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<!--
+			1 combineReducers  from 'redux'
+			随着应用变得复杂，需要对reducer函数进行拆分,拆分后每一块独立负责管理state的一部分
+			combineReducers 辅助函数的作用是，把一个由多个不同reducer函数作为value的object，
+			合并成一个最终的reducer函数，然后就可以对这个reducer函数调用createStore
+			
+			
+			2 applyMiddleware from 'redux'
+			添加中间件
+			中间件：redux提供了通过利用中间件来扩展自身功能以满足用户需求
+			因为在整个数据操作过程中 reducer是纯函数 不能做额外的处理 
+			在view视图层显然也不行
+			所以只能在dispatch过程中做额外的处理 比如保存日志等等操作
+			而这些额外的处理就叫做中间件 middlew
+			而
+			applyMiddleware(...middlewares)  可以在其中传入多个中间件 在action过程中添加更多处理过程
+			并且每个中间件都有自己的'熔断'处理，当他认为这个action不需要后面的中间件进行处理时，后面的中间件也就不能对这个action进行处理
+			而为什么不同的中间件可以组合使用  因为redux要求所有的中间件必须提供统一的接口
+			
+			
+			3 redux-thunk中间件  
+			thunkMiddleware等同于react-thunk  都是为了实现action的异步
+			将同步的action转化成异步的action  适合用于api请求场景
+			
+			
+			4 applyMiddleware(thunkMiddleware)(createStore)(reducers) 这种写法什么意思
+			正常写法：const store = createStore(reducer,applyMiddleware(thunk));
+			applyMiddleware函数参数是中间件，会返回一个函数，那个函数会接受一个store然后在返回一个函数，而这个函数还会返回一个函数，参数是reducer
+			
+			5 withRouter from 'react-router-dom'
+			将组件和withRouter组件绑定  可以获取到history对象
+			withRouter 会在render时把更新后的match,location,history传递给包裹组件
+			
+			6 bindActionCreators from redux
+			
+			他将单个或多个ActionCreator转化为dispatch(action)的函数集合形式。
+			开发者不用再手动dispatch(actionCreator(type))，而是可以直接调用方法。
+			
+			好处
+			1 将dispath触发规则单独抽离出去 便于维护
+			2 多个组件可重复调用 
+
+
+			
+	
+			
+		-->
+	</head>
+	<body>
+	</body>
+</html>

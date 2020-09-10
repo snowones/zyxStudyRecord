@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			bind() apply() call() 这三个函数都是为了改变执行函数的 作用域  也就是改变 this指针的指向
+			
+			作用
+			在新的作用域中执行对象中的函数
+			差别
+			call()  函数的参数直接放进去就行   
+			obj.function.call(新的作用域,'string'); 直接就执行了
+			apply()  的参数必须放在一个数组里
+			obj.function.apply(新的作用域,[]);
+			bind()  的参数和call一样是  但是他的返回值是 一个函数  也就是需要手动执行
+			obj.function.bind(新的作用域,'string')()
+		-->
+	</body>
+</html>

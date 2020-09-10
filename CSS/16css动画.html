@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		
+         <!--
+         	css中的动画类型
+         	transition:补间动画   有开头有结尾  中间是浏览器自己补充出来的
+         	keyframe关键帧动画	其实还是补间动画  只是中间可以有很多帧 
+         	逐帧动画   没有计算出来的画面  每一帧都是真实存在的
+         -->
+         <!--
+         	补间动画
+         	位置-平移  （left/right/margin/transform）
+         	方位 -旋转（transform）
+         	大小-缩放 (transform)
+         	透明度(opacity)
+         	其他-线性变换(transform)
+         	
+         	transition-delay:1s  动画延迟
+         	transition-duration:1s 动画时长
+         	
+         	transiton-timing-function:   定义动画进度和时间的关系
+         	它自带有很多属性可供选择     有线性变化和各种其他变化
+         	有专门的设计工具      搜Easing就可以直接搜出来在线制作工具
+         	可专门设计 然后使用
+         	
+         	可指定多个属性动画
+         	transition:width 1s,backgroud 3s;
+         	还可指定全部可以动画的属性
+         	transition:all 1s;
+         	
+         	控制台中有一个动画面板
+         	Animations 可预览动画效果和调整
+         -->
+         <!--
+         	关键帧动画
+         	
+         	相当于多个补间动画组合到一起了
+         	与元素状态的变化无关 而补间动画必须有元素状态变化
+         	定义更加灵活 能够控制的地方更多
+         	
+         	
+         	写法
+         	animation: 动画名 1s;
+         	这个属性也是缩写  有多种属性
+         	@keyframe 动画名{
+         		0%{
+         			
+         		}
+         		25%{
+         			
+         		}
+         		50%{
+         			
+         		}
+         		75%{
+         			 
+         		}
+         		100%{
+         			
+         		}
+         	}
+         	animation-iteration-count:2; 循环次数  
+         	animation-direction:reverse;指定动画是正向还是反向
+         	
+         	animation-play-state:paused;js可以用这个属性 让动画暂停   并保留状态
+         	
+         	animation-fill-mode: ; 指定动画最后停在哪里
+         -->
+         
+         <!--
+         	逐帧动画
+         	还是使用关键帧动画的语法 是关键帧动画的一种写法
+         	
+         	适用于无法补间计算的动画
+         	资源较大
+         	使用steps();
+         	一般为那种可循环的动画做逐帧
+         	
+         	比如1s八张图
+         	@keyframe run{
+         		0%{
+         			background-position:-100px 0;
+         		}
+         		12.5%{
+         			background-position:100px 0;  
+         		}
+         		....  上面使用的雪碧图
+         	}
+         	同时设置
+         	animation-timing-function:steps(1);
+         	这个属性设置每一帧中间分多少个过度   设置为1就说明每一帧之前不过度直接到第二帧的样子
+         	就实现了逐帧动画
+         
+         	
+         -->
+	</body> 
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			css工程化
+			1 组织   代码分成怎样的目录  分成怎么的目录 大家怎样去合作
+			2 优化   代码的优化  	
+			3 构建   代码写完后如何上线
+			4 维护    	
+		-->
+		<!--
+        	PostCSS（css处理工具  后置）
+        	postcss支持很多构建工具
+        	比如
+        	webpack postcss-loader
+        	
+        	CSS=》PostCSS解析转换-》CSS
+        	1 模块
+        	2 加前缀
+        	3 兼容性
+        	......
+        	
+        	PostCSS本身只有解析能力
+        	各种变换特性靠的是插件
+        	
+        	常见的插件
+        	import 模块合并
+        	autoprefixier 自动加前缀
+        	cssnano 压缩代码			
+        	cssnext 使用css新特性    有些新特性浏览器不支持 但是使用这个可以让它支持
+        	precss  提供变量、mixin、循环等
+        -->
+        <!--
+        	使用
+        	npm install postcss-cli
+        	 
+        	插件需要一个配置文件   postcss.config.js  里面引入各种插件
+        	插件也用npm安装
+        	
+        	还有很多大型的插件形成了自己的语法系统
+        	
+        	module.exports= {
+        		plugins:[
+        				//里面放置插件
+        				
+        				比如自动加前缀的插件
+        				autoprefixer({
+        					browsers:['>10%']   //这个插件可以解决浏览器兼容问题 自动加类似-webkit-xxxx
+        					
+        					代码的意思是  兼容范围的浏览器大于市场份额百分之10
+        					browsers:['last 2 versions']
+        					所有浏览器最近的两个版本兼容
+        					全部写法在 BrowserList
+        				})
+        		]
+        	}
+        -->
+        
+	</body>
+</html>

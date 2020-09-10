@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			table{
+				border: black 2px solid;
+				align-content: center;
+				cellpadding:3px;
+				cellspacing:5px;
+			}
+			td{
+				border:1px solid #000;
+			}
+			/*解决浏览器table表格里没有边框的问题   td边框消失     如火狐浏览器  可以直接给td标签加上属性border:1px solid #000;*/; 		
+		</style>
+	</head>
+	<body>
+		<table>
+		<tr><th>字符串方法</th><th>说明</th><th>字符串方法</th><th>说明</th></tr>
+		<tr><td>charAt()</td><td>返回字符串中的第n个字符</td><td>lastIndexOf()</td><td>从后像前检索一个字符串</td></tr>
+		<tr><td>charCodeAt()</td><td>返回字符串中的第n个字符的代码</td><td>match()</td><td>找到一个或多个正则表达式的匹配u</td></tr>
+		<tr><td>indexOf()</td><td>检索字符串</td><td>search()</td><td>检索与正则表达式相匹配的子串</td></tr>
+		</table>
+		<ul>
+		<li><h1>charAt()和charCodeAt()根据参数返回指定下标的字符或是字符的编码</h1></li>
+		<li><h1>indexOf()和lastIndexOf()则是根据指定字符串查找他下表的位置</h1></li>
+		<li><h1>match()方法返回的是一个数组，但是他的行为受正则表达式的匹配模式限制，如果匹配模式没有带全局修饰符g，那么match()也只执行一次匹配</h1></li>
+		</ul>
+	</body>
+</html>

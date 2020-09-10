@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<!-- ！！！手写Ajax-->
+		<script type="text/javascript">
+			function ajax(){
+				var xmlhttp;
+				if(window.XMLHttpRequest){
+					xmlhttp = new XMLHttpRequest();
+				}else{
+					// code for IE5 IE6
+					xmlhttp = ActiveXObject("Microsoft.XMLHTTP");
+				}
+				
+				//判断状态
+				xmlhttp.onreadystatechange = function() {
+					/*
+						readyState
+						0:请求未初始化
+						1:服务器连接已建立
+						2:请求已接收
+						3:请求处理中
+						4:请求已完成,且响应已就绪
+						status
+						200:请求成功
+						404:未找到
+						500:服务器内部错误
+					*/
+					if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
+						//获取字符串形式的响应数据
+						document.getElementById("myDiv").innerHTML = xmlhttp.responseText;
+					}
+				}
+				
+				xmlhttp.open("GET","url",true);
+				
+				//设置头信息
+				xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+				
+				//将信息发送到服务器
+				xmlhttp.send();
+				
+				
+			}
+		</script>
+		<!--
+        	ajax实现原理
+        	1 通过XMlHttpRequest和服务器进行异步通信
+        	2 通过js来绑定和调用
+       -->
+       <!--
+       	    ajax 请求步骤
+       	  
+		        1创建XMLHttpRequest对象。
+		        2设置请求方式。
+		        3调用回调函数。
+		        4发送请求。
+
+       -->
+       <!--
+       	     jquery ajax请求步骤
+       	     
+       	     1 type 设置请求方式是get还是post
+       	     2 async 设置同步还是异步
+       	     3 data 设置发送的数据
+       	     4 dataType  预估服务器返回值类型
+       	     5 succee: error: 成功返回和失败返回
+       -->
+	   <!--
+			 ajax获取的数据储存在哪
+			 AJax所拿到的数据是以数组的形式存储在浏览器的内存中
+	   -->
+	</body>
+</html>

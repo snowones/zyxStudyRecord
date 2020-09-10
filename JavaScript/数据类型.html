@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+        	引用数据类型：Object、Array和Function
+        	Es6新增 :Symbol(创建后独一无二且不可变的数据类型 )
+        	
+        	（1）JavaScript的数据类型
+
+			基本数据类型：Number，String，Boolean，Undefined，Null
+			
+			复杂数据类型：Object，Array，Function，RegExp，Date，Error
+			
+			全局数据类型：Math
+			
+			
+			JavaScript的值类型和引用类型
+			
+			JavaScript有两种类型的数据，值类型和引用类型，
+			一般的数字，字符串，布尔值都是值类型，
+			存放在栈中，而对象，函数，数组等是引用类型，存放在堆中，
+			对引用类型的复制其实是引用复制，相当于复制着地址，对象并没有真正的复制。
+
+
+			var a=5;var b=a;a=null;    //那么b是5
+			var a={},var b=a;b.name="mbj";
+			console.log(a.name);   //mbj，因为a，b指向同一个对象
+	a=null;console.log(typeof b);  //object，a=null，只是a不再指向该对象，但是这个对象还是在堆中确确实实的存在，b依然指向它。
+
+
+		   这也带来一个新的问题
+		  
+		  new 操作符到底做了什么
+		   首先，new操作符为我们创建一个新的空对象，然后this变量指向该对象，
+		   其次，空对象的原型执行函数的原型，
+                   最后，改变构造函数内部的this的指向
+                   
+                   而当上面的a=null后   那个对象并不会被垃圾回收机制回收掉
+                   因为b的指向还是那个对象
+        -->
+        
+        
+	</body>
+</html>

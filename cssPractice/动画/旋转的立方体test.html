@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>3d立方体 </title>
+	</head>
+	<style type="text/css">
+	/*css  rest*/
+	*{padding: 0; margin: 0;}
+	img{
+		border: 0;
+	}
+	/*css  rest*/
+	.content{
+		width: 200px;
+		height: 200px;
+		margin: 100px auto;
+		position: relative;
+		-webkit-transform-style:preserve-3d;
+	}
+	.box{
+		width: 200px;
+		height: 200px;
+		position: absolute;
+		text-align: center;
+		line-height: 200px;
+		font-size: 80px;
+		font-weight: bold;
+		color: #fff;
+	}
+	.c1{
+		background:rgba(255,0,0,1);
+		-webkit-transform:rotateX(90deg)   translateZ(100px);
+	}
+	.c2{
+		background:rgba(0,255,255,1);
+		-webkit-transform:rotateX(270deg)  translateZ(100px);}
+	}
+	.c3{
+		background:rgba(255,0,255,1);
+		-webkit-transform:rotateY(90deg) translateZ(100px);
+		}
+	.c4{
+		background:rgba(0,255,0,1);
+		-webkit-transform:rotateY(270deg) translateZ(100px);
+	}
+	.c5{
+		background:rgba(200,200,0,1);
+		-webkit-transform:translateZ(-100px);
+		}
+	.c6{
+		background:rgba(0,0,255,1);
+		-webkit-transform: translateZ(100px) ;
+		}
+	@-webkit-keyframes run{
+    	0%{-webkit-transform: rotateX(0deg) rotateY(0deg) }
+    	100%{-webkit-transform:rotateX(360deg)  rotateY(360deg)  }
+}
+	.content{
+		-webkit-animation:run 5s linear infinite ;
+	</style>
+	<body>
+	<div class="container">
+			<div class="content">
+				
+				<div class="c1 box">1</div>
+				<div class="c2 box">2</div>
+				<div class="c3 box">3</div>
+				<div class="c4 box">4</div>
+				<div class="c5 box">5</div>
+				<div class="c6 box">6</div>
+			</div>
+			
+	</div>
+	</body>
+</html>

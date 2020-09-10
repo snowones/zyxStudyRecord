@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			/*案例2*/
+			#father{
+				height: 100px;
+				width: 100px;
+				border: 1px solid red;
+			}
+			input[type="checkbox"]{
+				display: none;
+			}
+			#zyx:checked #bg{
+				background-color: #ccc;
+			}
+			#model{
+				width: 100px;
+				height: 100px;
+				position:fixed;
+				top: 0;
+				display: none;
+				background: aqua;
+			}
+			
+			#zyx:checked + #model{
+				display: block;
+			}
+			/*案例2*/
+			#test2{
+				width: 500px;
+				height: 100px;
+				background: #CCCCCC;
+				display: flex;
+			}
+			#test2 ul{
+				margin:  auto;  /*让ul居中*/
+				
+  				display:flex;
+  				direction:rtl;  /*让4个li转过来*/
+  				
+
+				padding: 0;
+				text-align: center;
+				vertical-align: center;
+				list-style: none;
+			}
+			#test2 ul li{
+				display: inline-block;
+				height: 20px;
+				width: 20px;
+				border-radius: 50%;
+				border: 1px solid red;
+				margin: 10px;
+				
+			}
+			li:hover, li:hover ~ li{
+				background: aqua;
+			}
+		</style>
+	</head>
+	<body>
+		<!--
+        	案例1
+        -->
+		<script>
+			//把这个arr 这个多层次数组转为一层
+			var arr = [3, [2, -4, [5, 7]], -3, ['aa', [['bb']]]]
+			var arr2 = flatten2(arr)
+			console.log(arr2)
+			
+			function flatten2(arr){
+				 var arr2 = [];
+				 function _flat(arr){
+				 	arr.forEach(function(value){
+				 		if(Array.isArray(value)){
+				 			_flat(value);
+				 		}
+				 		else{
+				 			arr2.push(value);
+				 		}
+				 	})
+				}
+				 _flat(arr);
+				 return arr2
+				}
+		</script>
+		<!--
+       		案例2  input的特殊使用
+        -->
+        
+        <div id="father">
+        	<label for="zyx">按钮</label>
+        	<input type="checkbox" id="zyx" />
+        	<div id="model">
+        		<label for="zyx">关闭</label>
+        	</div>
+        </div>
+        
+        	<!--
+            		案例3 xx:hover的用途
+            -->
+            
+            <div id="test2">
+            	<ul>
+            		<li></li>
+            		<li></li>
+            		<li></li>
+            		<li></li>
+            	</ul>
+            </div>
+	</body>
+</html>

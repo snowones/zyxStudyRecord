@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			.container{
+				border: 1px solid;
+				font-size: 0;  /*结果inlinenlock的裂缝问题*/
+				width: 500px;
+			}
+			.left{
+				background-color: #FF0000;
+				display: inline-block;
+				width: 200px;
+				height: 200px;
+				font-size: 10px; 
+			}
+			.right{
+				background-color: #00FFFF;
+				display: inline-block;
+				width: 300px;
+				height: 200px;
+				font-size: 10px; 
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="left">
+				左
+			</div>
+			<div class="right">
+				右
+			</div>
+		</div>
+		
+		<!--
+        	inline-block元素的裂缝问题
+        	inline—block元素的原理是把两个块级元素变成两个行内元素  行内元素也就是文字
+        	相当于在一个div块内的两个文字
+        	<div class="left">
+				左
+			</div>
+			<div class="right">
+				右
+			</div>
+			比如在这段代码内    把这两个元素看作两个文字的话 其中间 是有空格的  一个div和另一个div是不连起来的
+			也就形成了一个裂缝
+			如何将他消除掉
+			可直接 写成下面这种格式
+			<div class="left">
+				左
+			</div><div class="right">
+				右
+			</div>
+			
+			或是设置父元素的font-size:0;这样父元素的字体大小是0了 ，也就不存在中间的空格问题了
+			然后再分别设置子元素的font-size 就可以完成了
+        -->
+	</body>
+</html>

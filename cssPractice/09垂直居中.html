@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			.father{
+				height: 500px;
+				width: 600px;
+				background: #00FFFF;
+				margin-bottom: 20px;
+			}
+			.son{
+				height: 100px;
+				width: 100px;
+				background: #FF0000;
+			}
+			.father1{
+				position: relative;
+			}
+			.son1{
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				margin-left: -50px;
+				margin-top: -50px;
+			}
+			.father2{
+				display: flex;
+			}
+			.son2{
+				margin: auto;
+			}
+			.father3{
+				position: relative;
+			}
+			.son3{
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%,-50%);  
+				/* transform 支持2D和3D转化
+				 
+			1	translate偏移 
+				translate(x,y) 定义2D转化
+				 translate3d(x,y,z) 定义3D转化
+				 translateX
+				 translateY
+				 translateZ
+				 
+			2   scale 缩放	 
+			3	rotate 旋转 
+			4 	skew 倾斜
+				 */
+			}
+		</style>
+	</head>
+	<body>
+		<!--
+			1 inline-block实现垂直居中
+			我们可以把子元素设置为inline-block  然后元素的vertical-align设为middle
+			vertical-align的属性
+			baseline:元素的基线放在父元素的基线上
+			top:把元素的顶端和行中最高的元素的顶端对齐
+			bottom:把元素的顶端与行中最低的元素的顶端对齐。
+			middle:把元素放置在父元素的中部
+		-->
+		<!--
+		2 table-cell实现垂直居中
+			父级设置display table  子元素设置display table-cell
+			子元素这时相当于一个 块级行内元素  但他的大小会自动撑满table
+			直接什么 text-align center 和vertical-align middle 就可以垂直居中
+		-->
+		<div class="father father1">
+			<div class="son son1">
+				<!--
+                	第一种方法  当知道居中元素宽高时  将父元素设为relative 子元素设为absolute  
+                	top left 各百分之50 然后margin-left和margin-top再各-1/2居中元素宽高来偏移
+                -->
+			</div>
+		</div>
+		<div class="father father2">
+			<div class="son son2">
+				<!--
+                	第二种方法  在不知道子元素宽高
+                	父级 display flex   子元素 margin：0 auto
+                -->
+			</div>
+		</div>
+		<div class="father father3">
+			<div class="son son3">
+				<!--
+                	第三种方法  在不知道子元素宽高 将父元素设为relative 子元素设为absolute  
+                	top left 各百分之50 然后transform: translate(-50%,-50%);来偏移
+               -->           
+			</div>
+		</div>
+		<!--
+        	行内元素 文字垂直居中
+        	
+        	只需要line-height大于 font-szie
+        	这样多出来的line-height就会自动平分到字体两侧
+        	
+        	字体的排列是根据字体的base-line 基线 来对齐的  vertical-line是调整字体的对齐方式
+        -->
+	</body>
+</html>

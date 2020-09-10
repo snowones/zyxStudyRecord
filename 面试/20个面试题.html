@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+		
+			0 meta标签的作用
+			1 移动端适配   <meta name="viewport" content="width=device-width initial-scale=1,maximum-scale=1">
+			2 charset"utf-8"
+			3 SEO优化     <meta name="keyworlds" content="关键字1,关键字2"> 让网络爬虫搜到的东西
+			4 让手机忽略自动识别电话，邮箱 <meta content="telephone=no" name="format-detection"/>这是手机号的
+			
+			1 content-box 是标准盒子模型   border-box是ie盒子模型
+			
+			
+			2position 设置absolute给div设置和span都什么区别
+		      	div和span表现都一样 span也可以设置宽高了  因为 postion 是最高一级
+		     	设置完 display会失效 
+		     	
+		     	
+		    3 怎么解决margin穿透，margin重叠的问题
+		    1不用margin用padding
+		    2首先同级会发生margin重叠  父级会发生margin穿透 
+		        可以通过bfc元素来解决  首先bfc必须是块级元素  bfc元素是一个完全独立的元素  这个元素完全不会影响到外部元素
+		        如何生成bfc  1 overflow属性    2 display设置为inline-block
+		        
+		        所以这题最好的解决方式是 其中一个 的display设置为inline-block  然后width设置为100%
+		       1  block和inline-block width:100%表现是一摸一样的  并且元素产生了bfc特性
+		       
+		    4 em和rem(r:root)
+		    rem根据根元素字体大小  em根据父级
+		        最好的解决方案是rem结合em
+		    
+		    5栅格布局 bootstrap第一次提出
+		        组成  container row  然后xx-xs/sm/md col-space  offset
+		        
+		    6事件机制
+		        事件是先捕获后冒泡  
+		        阻止冒泡    用addeventlistener给元素添加事件   而不是普通的onclick定义
+		        这样可以直接通过参数来阻止冒泡
+		    
+		        事件委托 （target.xxx来获取触发事件的元素） 事件代理
+		    
+		    7 函数为返回  会自动返回undefined
+		    
+		   8 如何实现原型替换
+		   
+		   1 prototype的常用使用场景 比如现在我创建的data对象 都需要使用一个方法  这时我们不需要再每一个对象上都设置的这个方法 
+		              可以直接在data对象的原型上也就是prototype上设置这个方法  这样所有对象就都能用了
+		    
+		    	原型的替换就是 this指针的变化 也就是作用域的变化  实际就是使用bind() call() apply( ,[])
+		    	
+		   
+			9闭包
+			如果一个函数调用他外部的变量 这时这个函数的作用域 和那个变量就形成了闭包
+			重点 怎么去清理闭包 释放变量
+			把用到闭包的这个函数的变量或是方法做一个内存的重新指向  
+			直接把这个变量或是方法=null  就清理了闭包
+			
+			有一个小问题
+			当我们页面引入一个js模块  export这个模块
+			这个模块会congsole.log("a");
+			然后我们重复以入它4次或无数次 为什么只会输出一个a
+			因为其实引入这个js模块 就相当于一个闭包 
+			这个模块一直在内存中没被消除 所以只会执行一次
+			
+			10promise和generator
+			这两个都是 异步编程的一种解决方案 可以防止魔鬼回调
+			promise.then().catch()
+			promise 一般是替代callback编程方式  他有三种状态 pending（进行中）、fulfilled（已成功）和rejected（已失败）
+			而且状态一直往下走不可返回   错误可以统一用catch捕捉
+			
+			11命名方式的规范
+			组件化的命名
+			每个组件都有组件化的标识
+			用中横线命名
+			
+			建议看苹果官网的页面html写法  还有class命名方式
+			
+			12现在content宽度  及重要内容设置多少设置合适         1190px
+			原因现在主流网站都设置的是1190
+			
+			13平时你都看什么网站 
+			知乎 github ..
+			还可以说 我平时浏览网站时经常会f12一下  看下网页的代码 
+		-->
+	</body>
+</html>

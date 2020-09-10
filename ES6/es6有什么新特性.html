@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			1 let const
+			2 变量的解构赋值和扩展运算符...
+			3 字符串的扩展、正则、数值、函数、数组对象的扩展
+			4 symbol 数据类型
+			5 set map
+			6 for of(遍历对象)、iterator遍历器
+			7 promise（promise.all  promise.finally）、generator(yeild)、await async   
+			8 class  module（import from export default） 
+			
+		-->
+		<!--
+        	1 let const
+			
+				1let的一个特殊点
+					在for循环内  for(let i =0;i<10;i++){
+						let i =aaa;
+					}
+					其实上面（）内的i变量的作用域是循环体内i变量的作用域的父级
+					for循环会单独形成一个作用域
+				2 let 不存在变量提升
+				3 暂时性死区
+					一个作用域内 一但定义const或是let  就会把这个变量绑定在这个作用内 任何在let定义之前调用这个变量都会报错
+					var tmp ='bbb';
+					if (true) {
+					  tmp = 'abc'; // ReferenceError
+					  console.log(tmp); // ReferenceError
+
+					  let tmp; // TDZ结束
+					  console.log(tmp); // undefined
+
+					  tmp = 123;
+					  console.log(tmp); // 123
+					}
+					
+					一种隐蔽的暂时性死区
+					function bar(x = y, y = 2) {
+					  return [x, y];
+					}
+					bar(); // 报错
+				
+				4 不允许重复声明
+				5 const原理 const保证的并不是变量的值不变 而是变量指向的那个内存地址所保存的数据是不能改变的
+				但是对于复杂类型  我们依然可以为其添加属性== 这是一个不能控制的事
+				
+			面试 使用let和const有什么好处（为什么需要快级作用域）
+				1可以防止内层变量覆盖外层变量
+				2防止for循环计数变量泄露为全局变量
+				
+				块级作用域内定义函数  声明类似为var 并且定义提升到块级作用域头部
+        	2 变量解构赋值
+        	3 扩展运算符
+				增加了字符串遍历接口 字符串也含有 iterator接口
+				所以也可以直接用for of循环遍历
+				for (let codePoint of 'foo') {
+				  console.log(codePoint)
+				}
+			es6自带的模板字符串  
+			let x = 1;
+			let y = 2;
+
+			`${x} + ${y} = ${x + y}` `这个符号esc下面那个符号
+        	4 其实字符串 数字 函数 数组在不同方面都有一些扩展
+        	5 新类型 symbol
+			定义
+			ES5 的对象属性名都是字符串，这容易造成属性名的冲突。
+			比如，你使用了一个他人提供的对象，但又想为这个对象添加新的方法（mixin 模式），新方法的名字就有可能与现有方法产生冲突。
+			如果有一种机制，保证每个属性的名字都是独一无二的就好了，这样就从根本上防止属性名的冲突。这就是 ES6 引入Symbol的原因。
+			
+			let s = Symbol();此s就是一个唯一的属性值
+			并且可以这么定义let s = Symbol('我是一个xxx属性');  内部的字符串不影响s  只是给s提供说明描述
+			注意，Symbol函数前不能使用new命令，否则会报错。
+			这是因为生成的 Symbol 是一个原始类型的值，不是对象。
+			也就是说，由于 Symbol 值不是对象，所以不能添加属性。基本上，它是一种类似于字符串的数据类型。
+			
+        	6 set map结构
+			set是一种新的数据结构  类似于数组，但内部成员都是唯一的，没有重复的值。
+			
+        	7 promise
+        	8 iterator接口  for of循环
+        	9generator
+        	10 async
+        	11 class
+        -->
+	</body>
+</html>

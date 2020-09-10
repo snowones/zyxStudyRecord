@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<h1>
+			对于字符串类型的语句或是表达式，可以调用静态方法eval()来执行
+		</h1>
+		<h1>
+			特殊情况，单引号和双引号配合使用，但是不可以双引号套双引号，单引号套单引号
+		</h1>
+		<script type="text/javascript">
+			var s = "alert('hello world')";
+			eval(s);
+			
+			//String()也可以作为普通函数使用，把单数转换为字符串类型的值返回，此时他就不是构造函数了/
+			//var s = Sting(123456);
+					
+			//字符串编码转换为字符串
+			
+			var a = [35835,32773,24744,22909],b=[];
+			for (var i in a) {
+					b.push(String.fromCharCode(a[i]));
+			}
+			alert(b.join(""));
+			//fromCharCode()方法可以和charCodeAt()配合使用，执行想法的操作
+			//String.split() 执行的操作与 Array.join 执行的操作是相反的
+			var c = "新的一年我只想暴富";
+			var d =[];
+			for (var j=0;j<c.length;j++) {
+				document.write("<h1>"+c.charCodeAt(j)+"</h1>");
+				d.push(c.charCodeAt(j));
+			}
+			
+		</script>
+	</body>
+</html>

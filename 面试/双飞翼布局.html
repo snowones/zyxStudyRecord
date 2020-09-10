@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			html,body{
+				height: 100%;
+			}
+			body{
+				min-width: 500px;/*150+200 再给中间栏留一些*/
+			}
+			#container {
+				height: 100%;
+			  width: 100%;
+			}
+			
+			.column {
+			  float: left;
+			}
+			
+			#center {
+				height: 100%;
+			  background: #00FFFF;
+			  margin-left: 200px;
+			  margin-right: 150px;
+			}
+			
+			#left {
+				height: 100%;
+			  background: aquamarine;
+			  width: 200px; 
+			  margin-left: -100%;
+			}
+			
+			#right {
+				height: 100%;
+			  background: #CCCCCC;
+			  width: 150px; 
+			  margin-left: -150px;
+			}
+			
+			#footer {
+			  clear: both;
+			}
+		</style>
+	</head>
+	<body>
+		<body>
+		  <div id="header"></div>
+		  <div id="container" class="column">
+		    <div id="center">中间</div>
+		  </div>
+		  <div id="left" class="column">左</div>
+		  <div id="right" class="column">右</div>
+		  <div id="footer"></div>
+<body>
+
+	</body>
+</html>

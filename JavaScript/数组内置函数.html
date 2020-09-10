@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			//1 
+			//向数组中添加值
+			//向末尾  push()
+			//向开头  unshift()
+			//两个都返回添加过后的数组长度
+			var arr1 = new Array(1,2,3,4,5);
+			var q = arr1.push(1);
+			var w = arr1.unshift(1);
+			
+			
+			
+			//2
+			//删除数组中的值
+			//删除末尾pop(); 
+			//删除开头 shift(); 
+			//返回的是删除的那个值
+			var temp = arr1.pop();//删除最后一个值
+			arr1.shift();//删除第一个值
+			
+			
+			
+			//3
+			//数组转化为字符串
+			//join(" ")  参数不加 默认为‘,’ 参数为链接每个值得字符
+			var a  =  arr1.join("-");
+			console.log(a,arr1);
+			//1-2-3-4-5 (5) [1, 2, 3, 4, 5]
+			//从上面得到得数据集可看出 join函数不会影响原数组
+			
+			
+			
+			//4
+			//数组排序
+			//整体反序 reverse()
+			 var b = arr1.reverse();
+			 console.log(b,arr1)
+			 //(5) [5, 4, 3, 2, 1] (5) [5, 4, 3, 2, 1]
+			 //reverse() 会影响原数组
+			 //排序 sort() 
+			 //注意！！！这个函数不加参数是按字符顺序排的 而不是数字大小
+			 arr1.sort(function(a,b){return a - b});
+			 //升序
+			 arr1.sort(function(a,b){return b - a})
+			 //降序
+			 
+			 
+			 //5 
+			 //链接数组 concat()
+			 var arr2 = new Array(1,2,3,4);
+			 var arr3 = new Array(1,2,3,4);
+			 var arr4 = arr1.concat(arr2,arr3,['zyx']);
+			 console.log(arr4,arr1);
+			 //arr1没有发生变化 concat()并不会影响原来得数组
+			 
+			 
+			 
+			 //6
+			 // 返回选定元素 [slais]
+			 //slice(begin,end) end参数可选 返回begin下标到end-1下标
+			 var l =  arr2.slice(1,3);
+			 //2,3
+			 
+			 
+			 
+			 //7
+			 //删除 插入 替换  都用得splice(begin,number,temp,temp.....)
+			 //第一个参数删除开始位置  第二个参数删除多少个  可为0
+			 //temp参数无限  添加元素temp  从begin位置开始添加   
+			 //这个方法返回删除得值  如果第二个参数为0 返回[]
+			 //直接作用于操作得数组
+			 
+			 //删除
+			 var arr5 = arr2.splice(1,1);
+			 console.log(arr5,arr2);
+			 // [2] [1,3,4]
+			 
+			 //插入
+			 var arr6 = arr2.splice(1,0,'zyx','zyx','zyx');
+			 console.log(arr6,arr2);
+			 
+			 //替换
+			 var arr7 = arr2.splice(1,3,'JBY','zyx','JBY');
+			 console.log(arr7,arr2);
+			 
+			 
+			 //8 
+			 //查找值所在得下标 indexOf(值,begin);
+			 //第一个参数查找得值 第二个参数开始得位置
+			 var index = arr2.indexOf('JBY',2);
+			 //返回index
+			 //从末尾开始查找
+			 //lastIndexOf();
+			 
+			 
+			 
+ 		</script>
+	</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			div{
+				border: 1px solid  black;
+			}
+			.container{
+				height: 500px;
+				width: 100%;
+				margin-bottom: 20px;
+				margin-top: 20px;
+			}
+			.center{
+				background-color: blueviolet;
+			}
+			.left{
+				background-color: aqua;
+			}
+			.right{
+				background-color: brown;
+			}
+			.flex-center{
+				flex: 1 0;
+			}
+			.flex-left{
+				flex: 0 0 200px;
+				order: -1;
+			}
+			.flex-right{
+				flex: 0 0 200px;
+			}
+			.flex-container{
+				display: flex;
+			}
+			
+			
+			.float-container{
+				box-sizing: border-box;
+				width: 100%;
+			}
+			.float-left{
+				box-sizing: border-box;
+				float: left;
+				width: 200px;
+				height:200px
+			}
+			.float-right{
+				box-sizing: border-box;
+				float: right;
+				width: 200px;
+				height:200px;
+			}
+			.float-main{
+				box-sizing: border-box;
+				margin-left: 200px;
+				width: calc(100% - 400px);
+				height:200px
+				
+			}
+			
+			
+			.position-container{
+				margin-top: 20px;
+				height: 500px;
+				width: 100%;
+			}
+			.position-left{
+				height: 500px;
+				width: 200px;
+				position: relative;
+			}
+			.position-center{
+				height: 500px;
+				width: calc(100% - 400px);
+				position: relative;
+				left: 200px;
+				bottom: 502px;
+			}
+			.position-right{
+				height: 500px;
+				width: 200px;
+				position: relative;
+				left:calc(100% - 200px);
+				bottom: 1004px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container flex-container">
+		  <div class="center flex-center"></div>
+		  <div class="left flex-left"></div>
+		  <div class="right flex-right"></div>
+	   </div>
+	   
+	    <div class="float-container">
+        	<div class="float-left left">
+        		左
+        		
+        	</div>
+        	<div class="float-right right">
+        		右
+        	</div>
+        	<div class="float-main center">
+        		中间    
+                      <!--
+                      	浮动元素无法绕过他前面的元素  所以需要放到最后
+                      -->
+        	</div>
+        	
+        </div>
+        
+        <div class="position-container">
+		  <div class="left position-left"></div>
+		  <div class="center position-center"></div>
+		  <div class="right position-right"></div>
+	   </div>
+	</body>
+</html>

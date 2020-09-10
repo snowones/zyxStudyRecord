@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			.box{
+			width: 200px; height: 200px;
+			position:absolute;
+			left: 300px;top: 200px;
+		}
+		@-webkit-keyframes name{
+			 0%{-webkit-transform: rotateX(0deg) rotateY(0deg) }
+  			 100%{-webkit-transform:rotateX(360deg)  rotateY(360deg)  }
+		}
+		.content{
+			transform-style: preserve-3d;
+			animation: content 5s linear both infinite;
+		}
+		@-moz-keyframes c2 /* Firefox */
+		{
+			to{
+				-webkit-transform:rotateX(90deg)   translateZ(100px);
+			}
+		}
+		.c2{
+			perspective(length);
+			background:rgba(255,0,0,1);
+			transform-style: preserve-3d;
+			animation: c2 3s linear both infinite;
+		}/*linear设置动画从头到为速度相同  infinite设置动画播放次数为无限*/
+		@-moz-keyframes c3 /* Firefox */
+		{
+			to{
+				-webkit-transform:rotateX(270deg)  translateZ(100px);
+			}
+		}
+		.c3{
+			perspective(length);
+			background:rgba(0,255,255,1);
+			transform-style: preserve-3d;
+			animation: c3 3s linear both infinite;
+		}/*linear设置动画从头到为速度相同  infinite设置动画播放次数为无限*/
+		@-moz-keyframes c4 /* Firefox */
+		{
+			to{
+				-webkit-transform:rotateY(90deg) translateZ(100px);
+			}
+		}
+		.c4{
+			perspective(length);
+			background:rgba(255,0,255,1);
+			transform-style: preserve-3d;
+			animation: c4 3s linear both infinite;
+		}/*linear设置动画从头到为速度相同  infinite设置动画播放次数为无限*/
+		@-moz-keyframes c5 /* Firefox */
+		{
+			to{
+				-webkit-transform:rotateY(270deg) translateZ(100px);
+			}
+		}
+		.c5{
+			perspective(length);
+			background:rgba(0,255,0,1);
+			transform-style: preserve-3d;
+			animation: c5 3s linear both infinite;
+		}/*linear设置动画从头到为速度相同  infinite设置动画播放次数为无限*/
+		@-moz-keyframes c1 /* Firefox */
+		{
+			to{
+				-webkit-transform:translateZ(-100px);
+			}
+		}
+		.c1{
+			perspective(length);
+			background:rgba(200,200,0,1);
+			transform-style: preserve-3d;
+			animation: c1 3s linear both infinite;
+		}/*linear设置动画从头到为速度相同  infinite设置动画播放次数为无限*/
+		@-moz-keyframes c6 /* Firefox */
+		{
+			to{
+				-webkit-transform: translateZ(100px) ;
+			}
+		}
+		.c6{
+			perspective(length);
+			background:rgba(0,0,255,1);
+			transform-style: preserve-3d;
+			animation: c6 3s linear both infinite;
+		}/*linear设置动画从头到为速度相同  infinite设置动画播放次数为无限*/
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="content">
+				
+				<div class="c1 box"></div>
+				<div class="c2 box"></div>
+				<div class="c3 box"></div>
+				<div class="c4 box"></div>
+				<div class="c5 box"></div>
+				<div class="c6 box"></div>
+			</div>
+			
+		</div>
+	</body>
+</html>

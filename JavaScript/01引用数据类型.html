@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			//首先对象和数组,还有函数是引用数据类型   
+			//这意味着 这样的数据类型实际并不保存值，而是储存指向存储单元的指针
+			
+			例子
+			let a = [1,2,3];
+			let b = a;
+			b.push(8);
+			console.log(a);//[1,2,3,8];
+			console.log(b);//[1,2,3,8];
+			//更新数组b a同时也改变了
+			
+			//要解决这个问题  es6的方法很简单
+			
+			
+			
+			
+			
+			//扩展运算符用三个点号表示，功能是把数组或类数组对象展开成一系列用逗号隔开的值
+
+			//1 es6扩展运算符...
+			b = [...a,4,5,6];
+			//2 es6方法   可直接创建一个副本 由b来指向
+			b = Object.assign([],a); 
+			//这两个都是es6的方法
+			
+			//构造函数
+			
+			var j = {} //是 var j = new Object() 的语法糖
+			var g =[] //是var a = new Array() 的语法糖
+			function Foo(){} //是var Foo = new Function()  的语法糖
+			
+		// 如何判断一个变量 是对象/数组/函数
+		
+		// x  instanceof  Object/Array/Function
+		</script>
+	</body>
+</html>

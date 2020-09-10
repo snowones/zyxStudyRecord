@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			.waterfall-container {    
+			     /*分几列*/
+			    column-count: 2;
+				column-gap: 50px;
+			  }  
+			 
+			  .waterfall-item {    
+			     /*不留白，不知道什么意思可以取消这个样式试试*/
+			    break-inside: avoid;
+				
+			  }
+			  .item{
+				  height: 300px;
+				  width: 100%;
+				  background-color: #009688;
+			  }
+		</style>
+	</head>
+	<body>
+		<div class="waterfall-container">
+			<div class="waterfall-item item">
+				我是内容
+			</div>
+			<div class="waterfall-item item">
+				我是内容
+			</div>
+			<div class="waterfall-item item">
+				我是内容
+			</div>
+			<div class="waterfall-item item">
+				我是内容
+			</div>
+			<div class="waterfall-item item">
+				我是内容
+			</div>
+			<div class="waterfall-item item">
+				我是内容
+			</div>
+		</div>
+		<script type="text/javascript">
+			const oldList = [1, 2, 3, 4, 5, 6, 7]
+			
+			// 使用reduce函数接受一个初始值{ 0: [], 1: [], length: 2 },
+			// 初始值包含两个空数组，和一个数组长度(Array.from方法要求将对象转数组时对象内要有这个属性)
+			// 在reduce函数内根据索引做余2判断，因为分两，余0的加入第一个数组，余1的加入第二个数组
+			// 最后reduce返回遍历完的对象 {0:[1,3,5,7],1:[2,4,6],length:2}
+			// 使用Array.from({0:[1,3,5,7],1:[2,4,6],length:2}) 得到 数组 [[1,3,5,7],[2,4,6]]
+			// 解构数组 使用concat合并，完事
+			const newList = [].concat(...(Array.from(oldList.reduce((total, cur, index) => {
+			  total[index % 2].push(cur)  
+			  return total
+			}, { 0: [], 1: [], length: 2 }))))
+			
+			console.log(newList)
+		</script>
+	</body>
+</html>

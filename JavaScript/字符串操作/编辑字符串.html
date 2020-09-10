@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			table{
+				border: black 2px solid;
+				align-content: center;
+				cellpadding:3px;
+				cellspacing:5px;
+			}
+			td{
+				border:1px solid #000;
+			}
+			/*解决浏览器table表格里没有边框的问题   td边框消失     如火狐浏览器  可以直接给td标签加上属性border:1px solid #000;*/; 
+		</style>
+	</head>
+	<body>
+		<table>
+			<tr><th>字符串方法</th><th>说明</th></tr>
+			<tr><td>replace()</td><td>替换一个字与正则表达式匹配的子串</td></tr>
+			<tr><td>toLocaleLowerCase()</td><td>将字符串转换为小写</td></tr>
+			<tr><td>toLocaleLowerCase()</td><td>将字符串转换为大写</td></tr>
+			<tr><td>toLowerCase()</td><td>将字符串转换为小写</td></tr>
+			<tr><td>toUpperCase()</td><td>将字符串转换为大写</td></tr>
+		</table>
+		<ul>
+			<li>replace()方法同时执行查找和替换两个操作。如果正则表达式中包含全局变量g，则替换全部查找到的子串</li>
+			<li><h1>为了适应本地化设计需要，String对象定义了toLocaleLowerCase()和toLocaleLowerCase()两个本地化
+			方法。它们能够按照本地方式转换大小写字母，由于只有几种语言（如土耳其语言）具有地方特有的大小写映射，所以一般不用这两个方法
+			</h1></li>
+			
+		<li><h1>ECMAscript 3.0 版本明确规定，replace()方法的第二个参数建议使用函数，而不是字符串</h1></li>
+		</ul>
+		<script>
+			var s = "http://www.mysite.cn/index.html";
+			function f(x){
+				return x.substring(x.lastIndexOf(".")+1,x.length-1)
+			}
+			var b = s.replace(/(html)/,f(s));
+			alert(b);
+		</script>
+	</body>
+</html>

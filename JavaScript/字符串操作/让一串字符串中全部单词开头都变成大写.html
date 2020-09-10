@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			var s = 'script language = "javascript" type = "text/javascript"';
+			var f = function($1){
+				return $1.substring(0,1).toUpperCase() + $1.substring(1);
+				//第一个返回大写首字母，第二个返回单词剩下部分
+			}
+			var a = s.replace(/(\b\w+\b)/g,f);
+			alert(a);
+		</script>
+	</body>
+</html>

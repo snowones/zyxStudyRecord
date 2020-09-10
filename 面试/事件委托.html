@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			事件委托指的是，不再事件的发生地设立监听函数，
+			而是在事件发生地的父元素或者祖先元素设置监听器函数，这样可以大大提高性能，因为可以减少绑定事件的元素
+			
+			
+        	做项目时遇见过这样一个情况
+        	首先用for循环为每一个li元素绑定一个点击事件
+        	然后有一个按钮 每点击一下 会增加一个li 但是这个li没有绑定click事件  不能说每次全部重新绑定一遍 太浪费性能了
+        	这时就可以使用 事件委托
+        	
+        	// 采用事件委托，委托给document帮忙处理
+					window.onload = function(){
+					  document.addEventListener('mouseover', function(e) {  //鼠标滑动事件
+					    var e = e || window.event            
+					    var target = e.target || e.srcElement
+					    if (e.target.nodeName.toLowerCase() == 'li') {  //获取到这个事件的发生元素  如果是li  就让这个元素的背景发生变化
+					      e.target.style.background = 'gray'		//等于讲li事件的监听 让document来监听了
+					      											//e.target 获取事件出发的节点
+					    }
+					  })
+					  document.addEventListener('mouseout', function(e) {
+					    var e = e || window.event
+					    var target = e.target || e.srcElement // IE：e.srcElement
+					    if (e.target.nodeName.toLowerCase() == 'li') {
+					      e.target.style.background = ''
+					    }
+					  })
+}
+
+        -->
+	</body>
+</html>

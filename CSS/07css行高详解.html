@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			span{
+				background: red;
+				.c1{
+					line-height: 20px;
+				}
+				.c1{
+					line-height: 8px;
+				}
+				.c1{
+					line-height: 30px;
+				}
+				.c1{
+					line-height: 28px;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<!--
+        	3个问题 
+        	 行高的构成    行高相关的现象和方案 行高的调整
+        	 行高由linebox构成   linebox由全部的inline元素组成   由其中最大line-height决定
+        -->
+        <!--实例-->
+        <div>
+        	<span class="c1">inline box</span>
+        	<span class="c2">inline box</span>
+        	<span class="c3">inline box</span>
+        	inline box
+        	<!-- 没有标签的也是inline-box 这叫匿名行内元素-->
+        	<span class="c5">inline box</span>
+        </div>
+        <!--
+        	这5个行内元素 行高不一样 但高度显示却一模一样
+        	1  文字的排版
+        	文字 有底线 顶线  还有一个字母的底部叫基线baseline    默认文本按照baseline对其
+        	所有的行内元素全部在一起叫linebox  而linebox的高度由一行内最大inline-height决定
+        	
+        	2 垂直居中的文字
+        	当line-height 大于 font-size时  多出来的部分会自动排到上下两侧 形成垂直居中
+        	
+        	3字体大小不同  字体按baseline对齐     vertical-align 对齐方式 改变的是字体的对齐方式    middle值是字体居中对齐
+        	vertical-align还可以直接设置px  来移动文字的位置
+        -->
+	</body>
+</html>

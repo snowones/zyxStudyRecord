@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<!-- 1 当一张图片下面有空隙  它的原理是什么   怎么解决 
+			
+				因为图片是一个inline元素   它需要按照inline的对齐方式 正常情况下的对齐方式是按照基线对齐的
+				而基线和底线是有一定距离的  这也就是空隙出现的原因  偏差根据同行字体大小而定    如果是12px的字体
+				大小   那么空隙就是3px  这也就是经典的图片3px空隙问题  
+				
+				解决方式 改变文字对齐方式 vertical-aline:bottom  就可以了
+					     还可以 把img 设置为block
+			
+			2 雪碧图的原理和实现
+			雪碧图: 1设置大小  background-size 然后设置显示的图片的哪个位置 background-position
+ 			background-postion:偏移做标; 其实跟你图片里哪个图标的位置坐标刚好是相反的
+ 			2 如何缩小雪碧图大小    让background-size和background-postion同比例缩小
+ 			
+ 			面试时可能会问如何优化网页  雪碧图是一个非常重要的点 可以很大的减少服务器请求次数
+		-->
+	</body>
+</html>

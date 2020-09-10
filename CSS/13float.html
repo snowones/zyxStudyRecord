@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			.con1{
+				border: 2px  solid black;
+				overflow: auto;  /* 解决父级高度塌陷问题*/
+			}
+			.float{
+				float: left;
+				background: red;
+				width: 200px;
+				height: 200px;
+			}
+			.father{
+				box-sizing: border-box;
+				width: 600px;
+			}
+			.left{
+				box-sizing: border-box;
+				border: 1px solid;
+				float: left;
+				width: 200px;
+				height:200px
+			}
+			.right{
+				box-sizing: border-box;
+				border: 1px solid;
+				float: right;
+				width: 200px;
+				height:200px;
+			}
+			.main{
+				box-sizing: border-box;
+				border: 1px solid;
+				margin-left: 200px;
+				margin-right: 200px;
+				width: 200px;
+				height:200px
+				
+			}
+		</style>
+	</head>
+	<body> 
+		<div class="con1">
+			111
+			<div class="float">
+				
+			</div>
+		</div>
+		<!--
+        	float  兼容性最好的布局 国内大部分网站都用这个布局
+        	float最重要的特性  脱离文档流 但是不脱离文本流
+        -->
+        <!--
+        	float影响
+        	对自身的影响
+        	1 形成“块” （BFC）  例如当给行内元素设置float后 我们就可以给它设置宽高了
+        	2 位置尽量靠上
+        	3 位置尽量靠左（右）
+        	
+        	对兄弟的影响
+        	1 上面贴非float元素
+        	2 旁边贴float元素
+        	3 不影响其他块级元素位置
+        	4 影响其他块级元素内部文本
+        	
+        	对父级元素的影响
+        	1 从布局上消失
+        	2 父级高度塌陷
+        	
+        	1解决父级元素高度塌陷问题
+        	浮动元素有一个重要的特征就是bfc  BFC元素会关注自身的宽高  当父级元素塌陷时  
+        	我们就可以把父级变成一个BFC元素 让它来关注自己的宽高 让他关注自己的内部元素
+        	可以设置overflow:auto 或是hidden  让父元素关注自己的内部元素 就解决的高度塌陷问题
+        	
+        	第二种方式 
+        	既然 float元素脱离了文档流 也就是不影响其布局  我们就可以 用一个内容来把父级撑起来
+			这里有个很重要的属性：clear:both   他的含义是  这个元素的两边不能有浮动元素
+			当我们给一个块级元素设置clearboth时并且要明白float元素要尽量靠上排  所以我们的
+			这个块级元素就只能排在浮动元素的下面了 所以 也就撑开了父级元素
+			写法 
+			给父级加个类   类::after{
+				content:" ";
+				display:block;
+				clear:both;
+				height:0;   把这个元素高度设为0
+				visbility:hidden;  隐藏那个空格  这个属性设置元素是否可见  它所设置的不可见  元素消失但仍占据文档流空间
+			}
+			
+			如何用float元素处理两栏布局
+			
+			第一个元素直接float:left
+			而其兄弟元素不设置的话 它文档流不变  但是文本流排在了float元素旁边
+			这时可以设置margin-left 让其整个元素都在float元素右边
+			当设置三栏布局时  中间元素可以设置margin-right 和margin-left
+			下面是示例
+        -->
+        <div class="father">
+        	<div class="left">
+        		左
+        		
+        	</div>
+        	<div class="right">
+        		右
+        	</div>
+        	<div class="main">
+        		中间    
+                      <!--
+                      	浮动元素无法绕过他前面的元素  所以需要放到最后
+                      -->
+        	</div>
+        	
+        </div>
+        
+	</body>
+</html>

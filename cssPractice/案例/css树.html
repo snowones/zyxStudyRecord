@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>纯css树</title>
+		<style>
+			.checkbox input{
+				cursor:default;
+				opacity: 0;
+			}
+			.checkbox label{
+				cursor: pointer;
+			}
+			.checkbox input+label{
+				background: url(toggle-small-expand.png) no-repeat;
+				padding-left: 20px;
+			}
+			.checkbox input:checked + label{
+				background: url(toggle-small.png) no-repeat;  
+			}
+			.tree{
+				margin-top: 40px;
+				padding-left: 10px; /*本来默认是40px*/
+			}
+			a{
+				color: #4C4C4C;
+				text-decoration: none;
+				/*去掉a标签的特性   a标签默认字体蓝色 下面带一个横线 */
+			}
+			
+			li a{
+				background: url(document.png) no-repeat; /*给普通文件设置图标*/
+				padding-left: 20px ;
+			}
+			li{
+				list-style: none;  
+				position: relative; /* 和input配合*/
+			}
+			
+			li input{
+				opacity:0;  /*为了让checkbox消失*/
+				cursor:pointer;  /*小手*/
+				position: absolute;  /*为了让label可以设置成块级元素  因为label需要进行图标和文字的偏离*/
+			}
+			
+			label{
+				display: block;
+				padding-left: 20px;   /*让文字和图标分离*/
+				margin-left: 20px ;   /*因为压在加号图标上  需要 整体向右移动 */
+				background: url(folder-horizontal.png) no-repeat; /* 文件夹图标*/
+				cursor: pointer;
+			}
+			
+			.tree ol{
+				background: url(toggle-small-expand.png) no-repeat;  /*在ol上设置加号图标*/
+				background-size:16px 16px;
+				/*border: 1px solid;*/
+				/*position: relative;
+				top: -20px;
+				padding-top: 20px ;*/
+				margin-top: -20px;    /*现在想把加号图标移动到checked选框上 向上移动*/
+				padding-top: 20px ;   
+			}
+			.tree ol > li { display: none;}  /*将全部子文件隐藏*/
+			input:checked ~ ol > li{   
+				display: block;   /*兄弟选择器  当check被选中时  将它下面消失的元素出来*/
+			}
+			input:checked ~ ol {
+				background: url(toggle-small.png) no-repeat;   /*兄弟选择器  当check被选中时  将ol的图标变成减号*/
+				background-size:16px 16px;
+			}
+			</style>
+	</head>
+	<body>
+		<div class="checkbox">
+			<input type="checkbox"  id="handsome" /><label for="handsome">文件夹</label>
+		</div>
+		<ol class="tree">
+			<li>
+				<input type="checkbox" id="Wenjian1" checked="checked" /><label for="Wenjian1">新建文件夹1</label>
+				<ol>
+				<li class="file"><a href="#">file</a></li>
+				<li>
+					<input type="checkbox" id="Wenjian1.1"  checked="checked"/><label for="Wenjian1.1">新建文件夹1.1</label>
+					<ol>
+						<li><a href="#">file</a></li>
+						<li><a href="#">file</a></li>
+						<li><a href="#">file</a></li>
+						<li><a href="#">file</a></li>
+						<li><a href="#">file</a></li>
+					</ol>
+				</li>
+				<li class="file"><a href="#">file</a></li>
+				<li class="file"><a href="#">file</a></li>
+				</ol>
+			</li>
+			<li>
+				<input type="checkbox" id="Wenjian2" /><label for="Wenjian2">新建文件夹2</label>
+				<ol>
+				<li class="file"><a href="#">file</a></li>
+				<li>
+					<input type="checkbox" id="Wenjian2.1" /><label for="Wenjian2.1">新建文件夹2.1</label>
+					<ol>
+						<li><a href="#">file</a></li>
+						<li><a href="#">file</a></li>
+						<li><a href="#">file</a></li>
+					</ol>
+				</li>
+				<li class="file"><a href="#">file</a></li>
+				<li class="file"><a href="#">file</a></li>
+				</ol>
+			</li>
+			<li>
+				<input type="checkbox" id="Wenjian3" /><label for="Wenjian3">新建文件夹3</label>
+				<ol>
+				<li class="file"><a href="#">file</a></li>
+				<li>
+					<input type="checkbox" id="Wenjian3.1" /><label for="Wenjian3.1">新建文件夹3.1</label>
+					<ol>
+						<li><a href="#">file</a></li>
+					</ol>
+				</li>
+				<li class="file"><a href="#">file</a></li>
+				<li class="file"><a href="#">file</a></li>
+				</ol>
+			</li>
+			<li>
+				<input type="checkbox" id="Wenjian4" /><label for="Wenjian4">新建文件夹4</label>
+				<ol>
+				<li class="file"><a href="#">file</a></li>
+				<li class="file"><a href="#">file</a></li>
+				<li class="file"><a href="#">file</a></li>
+				<li>
+					<input type="checkbox" id="Wenjian4.1" /><label for="Wenjian4.1">新建文件夹4.1</label>
+					<ol>
+						<li><a href="#">file</a></li>
+						<li><a href="#">file</a></li>
+						<li><a href="#">file</a></li>
+						<li><a href="#">file</a></li>
+						<li><a href="#">file</a></li>
+					</ol>
+				</li>
+				</ol>
+			</li>
+			<li>
+				<input type="checkbox" id="Wenjian5" /><label for="Wenjian5">新建文件夹5</label>
+				<ol>
+				<li class="file"><a href="#">file</a></li>
+				<li>
+					<input type="checkbox" id="Wenjian5.1" /><label for="Wenjian5.1">新建文件夹5.1</label>
+					<ol>
+						<li><a href="#">file</a></li>
+					</ol>
+				</li>
+				<li class="file"><a href="#">file</a></li>
+				<li class="file"><a href="#">file</a></li>
+				<li>
+					<input type="checkbox" id="Wenjian5.2" /><label for="Wenjian5.2">新建文件夹5.2</label>
+					<ol>
+						<li><a href="#">file</a></li>
+					</ol>
+				</li>
+				</ol>
+			</li>
+		</ol>
+	</body>
+</html>

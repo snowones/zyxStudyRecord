@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+		1 useState 
+			没啥说的
+			const [name,setNmae] = useState('');
+			
+		2 useEffect
+		    当第二个参数为[] 这句话跟componentDidMount一个意思
+			useEffect(()=>{
+				
+			},[])
+			当第二个参数没有或是有个不为空的数组 跟ComponentDisUpdata差不错
+			分别为全部数据更新都触发或是指定参数更新时触发
+			useEffect(()=>{
+				
+			},[xx,xxx,xxx])
+			当里面含有一个
+			返回一个箭头函数时 return的内容等于compoentDIdUnmount
+			useEffect(()=>{
+				return ()=>{
+					xxxxx
+				}
+			},[xx,xxx,xxx])
+			
+		3 useContext
+			使用这个Hook 还需要以前版本使用的createContext
+			
+			//父组件
+			import React,{useState,useContext,createContext} from 'react';
+			export const Text = createContext();//创建一个上下文并且这个上下文还需要导出
+			import Item from './item';
+			export default function () {
+				const [count,setCount] = useState(0);
+				return({
+					<div>
+						<button onClick = {()}=>{setCount(count + 1)}>
+						+1
+						</button>
+						<Text.Provider value = {{count,setCount}}>  //被这个Provider包裹的全部子组件孙子组件都可以使用value传递的上下文参数
+							<Item />
+						</Text.Provider>
+					</div>
+				})
+			}
+			
+			子组件
+			import React,{useContext} from 'react';
+			import {Text} from './index';//需要把上下文也引入
+			
+			export default function Item() {
+				const  {count,setCount} = useContext(Text);//然后就可以使用父组件中这个上下文provider的value变量和方法
+				return(
+					<div>
+						Item_count:{count}
+						<br />
+						<button onClick = {()}=>{setCount(count - 1)}>
+						01
+						</button>
+					</div>
+				)
+			}
+			
+		4 useRef
+			这个东西一般帮助我们获取元素
+			import React,{useRef} from 'react';
+			export default function () {
+				//定义一个ref
+				const inputRef = useRef();
+				
+				const handClick = ()=>{
+					//这个ref绑定了一个input 此时inputRef就代表了那个input
+					这里直接将那个input设为聚焦状态
+					inputRef.current.focus();
+				}
+				
+				return({
+					<div style = {{margin:'px'}>
+						//把inputRef绑定到input上
+						<input  ref={inputRef} type="text" />
+						<br />
+						<button onclick={handleClick}>click</button>
+					</div>
+				})
+			}
+			
+		5 useMemo
+			帮助我们保存渲染的结果
+			function Parent({a,b}) {
+				const child1 = React.useMemo(()=>
+					<div> a</div>
+				,[a]);
+				//将一写页面的渲染内容用useMemo包裹起来
+				//设定 只有a改变了 这个部分才会重新渲染
+				
+				return()
+				<div>
+					{child1}
+				</div>
+			}
+		
+		6 useCallback
+			跟useMemo很像 不同的是 它主要是为了不让一个函数重新生成 而上面那个是不让组件重新渲染
+		
+		funtion callback({num}){
+			const fn = useCallback(
+				()=>{
+					console.log(num);
+				}
+			,[num])
+			return(
+				<div>
+					{fn}
+				</div>
+			)
+		}
+			正常组件重新渲染 都会重新把fn函数定义一遍，而这个方法绑定后 必须num改变了改方法才会重新定义
+			
+		7 useReducer
+			其实就是函数组件使用redux  其实就是一个useState的封装为了做更复杂的state更新
+			
+		-->
+	</body>
+</html>
