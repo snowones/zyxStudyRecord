@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			let zyx = {
+				name:"zyx",
+				age:18
+			}
+			//1 遍历变量的key Object.keys(object)
+				Object.keys(zyx).forEach((key)=>{
+					console.log(key);
+				})
+			//2 判断是否为对象
+			let isObject = (data)=>{
+				return Object.prototype.toString.call(data) == '[object Object]';
+			}
+			//3 两个对象合并
+			let objMerge = function(obj, target){
+				Object.keys(obj).forEach(key => {
+					if (isObject(obj[key])) {
+						if (isObject(target[key])) { 
+							Object.keys(obj[key]).forEach(prop => {
+							  target[key][prop] = obj[key][prop]
+							})
+						} else { 
+							if (target[key]) {
+								target[key] = {
+									[key]: target[key],
+									...obj[key]
+								}
+							} else {
+								target[key] = obj[key]
+							}
+							
+						}
+					} else {
+						if (isObject(target[key])) {
+							target[key] = {
+								...target[key],
+								[key]: obj[key]
+							}
+						} else {
+							target[key] = obj[key]
+						}
+					}
+				})
+				return target
+			}
+			
+			//阶乘
+			let factorial = (n)=>{
+				if(n == 1) {
+					return 1
+				}
+				return n * factorial(n-1);
+			}
+			factorial(5);
+			
+		</script>
+	</body>
+</html>

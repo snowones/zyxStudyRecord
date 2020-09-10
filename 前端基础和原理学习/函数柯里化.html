@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">			
+			//柯里化(Currying) 
+			//是把接收多个参数的原函数变换成接受一个单一参数（原来函数的第一个参数的函数)
+			//并返回一个新的函数，新的函数能够接受余下的参数，并返回和原函数相同的结果
+			
+			//ES6的方式实现柯里化的通用
+			function currying(fn,...rest1){
+				return function(...rest2){
+					//这里用apply 是为把数组形式的参数直接传入原函数 null是因为不需要改变this
+					return fn.apply(null,rest1.concat(rest2));
+				}
+			}
+			
+			//将一个sayHello函数柯里化
+			function sayHello(name,age,fruit){
+				console.log(`我叫${name},我${age}岁了，我喜欢吃${fruit}`);
+			}
+
+			//传入第一个参数
+			let curryingShowMsg = currying(sayHello,'小明');
+			//执行传入剩余参数
+			curryingShowMsg(22,'芒果');
+			
+			//反柯里化
+			//和柯里化刚好相反。为了让方法使用场景更广，使用反柯里化，
+			//可以把原生方法借出来，让任何对象拥有原生对象的方法。
+			
+			//二者的区别
+			//柯里化
+			//function(arg1,arg2) => function(arg1)(arg2);
+			//function(arg1,arg2,...,argn) => function(arg1)(arg2)(...)(argn)
+			//返柯里化
+			//obj.func(arg1,arg2)  => func(obj,arg1,arg2)
+
+			//ES6实现一个反柯里化
+			function unCurrying(fn){
+				//tar 是我们借给的对象 以前需要xxx.fn(xx) 现在就可以fn(xxx,xx)
+				return function(tar,...argu){
+					return fn.apply(tar,argu);
+				}
+			}
+			//比如我们想把Array.prototype.push方法从原生借出来
+			let push = unCurrying(Array.prototype.push);
+			//arrguments是我们借给的对象
+			push(arguments,4);
+
+
+			//函数柯里化的高阶实现 
+			//上面的函数只实现一层简单的柯里化 如果实现完全的柯里化func(xx)(xx)(xx)(xx)的话
+			//我们要反复嵌套我们的柯里化函数
+			//这里我们实现一个更高阶的柯里化通用方法
+
+			function curryingHelper(fn,len){
+				//这里先说个基本知识点 fn.length 返回的是这个方法需要传入的参数个数
+				//这里第一次运行时通过fn.length 后面递归都是用的传入的len len为剩余的参数个数
+				const length = len || fn.length;
+				return function(...rest){
+					//判断这次传入的参数是否大于等于剩下的参数 如果不是递归返回下一个方法继续传参
+					return rest.length >= length  
+					? fn.apply(this,rest)
+					: curryingHelper(currying.apply(this,[fn].concat(rest)),length-rest.length)
+				}
+			}
+			//还是刚才的sayHello 函数
+			let betterShowMsg = curryingHelper(sayHello);
+			//自动控制传参层数
+			betterShowMsg('zyx')(22)('葡萄');
+			betterShowMsg('zyx',22)('葡萄');
+
+
+			//柯里化的三种用法
+			//1 参数的复用
+			function Say(name,some){
+				console.log(name + '说' + some);
+			}
+			//如果我们只想让zyx说一些东西
+			let zyxSay = currying(Say,'zyx');
+			zyxSay('1111');//zyx说1111
+
+			//2 提高适用性
+			//通用函数解决了兼容性的问题，但是同时在不同场景下，我们可能同一种规则需要反复使用
+			//这就可能会造成代码的重复性 比如
+
+			function square(i){ return i*i }//平方
+			function dubble(i){ return i*2 }//双倍
+			function map(handler,list){
+				//handle 是操作的规则 list是操作的arrguments
+				return list.map(handler)
+			}
+
+			map(square,[1,2,3]);//数组每一项平方
+			map(dubble,[1,2,3]);//数组每一项加倍
+			//这就是通用性 我可以用同一个函数做很多不同的操作
+			//但是如果我们需要大量做平方操作 每次我们都需要传入方法再传入数组就造成的代码浪费
+			//这时我们通过柯里化提高实用性
+
+			let mapSQ = currying(map,square);//直接定义出来的新的平凡操作函数
+			mapSQ([1,2,3]);//以后就不用传入操作方法了
+
+			//延迟执行
+			let add = function(...rest){
+				//定义一个闭包保存_args
+				const _args = [];
+				return function cb(...rest){
+					if(rest.length == 0){
+						//如果不穿参数了 也就是add() 说明我们需要最后执行函数了
+						let res = 0;
+						//累加
+						console.log(_args);
+						for(let data of _args){
+							res += data;
+						}
+						return  res;
+					}else{
+						_args.push(...rest);
+						//为了锁住args 闭包
+						return _args;
+					}
+				}
+			}()
+
+			add(1);
+			add(2);
+			let a = add();
+			console.log(a);
+			
+		</script>
+	</body>
+</html>
