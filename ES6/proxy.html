@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			proxy 在目标对象的外层搭建了一层拦截，外界对目标对象的某些操作，必须通过这层拦截
+			var proxy = new Proxy(target,handle)
+			new Proxy()表示生成一个Proxy实例，target参数表示所要拦截的目标对象，
+			handler参数也是一个对象，用来定制拦截行为
+		-->
+		<script type="text/javascript">
+			let target = {
+				name:'zyx'
+			}
+			let handler = {
+				get:function(target,key) {
+					console.log(key+'被读取');
+					return target[key];
+				},
+				set:function(target,key,value) {
+					console.log(key+'被设置成了'+value);
+					target[key] = value;
+				},
+			}
+			
+			let targetWithHandle = new Proxy(target,handler);
+			let zyx = targetWithHandle.name;//会输出一个name被读取
+			targetWithHandle.name = 'zyxZYX';//会输出一个name被设置成了zyxZYX
+			console.log(target.name);//zyxZYX
+		</script>
+		<!--
+			Proxy的作用
+				1. 拦截和监视外部对象的访问
+				2. 降低函数或类的复杂度
+				3. 在复杂操作前对操作进行校验或对所需资源进行管理
+		-->
+		<!--
+			Proxy所能代理的范围 也就是Handle有多少种操作类型
+			// 在读取代理对象的原型时触发该操作，比如在执行 Object.getPrototypeOf(proxy) 时。
+			handler.getPrototypeOf()
+			// 在设置代理对象的原型时触发该操作，比如在执行 Object.setPrototypeOf(proxy, null) 时。
+			handler.setPrototypeOf()
+			// 在判断一个代理对象是否是可扩展时触发该操作，比如在执行 Object.isExtensible(proxy) 时。
+			handler.isExtensible()
+			// 在让一个代理对象不可扩展时触发该操作，比如在执行 Object.preventExtensions(proxy) 时。
+			handler.preventExtensions()
+			// 在获取代理对象某个属性的属性描述时触发该操作，比如在执行 Object.getOwnPropertyDescriptor(proxy, "foo") 时。
+			handler.getOwnPropertyDescriptor()
+			// 在定义代理对象某个属性时的属性描述时触发该操作，比如在执行 Object.defineProperty(proxy, "foo", {}) 时。
+			andler.defineProperty()
+			// 在判断代理对象是否拥有某个属性时触发该操作，比如在执行 "foo" in proxy 时。
+			handler.has()
+			// 在读取代理对象的某个属性时触发该操作，比如在执行 proxy.foo 时。
+			handler.get()
+		-->
+		
+		<script type="text/javascript">
+			//Proxy的使用场景
+			// 1 实现私有变量
+			let targetPrivate = {
+				name :'zyx',
+				_age :'22',//我们这里将私有变量都定义为已_开头
+			}
+			
+			let HandlePrivate = {
+				get: function(target,key){
+					//str.startsWith
+					if(key.startsWith('_')){
+						console.log('私有变量' + key + '不能被访问');
+						return false
+					}
+					return target[key]
+					
+				},
+				set: function(target,key,value){
+					if(key.startsWith('_')){
+						console.log('私有变量' + key + '不能被修改');
+						return false
+					}
+					target[key] = value
+				},
+				//使用has拦截in操作
+				has:function(target,key){
+					if(key.startsWith('_')){
+						return false;
+					}
+					return Reflect.has(target, key);
+				}
+			}
+			
+			let targetPrivateWithHandle = new Proxy(targetPrivate,HandlePrivate);
+			let a = targetPrivateWithHandle._age;//打印私有变量_age不能被访问
+			targetPrivateWithHandle._age = '1111';//打印私有变量_age不能被修改
+			
+			//还可以使用has拦截in操作
+			//in 操作符  变量 in 对象
+			console.log( "_age" in targetPrivateWithHandle)
+			
+		</script>
+		
+		<script type="text/javascript">
+			//抽离校验模块
+			//我们可以同proxy校验对象的类型和各种校验规则
+			
+			let targetCheck = {
+				name : "zyx",//string
+				age : 16,//number
+				weight : 140,//number
+			}
+			
+			let handleCheck = {
+				set:function(target,key,value){
+					if(key == 'name'){
+						console.log(typeof value)
+						if(typeof value !== 'string'){
+							throw Error("Properties in numericDataStore can only be numbers");
+						}
+					}
+					if(key == 'age'||key == 'weight'){
+						console.log(typeof value)
+						if(typeof value !== 'number'){
+							throw Error("Properties in numericDataStore can only be string");
+						}
+					}
+					target[key] = value
+				},
+				get: function(target,key){
+					return target[key]
+				},
+			}
+			
+			let targetCheckWithHandle = new Proxy(targetCheck,handleCheck);
+			targetCheckWithHandle.name = 12;//这里会直接报错走不下去
+			console.log(targetCheckWithHandle.name);
+			targetCheckWithHandle.age = 'zyx';//这里也会报错
+			console.log(targetCheckWithHandle.age);
+			
+		</script>
+		<!--
+			除了上面的使用方式外还有以下用处
+			充当日志服务 可以利用代理 记录修改和访问属性和方法时日志
+			拦截和预警 和上门的校验意思差不多
+			过滤操作
+			中断代理：
+				Proxy支持随时取消对target的代理，这一操作常用于完全封闭对数据或接口的访问
+				Proxy.revocable() 创建可被销毁的代理对象
+		-->
+		
+		
+	</body>
+</html>

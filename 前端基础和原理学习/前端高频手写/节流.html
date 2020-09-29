@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			//节流
+			function throttle(func, ms = 1000) {
+			  let canRun = true
+			  return function () {
+			    if (!canRun) return
+			    canRun = false
+			    setTimeout(() => {
+			      func()
+			      canRun = true
+			    }, ms)
+			  }
+			}
+			
+			// 测试
+			const task = () => { console.log('run task') }
+			const throttleTask = throttle(task, 1000)
+			window.addEventListener('scroll', throttleTask)
+		</script>
+	</body>
+</html>

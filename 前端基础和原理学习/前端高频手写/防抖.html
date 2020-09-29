@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			// 防抖函数
+			let timer;
+			function debounce(func, ms = 1000) {
+			  return function () {
+				console.log(timer);
+			    if (timer) {
+			      clearTimeout(timer)
+			    }
+			    timer = setTimeout(() => {
+			       func&&func()
+			    }, ms)
+			  }
+			}
+			// 测试
+			const task = () => { console.log('run task') }
+			const task1 = () => { console.log('run task1') }
+			const task2 = () => { console.log('run task2') }
+			const task3 = () => { console.log('run task3') }
+			debounce(task1, 1000)();
+			debounce(task2, 1000)();
+			debounce(task3, 1000)();
+			const debounceTask = debounce(task, 1000)
+			window.addEventListener('scroll', debounceTask)
+		</script>
+	</body>
+</html>
