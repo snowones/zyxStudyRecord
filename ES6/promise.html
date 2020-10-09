@@ -6,8 +6,45 @@
 	</head>
 	<body>
 		<!--
-			有了Promise对象，就可以将异步操作以同步操作的流程表达出来，避免了层层嵌套的回调函数。
-			此外，Promise对象提供统一的接口，使得控制异步操作更加容易。
+			Promise是一个容器，里面保存了某个未来才会结束的事件，也就是异步事件。通过Promise我们可以
+			将异步的事件以同步的方式表达出来，避免了魔鬼回调，同时Promise为我们提供了操作异步事件的接口。
+			还有就是Promise名称由来，承诺的意思是Promise有三种状态，1 Pending 2 fulfilled 3 reject
+			,而这三种状态不受外界的影响，只可能由pending变到fulfilled或是由pending变到reject，并且状态
+			一旦改变，任何操作都无法再次改变这个状态。
+		>
+		<!--
+			resolve()方法的作用是将promise的状态由pending改为fulfilled并将异步调用成功的结果返回出去，
+			reject()是将Promise的状态由pending改为reject并将异步调用失败的方法返回出去
+			resolve()返回的值在.then里获取 reject返回的值再.catch()里获取
+			.then 会将自己返回的值 作为参数传入下一个.then中
+			如果做链式的调用可以在.then中再返回一个Promise
+			.finally()方法是 无论promise最后返回什么状态 都会执行这个方法内的内容(ES2018引入)
+			(这个方法还是很实用的，比如无论结果如果都取消loading)
+		-->
+		<!--
+			API
+				1.Promise.all() 
+				const p = Promise.all([p1,p2,p3])；
+				只有 p1 p2 p3 三个promise都返回resolve才会返回resolve
+				只要有一个reject就返回reject 
+				（平时用的话 一般是用再async函数里，比如三个毫不相干的方法，不需依次await等待
+				，因为这样会让函数执行的更慢，可以直接用promise.all让三个不相干的promise函数
+				一起执行）
+				
+				2.Promise.race()
+				const p = Promise.race([p1,p2,p3])
+				只要p1 p2 p3 有一个函数返回了 p的状态就直接改变
+				
+				3.Promise.allSettled() (ES2020)
+				这个跟.finally()一模一样 大家都执行完了 无论返回结果是什么都执行
+						
+				4.Promise.any()
+				跟promise.all()刚好相反，只要有一个返回resolve就会返回resolve，
+				三个都返回reject才会返回rejcet
+				
+				5.Promise.resolve() Promise.reject()
+				const jsPromise = Promise.resolve($.ajax('/whatever.json'));
+				这俩方法返回一个promise对象，是为了把普通方法封装成promise。
 		-->
 	</body>
 </html>
