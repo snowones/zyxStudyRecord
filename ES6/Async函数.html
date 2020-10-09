@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			async其实就是Generator函数的语法糖
+			它把Generator函数定义用的* 改成async
+			把yield改为了await
+			字面意思就是处理异步函数 await等待异步函数的回调
+			
+			它对Generator函数主要的改进是
+			1 增加了内部的执行器
+			generator 返回了一个迭代器 需要.next()来执行每一个yeild暂停的异步函数
+			而async内部自带执行器，await会等待每一个异步函数的执行，并最后返回一个promise
+			2 更好的语义化和更广的实用性
+			async和await有着有容易理解的语义化，await可以等待任何函数的返回，
+			而yeild后面必须是promise或是thunk函数（这个我也不知道是啥）
+		-->
+	</body>
+</html>
