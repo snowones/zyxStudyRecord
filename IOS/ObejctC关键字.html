@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			1 #import
+			  #import<> 从system目录中查找头文件,不会检查当前目录。
+			  #import""首先在当前目录中查找，如果未找到，则在Xcode设置的预处理程序搜索路径中查找文件。
+			  #import 指令可以防止头文件被重复包含
+			  
+			2 typedef
+			用于给一个类型定义新名称或简化较为复杂的类型声明
+			
+			3 #define
+			用于宏定义预处理
+			
+			4 定义类
+			*.h用于定义类的头文件
+			@interface类 :父类
+			@end
+			*.m 类文件
+			@implementation 类
+			@end
+			
+			5 类方法定义
+			-(返回值类型)函数名:(类型)参数名:(类型)value
+			-(int)speak:(int)age:(NSString*)address;
+			
+			6 全局方法定义
+			改成了+号
+			+(返回值类型)函数名:(类型)参数名:(类型)参数名 
+			
+			7super
+			用于子类调用父类方法，在重载的时候用的比较多
+			
+			8 @selector
+			获取方法的编号，相当于获取函数指针
+			
+			9 @class
+			@class告诉编译器这是一个类，编译器只需要通过指针来引用它即可，并不需要关于这个类的更多信息，可以用来减少编译
+			
+			10 @protocol
+			用于定义一个协议，相当于.NET中的接口interface
+			
+			11 @property
+			用于定义类属性，比如@property(nonatomic,retain)NSString *name; 相当于实现get和set方法，写在类的*.h文件中
+			
+			12 @synthesize
+				用于实现在头文件中描述实现的类属性，一般和@property同时使用；例如@synthesize name;这个写在类的*.m文件中
+			
+			13 id
+				id是保存“指向对象的指针”的类型。声明为id的变量，可以保存指向任何Object-C对象的一个指针
+			
+			14 retain
+				通知编译器向分配给此属性的对象发送一个保留信息，这将确保属性底层的实例变量在使用过程中不会从内存中消失。释放
+				旧对象，将旧对象的值赋予新对象，在增加新对象的索引计数1（在@property中使用）
+				
+			15 nonatomic
+				不给set方法加锁，在多线程访问的时候回出现并发问题（在@property中使用）
+			
+			16 assign
+				简单的赋值，不更改索引的技术（在@property中使用）
+			
+			17 copy
+				建立一个索引计数为1的对象，然后释放旧对象（在@property中使用）	
+			
+			18 readonly
+				将只生成get方法而不生成set方法(在@property中使用)
+			
+			19 readwrite
+				默认属性，将生成不带额外参数的get和set方法（在@property中使用）
+				
+			20 atomic
+				相当于set方法加锁，当多线程访问的时候，只有一个线程访问结束之后另外一个线程才能执行（在@property中使用）
+			
+		-->
+	</body>
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			学习内容的地址：https://juejin.im/post/6844903845617729549
+		-->
+		<!--
+		
+			1 屏幕分辨率 
+				指一个屏幕由多少个像素点组成 
+				但是并不是越大越清晰 还跟屏幕尺寸有关
+			2 图片分辨率
+				指一个图片由多少像素点组成
+				和上面一样 图片越小像素点越多 越清晰
+			3 PPI
+				PPI指每英寸的像素数 
+				它可以用来形容清晰度，PPI越高越清晰
+			4 DPI
+				每英寸包含的点数
+				在图片和屏幕上等同于PPI
+			
+			上述四种都是说的物理像素，即设备上真实的物理像素
+			
+			5 设备独立像素 简称	DIP 或是 DP
+				同样大小的手机（屏幕尺寸） 如果一个分辨率是第二个的两倍的话
+				同样大小的元素在第一个屏幕上的大小只能是第二个的二分之一
+				实际上 第一个屏幕用四个像素点渲染了第二个屏幕的一个像素点
+				这就是设备独立像素
+				比如iphoneX显示的尺寸是375*812而实际的分辨率比这高很多
+			6 设备像素比 dpr
+				物理像素和设备像素的比值
+				在web中 可以用window.devicePixelRatio来获取dpr
+				css中 可以用媒体查询min-device-pixel-ratio来区分dpr
+				@media (-webkit-min-device-pixel-ratio: 2),(min-device-pixel-ratio: 2){ }
+				RN中可以用PixelRatio.get()来获取
+			
+				当然，上面的规则也有例外，iPhone 6、7、8 Plus的实际物理像素是1080 x 1920，
+				在开发者工具中我们可以看到：它的设备独立像素是414 x 736，设备像素比为3，
+				设备独立像素和设备像素比的乘积并不等于1080 x 1920，而是等于1242 x 2208。
+				实际上，手机会自动把1242 x 2208个像素点塞进1080 * 1920个物理像素点来渲染，
+				我们不用关心这个过程，而1242 x 2208被称为屏幕的设计像素。我们开发过程中也是以这个设计像素为准。
+		-->
+		
+		<!--
+			实际开发中我们使用的是设备独立像素
+			ios中的尺寸单位是pt  安卓是dp
+			
+			写前端时正常情况下 也就是页面缩放比为百分之100时，一个css像素等于一个设备独立像素
+			
+			常见情况下我们用K和P来形容屏幕
+			P代表的是屏幕纵向的像素个数 1080P代表的是屏幕纵向有1080个像素 比如 1920*1080就是1080P的屏幕
+			K代表的屏幕横向有几个1024个像素，一般来说横向像素超过2048就是2k屏，超过4096就是4K屏幕	
+		-->
+		
+		<!--
+			视口
+			布局视口
+				document.documentElement.clientWidth/clientHeight 
+				一般用于获取整个网页打宽高
+				手机端我们经常会把document.body.clientWidth设为屏幕宽度
+			
+			视觉视口
+				就是用户眼镜能通过屏幕看到的区域大小
+				window.innerWidth/innerHeight
+				
+				当屏幕禁止缩放时 这个值等于屏幕的宽高
+				但是如果可以进行缩放，假如屏幕放大一倍，这是一个px就会跨越两个物理像素
+				这时视口大小就会缩小到屏幕大小的1/2
+		
+			理想视口
+				指网站页面在移动端展示的理想的大小
+				screen.width/height
+				
+				当页面禁止缩放时
+				css像素 == 设备独立像素  理想视口 == 视觉视口
+				当页面进行缩放时
+				页面缩放系数 = CSS像素/设备独立像素 = 理想视口/视觉视口
+		-->
+		
+		<!--
+			常用的meta配置移动端适配
+			<meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1; minimum-scale=1; user-scalable=no;">
+		
+			width：定义布局视口的宽度
+			height：定义布局视口的高度
+			initial-scale：定义页面初始缩放比
+			minimum-scale：定义页面缩放的最小值
+			maximum-scale：定义页面缩放的最大值
+			user-scalable：定义页面是否可以缩放 默认为yes 设置为no页面将无法缩放
+			
+			做这些的目的就是为了让屏幕禁止缩放
+			且让（宽度）布局视口 == 视觉视口 == 理想视口
+		-->
+		<!--
+			浏览器提供的获取窗口大小的API
+			https://juejin.im/post/6844903845617729549
+				window.innerHeight:获取浏览器视觉视口的高度，包括滚动条(常用).
+				window.screen.Height:获取屏幕理想视口高度。及设备分辨率除以设备像素比。（移动端常用，pc端用不着）
+				document.body.clientHeight:获取布局视口高度。不包括边框、外边距、滚动条（PC移动端都是最常用的，移动端我们的body经常没有外边距和边框 并且会去掉滚动条）
+				document.body（注意这里都是可以用任何documentElement）.offsetHeight:这个包括外边距、边框还有滚动条.(常用)。
+				document.documentElement.scrollHeight:不用滚动条情况下和clientHeight一样(用上面那俩就行)。
+				window.screen.avaiHeight:浏览器窗口可用高度（从没用过）.
+				window.outerHeight:获取浏览器窗口外部的高度。表示整个浏览器窗口的高度，包括侧边栏、窗口镶边和调正窗口大小的边框。
+		-->
+		
+		<!--
+			1px问题
+			为了适配移动端，我们经常用设备独立像素来进行布局
+			在设备像素比大于1的屏幕上。我们写的1px通常是被多个物理像素渲染，这就会出现1px在有些屏幕上显的很粗。
+		
+			这个问题的解决方案就不记录了  现在写适配基本不这么写了 也就不存在这种问题
+		-->
+		
+		<!--
+			移动端适配方案
+			
+			1 flexible方案
+				flexible方案是阿里早期开源的一个移动端适配方案 不过现在基本不用了
+				原理是使用rem来统一布局
+				核心代码
+				function setRemUnit(){
+					var rem = document.client/10;
+					docEL.style.fontSize = rem+'px';
+				}
+				就是把页面rem的值设置为屏幕的1/10大小 然后以后元素的大小我们都通过rem来计算
+				比如iphone设备独立像素为375px，此时1rem等于37.5px。设置假定一个UI元素的宽度为75px，
+				这时我们写他的宽度就应该为2rem。
+				我们需要把整个UI都通过rem重新计算一遍。
+				当然，每个布局都要计算非常繁琐，我们可以借助PostCSS的px2rem插件来帮助我们完成这个过程。
+			
+			2 vh、vw方案
+				其实上面的rem方案就是模仿vh、vw的 因为早期浏览器对vw和vh支持的程度不同
+				
+				vh、vw其实就是把window.innerHeight和window.innerWidth等分为100分
+				还有就是vmax和vmin
+				一个是取vh和vw中最大的数 一个是取vh和vw中最小的数
+				
+				如果视觉视口为375px，那么1vw = 3.75px，这时UI给定一个元素的宽为75px（设备独立像素），我们只需要将它设置为75 / 3.75 = 20vw。
+				
+				同样这种计算我们可以交给 PostCSS的 postcss-px-to-viewport 插件
+				
+				但是这两种方案都有通病
+				
+				1 px换算成vh或是rem时不一定能整除 可能会有像素差
+				2 当容器使用vw而margin采用px，因为内部是根据vw，margin计算单位根据父级，可能会造成宽度超出百分之100。
+				（可以用padding代替margin）
+				
+		-->
+		
+		<!--
+			
+			适配苹果X 
+			安全区域
+			
+			苹果X出现了三个变化 现在有些手写也有这个问题
+			1 圆角 2 刘海 3小黑条
+			
+			安全区域就是 让这三个东西不影响页面展示的区域
+			
+			1 viewport-fit
+				https://juejin.im/post/6844903845617729549
+				专门为了适配苹果X出的属性，在meta里设置
+				<meta name="viewport" content="viewport-fit=cover">
+				viewport-fit:contain  可视窗口完全包含网页内容（全部内容都在安全区域内）
+				viewport-fit:cover 网页内容完全覆盖可视窗口（不在安全区域内）
+				
+				默认为contain 默认情况下就不用调整其他属性了，内容被限制在了安全区域内
+		
+			2  env、constant
+				iOS11新增了两个CSS函数env、constant，用于设定安全区域与边界的距离。
+				
+				我们需要设置过viewport-fit后才能使用这俩函数
+				constant在iOS < 11.2的版本中生效，env在iOS >= 11.2的版本中生效，
+				这意味着我们往往要同时设置他们，将页面限制在安全区域内
+				函数内部可以放四个常量
+					afe-area-inset-left：安全区域距离左边边界距离
+					safe-area-inset-right：安全区域距离右边边界距离
+					safe-area-inset-top：安全区域距离顶部边界距离
+					safe-area-inset-bottom：安全区域距离底部边界距离
+				
+				比如
+				body {
+					padding-bottom: constant(safe-area-inset-bottom);
+					padding-bottom: env(safe-area-inset-bottom);
+				}
+		-->
+		
+		<!--
+			横竖屏幕检测
+				js
+					window.orientation:获取屏幕选择方向
+					window.addEventListener("resize", ()=>{
+					    if (window.orientation === 180 || window.orientation === 0) { 
+					      // 正常方向或屏幕旋转180度
+					        console.log('竖屏');
+					    };
+					    if (window.orientation === 90 || window.orientation === -90 ){ 
+					       // 屏幕顺时钟旋转90度或屏幕逆时针旋转90度
+					        console.log('横屏');
+					    }  
+					}); 
+				css
+					@media screen and (orientation: portrait) {
+					  /*竖屏...*/
+					} 
+					@media screen and (orientation: landscape) {
+					  /*横屏...*/
+					}
+		-->
+		
+		<!--
+			图片模糊问题
+				我们平时用的png、jpg都属于位图 
+				由一个个像素点构成
+				
+				理论上每个像素点在屏幕上被一个物理像素渲染才是正确的 
+				但是在dpr大于1的屏幕上 多个像素点被一个物理像素点渲染这就会造成模糊
+				所以蓝湖的设计稿上都会有三个图
+				dpr = 2 时用二倍图（@2x） dpr = 3 时用三杯图（@3x）
+		
+				下面是通过不同的方法设置选择倍图
+				
+				1 media
+					.avatar{
+					            background-image: url(conardLi_1x.png);
+					        }
+					        @media only screen and (-webkit-min-device-pixel-ratio:2){
+					            .avatar{
+					                background-image: url(conardLi_2x.png);
+					            }
+					        }
+					        @media only screen and (-webkit-min-device-pixel-ratio:3){
+					            .avatar{
+					                background-image: url(conardLi_3x.png);
+					            }
+					        }
+				2 image-set
+					.avatar {
+						background-image: -webkit-image-set( "conardLi_1x.png" 1x, "conardLi_2x.png" 2x );
+					}
+				3 srcset
+					使用img标签的srcset属性，浏览器会自动根据像素密度匹配最佳显示图片：
+					<img src="conardLi_1x.png"
+					     srcset=" conardLi_2x.png 2x, conardLi_3x.png 3x">
+				4 JavaScript拼接图片url
+					使用window.devicePixelRatio获取设备像素比，遍历所有图片，替换图片地址：
+					const dpr = window.devicePixelRatio;
+					const images =  document.querySelectorAll('img');
+					images.forEach((img)=>{
+					  img.src.replace(".", `@${dpr}x.`);
+					})
+				
+				或是直接使用svg图片
+		-->
+		
+		
+		
+		
+		
+		
+		
+		
+	</body>
+</html>

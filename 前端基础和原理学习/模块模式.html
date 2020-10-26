@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			1 命名空间模式
+				TS里现在直接有命名空间这个概念 可以直接定义
+				JS里命名空间是通过全局变量来实现的
+				我们定义一个全局变量 然后把他的变量和方法都添加到这个全局对象中
+				var zyxSpace = {};
+				zyxSpace.name = 'zyx';
+				zyx.method1 = ()=>{
+					xxxx
+				}
+				
+				//用这种方式来构建模块化会出现下面这些问题
+				1 命名空间如果比较复杂，调用链就会很长，使用不便，且增加代码量
+				2 嵌套层级高，会加大解析带的性能问题。
+				3 安全性不好，不能定义私有变量和方法
+				
+			2 模块模式
+				通过闭包的方式定义私有变量来提升安全性 
+				直接通过IIFE快速创建一个闭包
+				var zyxSpace = （function() {
+					let name = 'zyx';
+					let age = '22';
+					let lover = 'xxx';//私有变量
+					
+					return{
+						name,
+						age,
+						publicMethod:()=>{
+							console.log(lover);
+						}
+					}
+				}()
+				
+				这时我们的zyxSpace无法访问lover只能访问name、age和publicMethod
+				
+				3 还有就是直接用ES6的 module
+				export  import
+		-->
+	</body>
+</html>

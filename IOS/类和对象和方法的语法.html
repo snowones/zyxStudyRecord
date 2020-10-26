@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			成员变量和属性 
+			成员变量和属性是不同的 成员变量是内部自己使用的 而属性是给外部使用的
+			比如说对于人这个类 手脚、大脑就属于成员变量 是给自己用的
+			而职业、学历这种就属于属性是给外部用的
+		-->
+		<!--
+			2 类
+			声明一个类
+				@interface 类名:NSObject{
+					//变量声明
+					数据类名 变量名;
+				}
+				//方法声明
+				-(返回值类型)方法名称;
+				@end
+			实现一个类
+				@implementation 类名
+				此处写方法的实现
+				@end
+			
+			注意：
+			1 类必须要有声明和实现
+			2 类名用描述的失误名称命名 类名单词首字母必须大写
+			3 NSObject
+			4 用来表示这类事物的共同的特征的变量必须要定义在@interface的大括号中
+			5 定义在大括号之中用来表示这类事物的共同特征的变量叫做属性、成员变量、
+			实例变量、字段
+			6 为类定义属性，属性名必须以_开头
+			
+			
+			如何创建类的对象
+			语法：
+			类名*对象名 = [类名 new]
+			Person *p1 = [Person new];
+			p1对象的特点
+			1 可以直接使用
+			2 类中定义的东西，这个对象中也有，不会多也不会少
+			
+			如何使用对象
+			1 如何访问对象中的属性
+			 .默认情况下，对象的属性是不允许被外交直接访问的；
+			 .如果允许对象的属性可以被外界访问，那么就在声明属性的时候加一个@public关键字
+			2 访问对象属性的方式
+			对象名->属性名 = 值;//为对象中的属性赋值
+			对象名->属性名; //取出属性值(一般用这种方式取值)
+			(*对象名).属性名;//取出属性值
+			
+			#import <Foundation/Foundation.h>
+				@interface Student : NSObject //创建学生类
+				{
+					@public
+					NSString *_name;
+					int _age;
+					int _Chinese;
+					int _Math;
+					int _English
+				}
+				@end
+				@implementation Student
+				@end
+				int main (int argc, const char * argv[])
+				{
+					Student *s1 = [Student new]; //创建对象
+					s1->_name = @"Barry"; // 给对象赋值
+					s1->_age = 18;
+					s1->_Math = 100;
+					s1->_English = 98;
+					s1->_Chinese = 60;
+					NSlog(@"s1对象的姓名是%@，年龄是%d,数学成绩、英语成绩、语文成绩分别是：%d %d %d",s1->_name,s1->_age,s1->_Math,s1->English,s1->Chinese);
+				}
+		-->
+		<!--
+			3 无参数的方法
+			1声明
+				a.位置：在@interface的大括弧外面
+				b.语法：-(返回值)方法名称;
+				注意：方法头中的数据类型一定要用小括号括起来
+			2实现
+				a.位置：在@implementation之中实现;
+				b.语法：将方法的声明拷贝到@implementation之中，去掉分号，加上大括号
+			3调用
+				[对象名 方法名];
+				
+			案例
+			#import <Foundation/Foundation.h>
+			@interface Person : NSObject {
+				NSString *_name;
+				int _age;
+			}
+			
+			-(void)Run;
+			@end
+			
+			@implementation Person
+			-(void)Run{
+				NSlog(!"This is Test");
+			}
+			@end
+			
+			int main(int argc,const char * argv[]){
+				Person *p1 = [Person new];
+				//调用run方法
+				[p1 Run];
+			}
+		-->
+		<!--
+			4 有一个参数的方法
+			声明:-(返回值的类型)方法名称:(参数类型)参数名称;
+			例:-(void)eat:(NSString*)foodName
+			实现-(返回值类型)方法名称:(参数类型)参数名称{}
+			调用 [对象名 方法名:实参];
+			
+			案例
+			#import <Foundation/Foundation.h>
+			
+			@interface Person : NSObject{
+				NSString *_name;
+				int _age;
+			}
+			
+			-(void)eat:(NSString *)foodName;
+			@end
+			@implementation Person
+			-(void)eat:(NSString *)foodName{
+				NSLog(@"主人给我的%@真好吃！",foodName);
+			}
+			@end
+			
+			int main(int argc,const char * argv[]) {
+				Person *p1 = [Person new];
+				[p1 eat:@"红烧肉"];
+			}
+		-->
+		<!--
+			5 带多个参数的方法
+			声明 
+			-(返回值类型)方法名称:(参数类型)形参名称1:(参数类型)形参名称2:(参数类型)形参名称3
+			例：-(int)sum:(int)num1 :(int)num2 :(int)num3;
+			实现：去掉;改为{}
+			调用：[对象名 方法名:实参1 :实参2 :实参3];
+			
+			案例
+			#important <Foundation/Foundation.h>
+			
+			@interface Person : NSObject {
+				NSSring *_name;
+				int _age;
+			}
+			-(int)sum:(int)num1 :(int)num2 :(int)num3;
+			@end
+			
+			@implementation Person
+			-(int)sum:(int)num1 :(int)num2 :(int)num3{
+				int num4 = num1 + num2 +num3;
+				return nun4;
+			}
+			
+			@end
+			
+			int main(int argc,const char * argv[]){
+				Person *p1 = [Person new];
+				int sum = [p1 sum:10 :10 :25];
+				NSLog(@"num4 = %d",sum);
+			}
+			
+		-->
+		<!--
+			注意
+				同一个类可以创建无数个对象；
+				同一个类的多个对象之间毫无关系，虽然他们拥有相同类型的属性和方法，属性额的值是不会互相影响的
+		-->
+		<!--   
+			对象实例化的使用
+			@property 的使用
+			@property是一种代码生成机制，能够生成不同类型的getter和setter方法。
+			在oc中，操作来获取对象属性值和属性设置值就要使用@property
+			
+			@property使用的语法规则如下
+			@property(attribute1,attribute2) type value;
+			如 @property(nonatomic)NSString* carName;
+			@property要和synthesize一同使用
+			
+			测试:
+			#inport <Foundation/Foundation.h>
+			#import "Engine.h"
+			
+			@interface MyCar : NSObject{
+				int value;
+				float fValue;
+				NSString* carName;
+				Engline* en;
+			}
+			
+			@property (nonatomic) int value;
+			@property (nonatomic) float fValue;
+			@property (nonatomic) NSString* carName;
+			@property (retain) Engine* en;
+			
+			@end
+			
+			#import "MyCar.h"
+			
+			@implementation MyCar
+			
+			@synthesize value;
+			@synthesize fValue;
+			@synthesuze carName;
+			@synthesize en;
+			
+			@end
+			
+		-->
+		<!--
+			@property 中的attribute简单介绍
+			readonly 制度 只能读取而不能设定值
+			readwrite 可读可写（默认）
+			assign 在设值时替换新旧变量（默认）
+			retain 在设值时retain新的变量，release旧变量
+			copy 在设值时copy一份新变量 release旧变量
+			notatomice 默认为atomic
+		-->
+	</body>
+</html>
