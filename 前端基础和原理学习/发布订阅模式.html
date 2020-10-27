@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			发布-订阅模式（Publish-Subscribe Pattern，pub-sub）又叫观察者模式（Obeserver Pattern）
+			（二者有一些小的差距，但是大部分情况下可以认为是一种设计模式）
+		-->
+		<script type="text/javascript">
+			//首先实现一种发布订阅的简单例子
+			//去阿迪买鞋，发现看中的款式已经卖完了，虽然不知道什么时候进货，但是我们可以登记号码之后等待售货员短信，
+			//不用每天询问鞋子写信。买家-消息的订阅者 售货员-消息的发布者
+			
+			//阿迪商店  升级版多种类型
+			const adadisShop = {
+				adadisBook:{},//售货员用来登记的本子
+				record(type,customer){//根据不同的type进行登记
+					if(this.adadisBook[type]){//如果这个类型存在
+						if(!this.adadisBook[type].includes(customer)){//判断这个类型下存在这个顾客不
+							this.adadisBook[type].push(customer);
+						}
+					}else{
+						this.adadisBook[type] = [customer];
+					}
+				},
+				unreord(type,customer){//取消登记
+					if(!this.adadisBook[type] || this.adadisBook[type].includes(customer)){//说明顾客不存在
+						return 0
+					}else{
+						const idx = this.adadisBook[type].indexOf(customer);
+						this.adadisBook[type].splice(idx,1);
+					}
+				},
+				call(type){//通知该类型全部记录的人
+					if(!this.adadisBook[type]){
+						return 0
+					}else{
+						this.adadisBook[type].forEach(customer=>{
+							customer.update(type);
+						})
+					}
+				}	
+			}
+			
+			//顾客
+			const customer1 = {
+				phoneNumber:'185xxxxxx',
+				update(type){
+					console.log('通知'+ this.phoneNumber + '鞋子到货了');
+				}
+			}
+				
+			// 这样的逻辑有以下几个特点
+			// 1. 买家（订阅者）只要声明对消息的一次订阅，就可以在未来的某个时候接收来自售货员（发布者）
+			// 	  的消息，不用一直轮询消息的变化。
+			// 2. 售货员（发布者）持有一个小本本（订阅者列表），对这个小本本上记录的订阅者的情况并不关心，
+			//	  只需要在消息发生时挨个去通知小本本上的订阅者，当订阅者增加或是减少时，只需要在小本本上
+			//    增删记录即可。
+			// 3. 将上面的逻辑升级下，售货员可以有多个小本本，当不同款式的鞋进货了，发布者可以按照不同的小
+			//    本本分别去通知订阅了不同类型消息的订阅者，这里有个消息类型的概念。（升级后的代码直接加上面了）
+		</script>
+		<!--
+			发布订阅的通用实现
+			核心概念： 
+			买家-订阅者（Subscriber）：当消息发生时被通知的对象
+			售货员-发布者（Publisher）：当消息发生时负责通知订阅者
+			小本本-订阅（subscribe）：储存所有订阅者的数组
+			不同鞋型-消息类型（type）：订阅的消息类型
+			发送短信-发布（notify）：遍历订阅者触发消息通知
+			退订-取消订阅（unSubscribe）：删除订阅者
+		-->
+		<script type="text/javascript">
+			//通过class实现
+			class Publisher{
+				constructor() {
+				    this._subsMap = {}
+				}
+				
+				/* 消息订阅 */ 
+				subscribe(type, cb) { 
+					if (this._subsMap[type]) { 
+						if (!this._subsMap[type].includes(cb)){
+							this._subsMap[type].push(cb) 
+						}
+					} 
+					else {
+						this._subsMap[type] = [cb] 
+					}
+				}
+				
+				/* 消息退订 */
+				unsubscribe(type, cb) {
+					if(!this._subsMap[type] || !this._subsMap[type].includes(cb)){
+						return 0;
+					}else{
+						const idx = this._subsMap[type].indexOf(cb);
+						this._subsMap[type].splice(idx, 1)
+					}
+				}
+				
+				/* 消息发布 */ 
+				notify(type, ...payload) {
+					if (!this._subsMap[type]) {
+						return 0;
+					} else {
+						this._subsMap[type].forEach(cb => cb(...payload))
+					}
+				}
+			}
+			
+			const adadis = new Publisher() 
+			adadis.subscribe('运动鞋', message => console.log('152xxx' + message)) // 订阅运动鞋 
+			adadis.subscribe('运动鞋', message => console.log('138yyy' + message)) 
+			adadis.subscribe('帆布鞋', message => console.log('139zzz' + message)) // 订阅帆布鞋 
+			adadis.notify('运动鞋', ' 运动鞋到货了 ~') // 打电话通知买家运动鞋消息 
+			adadis.notify('帆布鞋', ' 帆布鞋售罄了 T.T') // 打电话通知买家帆布鞋消息 
+			// 输出: 152xxx 运动鞋到货了 ~ 
+			// 输出: 138yyy 运动鞋到货了 ~ 
+			// 输出: 139zzz 帆布鞋售罄了 T.T
+		</script>
+		
+		<!--
+			发布订阅模式的优缺点
+			
+				优点：
+				 1.时间上的解耦：注册的订阅行为由消息的发布来决定何时调用，订阅者不用持续关注。
+				 当消息发布时发布者会负责通知。
+				 2.对象上的解耦：发布者不用提前知道接收消息的是谁，发布者只需要遍历处理所有
+				 订阅该消息类型的订阅者发送消息即可，由此解耦了发布者和订阅者之间的联系，互不
+				 持有都依赖于抽象，不再依赖于具体。
+				
+				缺点：
+				 1.增加消耗：创建结构和缓存订阅者这两个过程需要消耗计算和内存资源，即使订阅后
+				 始终没有触发，订阅者也会始终存在于内存。
+				 2.增加复杂度：订阅者被缓存在一起，如果多个订阅者和发布者层层嵌套，那么程序将
+				 变得难以追踪和调试。
+		-->
+		
+	</body>
+</html>
