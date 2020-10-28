@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			策略模式（Strategy Pattern）又称政策模式，其定义一系列算法，把他们一个个封装起来，并且使
+			他们可以互相替换。封装的策略算法一般是独立的，策略模式根据输入来调整采用哪个算法。关键是策略
+			的实现和使用分离。
+		-->
+		<script type="text/javascript">
+			// 示例 比如双11有很多活动，有些商品100-30，有些200-80，我们该如何去计算价格
+			function priceCalculate(discountType,price) { //100-30
+				if (discountType == 'minus100_30') {
+					return price - Math.floor(price/100)*30;
+				}else if (discountType === 'minus200_80') { //200-80
+					return price - Math.floor(price/200)*80;
+				}else if (discountType === 'percent80') { //8折
+					return price*0.8;
+				}
+			}
+			priceCalculate('minus100_30', 270) // 输出: 210 
+			priceCalculate('percent80', 250) // 输出: 200
+			
+			//策略模式的关键在于策略的实现和使用分离 而这里是完全连在一起的
+			//这么写的缺点
+			//	1.随着折扣类型的增多，is-else会变得越来越臃肿
+			//	2.如果增加新的折扣类型或是折扣的算法有所改变，我们只能去函数里修改，这违法了开放-封闭原则（实体可扩展，但是不可修改）
+			//  3.可复用性差,如果其他地方也有类似的算法，但规则不一样，上述代码不能复用。
+			
+			
+			//我们将上述方法 用策略模式实现一遍
+			class PriceCalculate{
+				constructor() {
+				    this.DiscountMap = {
+						minus100_30: function(price) { // 满100减30
+							return price - Math.floor(price / 100) * 30 
+						},
+						minus200_80: function(price) { // 满200减80 
+							return price - Math.floor(price / 200) * 80 
+						},
+						percent80: function(price) { // 8折 
+							return price * 0.8 
+						}
+					}
+				}
+				
+				//输出价格结果
+				priceClac(discountType,price) {
+					return this.DiscountMap[discountType] &&  this.DiscountMap[discountType](price)
+				}
+				
+				//增加策略
+				addStrategy(discountType,fn) {
+					//这里只提供新增，不能修改
+					if(this.DiscountMap[discountType]) {
+						return 0
+					}else{
+						this.DiscountMap[discountType] = fn;
+					}
+				}
+			}
+			
+			let Test = new PriceCalculate();
+			Test.priceClac('minus100_30', 270);//210
+			Test.addStrategy('minus150_40', function(price) { 
+				return price - Math.floor(price / 150) * 40 
+			})
+			Test.priceClac('minus150_40', 270);//230
+		</script>
+		<!--
+			策略模式的通用实现
+			折扣计算方式-策略（Strategy） ：含有具体的算法，其方法的外观相同，因此可以互相代替。
+			具体的折扣计算过程-封装上下文（Context）：封装上下文可以根据需要调用需要的策略，屏蔽
+			外界对策略的直接调用，只对外提供一个接口，根据需要调用对应的策略。
+			StrategyMap：所有策略的合集，供封装上下文调用；
+		-->
+		<script type="text/javascript">
+			// 通用的最简单实现
+			const StrategyMap = {}; 
+			function context(type, ...rest) { 
+				return StrategyMap[type] && StrategyMap[type](...rest) 
+			}
+			StrategyMap.minus100_30 = function(price) { 
+				return price - Math.floor(price / 100) * 30 
+			}
+			context('minus100_30', 270) // 输出: 210
+		</script>
+		
+		<!--
+			策略模式的优缺点
+			
+			策略模式将算法的实现和使用拆分，这个特点带来了很多优点：
+				1.策略之前互相独立，但策略可以自由切换，这个策略模式的特点给策略模式带来了跟多灵活性，
+				  也提高了策略模式的复用率。
+				2.如果不采用策略模式，那么在选策略时一般会采用多重的条件判断，采用策略模式可以避免多
+				  重条件判断，增加可维护性。
+				3.可扩展性好，策略模式可以很方便的进行扩展。
+			
+			策略模式的缺点：
+				1.策略互相独立，因此一些复杂的算法逻辑无法共享，造成一些资源浪费。
+				2.如果用户想要使用什么策略，必须了解策略的实现，因此所有策略需要向外暴露，这违背最少
+				  知识的原则，也增加了用户对策略对象的使用成本。
+				  
+			
+			策略模式的适用场景
+				1.多个算法只在行为上稍有不同，这时可以用策略模式动态选择算法。
+				2.算法需要自由切换的场景。
+				3.有时需要多重条件判断，那么可以使用策略模式来规避多重判断条件
+				
+				比如说，表单判断，我们会定义很多个策略，并且表单的某些字段需要多重策略去判断，并且策略在外部还是可扩展的。
+		-->
+	</body>
+</html>
