@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			首先 new() 做了什么
+				1 var obj = {} :创建一个空对象
+				2 obj._proto_ = BaseObject.prototype;  :让空对象的_proto_属性指向构造对象的prototype属性
+				3 BaseObject.call(obj) :然后让构造对象的this指向创建的空对象
+				4 执行构造函数，返回新的obj
+		-->
+		<script type="text/javascript">
+			//手写一个new
+			//Object.setPrototypeOf(新obj，旧obj.prototype) 为现有对象设置原型，返回一个新对象
+			function myNew(Func,...args) {
+				const obj = {};
+				if (Func.prototype) {
+					Object.setPrototypeOf(obj,Func.prototype);
+				}
+				
+				const res = Func.apply(obj,args);
+				//typeof null  === 'object'
+				if(typeof res === "function" || (typeof res === "object" && res !== null)){
+					return res
+				}
+				return obj;
+			}
+			
+			function Person(name){
+				this.name = name;
+				console.log('我是构造函数');
+			}
+			
+			Person.prototype.sayName = function() {
+				console.log('我的名字是' + this.name);
+			}
+			
+			const me = myNew(Person,'zyx');//我是构造函数
+			me.sayName();//我的名字是zyx
+			console.log(me);//Person {name: "zyx"}
+		</script>
+	</body>
+</html>

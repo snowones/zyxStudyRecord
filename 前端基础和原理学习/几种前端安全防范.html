@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			XSS攻击
+				XSS攻击其实就是把可执行的代码注入网页中。总体上可以分为两种 持久性和非持久性
+				非持久型
+					这种比较常见，有时我们需要通过URL来获取参数，攻击者可以把脚本拼接URL后面，用户一旦打开就会受到攻击
+					叫非持久型的原因是 它只能攻击打开链接的用户 并不能攻击所有用户
+				持久型
+					持久型指攻击代码已被注入到了数据库，所有用户都可能受到攻击，比如评论模块，用户把脚本代码发到评论里，
+					然后这段脚本就被存入到了数据库，其他用户浏览到这个地方时就会受到攻击
+				
+				对于Chrome来说 XSS攻击很难成功，因为Chrome浏览器能够自动帮助用户防御攻击，当用户进入存在脚本注入的页面时，
+				Chrome浏览器会自动进行拦截
+				
+				个人防御手段 比较常用的是转译字符串，转译输入和输出的字符串，比如将 &、<、>进行转译
+				比如<script>window.location.href=”http://www.baidu.com”;</script>
+				会被转译为&lt;script&gt;window.location.href=&quot;http://www.baidu.com&quot;&lt;/script&gt;
+				而展示的时候浏览器会把这些字符串转成文本内容，而不是一段可以执行的代码
+				
+				还可以进行白名单黑名单过滤 比如把script或是一些H5标签内容
+				
+				
+				
+			CSP（网页安全政策、Content Security Policy）
+				CSP本质上就是建立白名单，开发者明确告诉浏览器那些外部资源可以加载和执行，我们只需要配置规则，把拦截操作
+				交给浏览器
+				
+				有两种方式可以开启CSP
+				1 通过HTTP头信息的Content-Security-Policy字段（这个需要在服务器上设置）
+					设置后 Response Headers里就有一个
+					content-security-policy: script-src 'self'; object-src 'none'; style-src cdn.example.org third-party.org; child-src https:
+					后面规则根据需要自行配置
+				2 通过网页的meta标签
+				    <meta http-equiv="Content-Security-Policy" content="script-src 'self'; object-src 'none'; style-src cdn.example.org third-party.org; child-src https:">
+		
+		-->
+		<!--
+			CSRF攻击（跨站请求伪造）
+				是指攻击者伪造请求地址注入木马页面，用户如果在登录状态在访问了页面，对应的服务端就会以为是用户在操作
+				
+				1这种情况使用token就可以避免，假如我们的请求每次都附带了token信息，就可以避免这种攻击
+				2这种攻击一般是利用用户登录后的Cookie内容，我们还可以不让第三方网站访问到用户的Cookie，
+				或是阻止第三方网站请求接口。
+				具体方法
+				1samesite:同一站点
+				可以对Cookie设置 SameSite属性 。该属性表示Cookie不随跨域请求发送
+					三个值 Strict、Lax、None
+					通过Set-Cookie设置
+					Set-Cookie: CookieName=CookieValue; SameSite=Strict;
+					还可以设置 HttpOnly来防止其他用户拿到你的cookie
+				2可以通过判断Http Header里的Referer
+					referer:http://www.xxx.com/xx/xx
+					referer记录了请求来源地的具体URI
+				3不用get用post 
+					这种方式只能避免一些，攻击者可以直接构造一个form来请求，使用这个主要是因为get太容易被拿来做CSRF攻击了
+		-->
+		
+		<!--
+			点击劫持
+				点击劫持是一种视觉欺骗的攻击手段 其实就是把别人的页面作为iframe嵌套到钓鱼网站上，然后用一个透明的
+				蒙层遮住，用户会以为自己访问的还是原网站。
+				
+				这种方式可以直接通过服务端设置响应头X-FRAME-OPTIONS
+				它有三个属性 DENY:不允许页面通过iframe的方式展示
+						   SAMEORIGIN:可以在相同域名下通过iframe的方式展示
+						   ALLOW-FROM:可以在指定的来源的页面下通过iframe的方式展示
+				
+				或是直接通过js的方式，当网页作为iframe展示时，移除网页内容 （异议不大 非常容易破解）
+				代码：
+				function locationTop(){
+				  if (top.location != self.location) {
+				     top.location = self.location; return false;
+				  }
+				  return true; 
+				 }
+				locationTop();
+				
+				破解：
+				// 顶层窗口中放入代码
+				var location = document.location;
+				//或者
+				var location = "";
+		-->
+		
+		<!--
+			中间人攻击，攻击者同时和客服端还有服务端都建立的链接，然后拦截请求修改请求内容
+				比如使用公共WIFI时
+				
+				使用HTTPS就没事了
+		-->
+		
+		<!--
+			CND劫持
+				出于性能考虑，前端可能会把一些静态资源放到CDN上，如果攻击者挟持了CDN，或是对CDN资源进行了污染，
+				网站就可能被攻击到
+				
+				目前 script标签和link标签出了一个新的属性integrity，加了这个属性，浏览器就会去校验资源是否被篡改
+		-->
+	</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			let objectFlat = (obj)=>{
+				let result= {};
+				let handle = (key,value) =>{
+					//处理简单数据类型
+					if(Object(value) !== value){
+						console.log(value);
+						if(key){
+							result[key] = value;
+						}
+					//数组形式
+					}else if(Array.isArray(value)){
+						if(value.length == 0){
+							result[key] = [];
+						}else{
+							for(let i = 0;i<value.length;i++){
+								handle(`${key}[${i}]`,value[i]);
+							}
+						}
+					}else{
+						//对象
+						let objArr= Object.keys(value);
+						if(objArr.length == 0 && key){
+							result[key] = {}
+						}else{
+							objArr.map((item)=>{
+								handle(key?`${key}.${item}`:`${item}`,value[item])
+							})
+						}
+					}
+				}
+				handle('',obj);
+				return result;
+			}
+			
+			let obj = {
+				setName:function(){
+					console.log(11);
+				},
+				name:'zyx',
+				array:[{name:1,age:2},1,3],
+				object:{
+					name:1,
+					age:2.
+				}
+			}
+			
+			console.log(objectFlat(obj));
+		</script>
+	</body>
+</html>

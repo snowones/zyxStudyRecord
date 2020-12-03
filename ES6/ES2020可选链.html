@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			在前端开发中一直有一个痛点，就是深层的访问对象。
+			当我们进行深层的访问对象时，经常需要不断的判空
+			例如 我们访问这样一个对象,去判断他的手机号是否为11位
+data = {
+	user:{
+		phoneNumber:'185xxxxxxxxxx'
+	}
+}
+我们需要这么写
+if(data.user && data.user.phoneNumber && data.user.phoneNumber.length == 11){
+	//xxx
+}
+			
+			在这里我们仅仅是想要判断一下手机号位置就需要进行两次额外的判空
+			并且这么写仅仅应该是在我们明确知道 data.user 和data.user.phoneNumber有可能为空的适合我们去这么写
+			然后在真实发开始时的错误常常是一些意外情况
+			我们前端通常会通过请求获取后端的数据然后回表单表格等网页内容赋值，我们如果要把每个这样的数据进行这种方
+			式的判空可就太操蛋了，然而仅仅一个空值就可能造成我们整个网页的渲染失败，毕竟我们也不能保证数据库里没有
+			脏数据。
+			
+			而现在我们可以使用可选链进行赋值判断
+			
+			可选链
+			语法：?.
+			作用：是一种访问嵌套对象属性的安全的方式。即使中间的属性不存在，也不会出现错误。
+			规则：如果?.前面是undefined或是null，就会立即挺尸运算返回结果
+			
+			例如 上面那段判断就可以修改为
+			if(data.user?.phoneNumber?.length == 11){
+				//xxx
+			}
+			代码意思和上面的三重判读完全一样，
+			如果data.user为空 返回false 
+			如果data.user.phoneNumber为空返回false  
+			如果data.user.phoneNumber != 11 返回false
+			
+			大大简化了代码量
+			
+			其它形式： 
+			1 ?.()
+				?.()用于调用一个可能不在的方法
+			比如
+data = {
+	user:{
+		phoneNumber:'185xxxxxxxxxx'
+		call:function(){
+			console.log('打电话')
+		}
+	}
+}
+			
+			当我们需要调用call方法而我们并不知道这个方法是否一定存在
+			我们可以
+			data.user.call?.()
+			
+			?.()会检查它前面的call方法是否存在 存在就执行 不存在也不会报错
+			这个地方以前的写法是 func&&func()
+			
+			2 ?.[]
+			这个其实就是访问对象的另外一种方式
+			data.user.phoneNumber
+			data['user']['phoneNumber']
+			
+			还是最开始那个例子就可以改成
+			if(data[user]?.[phoneNumber]?.[length] == 11){
+				//xxx
+			}
+		-->
+	</body>
+</html>

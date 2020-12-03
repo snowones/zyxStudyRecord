@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			图片在文件件里
+		-->
+		<!--
+			监控系统 需要监控什么？
+			
+			1 异常监控
+			2 数据监控
+			3 性能监控
+			
+		1 异常监控
+		
+			有哪些异常
+				1 javaScript异常（语法错误，代码错误）
+					通常使用window.onerror 或是 window.addEventListener('error',funciton(e){})
+					（这里包括下面都不去说try-catch,因为try-catch做异常监控必须明确知道这段代码可能出错，而不能做到全局监控）
+					上面两种方式都可以全局监控到js的语法错误和代码错误
+					比如 window.onerror = function(msg,url,line,col,error){}
+					可以拿到错误的文件名、行号、列号等信息
+					
+					但是对于跨域的JS资源，window.onerror拿不到详细信息 
+					需要额外增加Access-Control-Allow-Origin头部 并且script标签引入时增加 crossorigin
+					<script src="http://xx/xx.js" crossorigin></script>
+				2 静态资源加载异常（img、js、css）
+					1 通过object.onerror 
+						比如一个图片
+						let img = document.getElementById('#img');
+						img.onerror = function(e){
+							//捕获错误
+						}
+					但是该方法在静态资源跨域加载时无法获取报错信息,并且如果真实去用很麻烦，不能做到整体监控 
+					
+					2 performance.getEntries()
+						这个方法可以获取到所有加载成功的资料列表 
+						取到的信息比较多 主要包括地址、类型名（css、js...）
+						
+						缺点 
+							1.我们需要自己把控调用时机，他只能输出调用时的加载成功的资源
+						    2.我们需要自己做对比，需要自己知道有多少静态资源需要加载，再和拿到的这个列表进行对比
+							但是正常情况下这么去做比较难，并且我们现在的精彩资源有webpack帮我们进行打包，通常我们
+							每次打包好的资源都有一个hash值，并且每次会变，即使自己修改机制，也很难进行对比。还有就
+							是有些资源是代码运行时异步加载的，这方法使用这个监控很麻烦
+					
+					3 window.addEventListener('error') 最常使用
+						widow.addEventListener('error') 可以捕获到资源加载错误，但是注意window.onerror是不能的
+						但要注意window.addEventListener('error',function(e){},true)
+						第三个参数必须要为true
+						表示在捕获阶段触发，如果为false就是冒泡阶段，这样是无法拿到错误事件的
+						
+						<script type="text/javascript">
+							window.addEventListener('error',function(e){
+								console.log(e);
+								console.log(11111);
+									if(e){
+										//比如下面我随便写一个不存在的图片 这里拿到的就是img
+										let target = e.target || e.srcElement;
+										let isElementTarget = target instanceof HTMLElement;
+										if(isElementTarget){
+											//说明是静态资源加载错误
+										}else{
+											//说明是js错误
+										}
+										
+									}
+							},true)
+							
+						</script>
+						<img src='../xx/aa.png'>
+				3 Ajax请求异常
+					请求的异常是一种很容易处理的异常，但关键在于如何最简单的监控，因为我们的一个web应用通常会发送
+					很多个请求，我们通常通过封装ajax请求来实现请求的统一处理。
+					并且，常见情况下我们不仅仅会统一处理请求的错误情况，还可能包括token的封装，请求头的封装，或是
+					一些我们需要的功能，比如loading、页面结束自动结束未完成的请求
+					文章地址：https://zhuanlan.zhihu.com/p/269519055
+					
+					这里写一段伪代码
+						//url 请求地址 params请求参数 success成功回调 error失败回调
+						function api(url,params,success,error){
+							//公共参数 比如设备参数
+							let commonParams{
+								terminal:{},
+							}
+							//公共参数和请求参数合并
+							params = Object.assign(params, commonParams);
+							
+							//拼接token  登录情况下保存的用户数据  主要看后端给我们的数据，根据实际业务走
+							if (sessionStorage.getItem("userData")) {
+								let userData = JSON.parse(sessionStorage.getItem("userData")).session;
+								header = Object.assign(header, {
+								"x-user-session":
+									"userID=" +
+									userData.userID +
+									";token=" +
+									userData.token +
+									";timestamp=" +
+									userData.timestamp +
+									";autoLogin=true"
+								});
+							}
+							
+							fetch(url, {
+								method: "POST",
+								headers: header,
+								body: JSON.stringify(params)
+							}).then(response=>{
+								//成功的处理
+								success(response);
+							}).catch(e=>{
+								//错误处理  
+								//今天主题 统一的错误处理 我们可以在这里进行统一处理 也可以通过传入的回调灵活处理
+								if(error){
+									error(e);
+								}else{
+									//统一处理
+								}
+							})
+						}
+					
+				4 promise异常
+					1 最简单是promise.catch来直接捕获错误，同上面的Ajax请求，当我们用promise进行请求时，我们可以
+					通过统一的函数来统一处理错误。
+					
+					2 window.addEventListener("unhandledrejection")
+						文档：https://developer.mozilla.org/zh-CN/docs/Web/Events/unhandledrejection
+					
+						为了防止遗漏我们可以使用unhandledrejection事件来捕获promise异常
+						unhandledrejection： 当Promise被reject且没有reject处理器的时候
+						就会触发unhandledrejection事件
+						
+				5 iframe异常
+					iframe异常还是直接使用window.onerror就行了
+					例：
+					<iframe src='xxx'></iframe>
+					window.frames[0].onerror = function(message, source, lineno, colno, error){
+						//需要我们找到我们的iframe对象 然后就可以捕获到他内部的具体错误了
+					}
+					
+				其它的还有React异常监控和Vue异常监控
+					React:
+						componentDidCatch(error,info){
+							console.log('捕获异常:',error,info)
+						}
+					Vue:
+						Vue.config.errorHandle = (err,vm,info)=>{
+							console.log('捕获异常',error,info);
+						}		
+				
+			上报哪些信息
+				错误id、用户id、用户名、用户ip、设备、错误信息、浏览器信息、系统版本、应用版本
+				、机型、时间戳、异常级别（error、warning、info）
+			
+			如何监控
+				1 try-catch
+				2 window.onerror
+				3 window.addEventListener('error')
+				4 window.addEventListener('unhandleDrejection')
+				5 Vue 
+					Vue.config.errorHandle = (err,vm,info)=>{
+						console.log('捕获异常',error,info);
+					}
+				6 React
+					componentDidCatch(error,info){
+						console.log('捕获异常:',error,info)
+					}
+		
+		2 数据监控
+			1 PV/UV：pv页面浏览量或是点击量 UV指访问某个站点或是点击某条新闻的不同ip地址的人数(不用登陆时)，登陆后就是指具体的用户
+			2 用户给在每一个页面的停留时间
+			3 用户在相对的页面中触发的行为
+			4 用户通过什么入口来访问该网页
+			
+			上述的四点主要是为了统计用户行为和使用情况，它可以有利的帮助我们进行商业决策
+			而对于上述的四点前端是通过埋点的方式来进行监控的
+			埋点 
+			1 代码埋点 2可视化埋点 3无埋点
+			
+				代码埋点
+					就是以嵌入代码的形式进行埋点，比如监控用户的点击事件，会选择在用户点击时，插入一段代码，
+					保存这个监听行为或是将监听行为以某一种数据格式直接传递给后端服务器。此外比如需要统计产品
+					的pv、uv时，需要在页面初始化时，发送用户的访问信息等
+					
+					优点：高度的可控性，可以在任意时刻，精缺的发送或是保存所需要的数据信息
+					缺点：工作量大，每一个组件的埋点都需要添加相应的代码，埋点和业务耦合在了一起
+					
+				可视化埋点
+					通过可视化交互的手段，代替代码埋点。将业务代码和埋点代码分离，提供一个可视化
+					交互页面，输入为业务代码，通过这个可视化系统，可以在业务代码中自定义的增加埋
+					点事件等等，最后输出的代码耦合了业务代码和埋点代码
+					
+					缺点：可视化埋点可以埋点的控件有限，不能手动定制
+					
+				无埋点
+					无埋点并不是说不需要埋点，而是全部埋点，前端的任意一个事件都被绑定一个标识，所
+					有事件都分别记录下来。通过定期上传记录文件，配合文件接卸，解析出来我们想要的数
+					据，并生成可视化报告供专业人员分析，实现”无埋点“统计
+					
+					优点：由于采集的是全量数据，所以迭代过程中是不需要关注埋点逻辑的，也不会出现漏
+					埋，误埋等现象
+					缺点：无埋点采集全量数据，给数据传输和服务器增加压力和无法灵活的定制各个事件所
+					需要上传的数据
+			
+		3 性能监控
+			1 不同用户、不同机型、不同系统下的首屏加载时间
+			2 白屏时间
+			3 http等请求的响应时间
+			4 静态资源整体下载事件
+			5 页面渲染时间
+			6 页面交互动画完成时间
+			
+			Performance API
+			https://developer.mozilla.org/zh-CN/docs/Web/API/Performance
+			
+			
+		-->
+		<script type="text/javascript">
+			window.addEventListener('error',function(e){
+				console.log(e);
+				console.log(11111);
+					if(e){
+						//比如下面我随便写一个不存在的图片 这里拿到的就是img
+						let target = e.target || e.srcElement;
+						let isElementTarget = target instanceof HTMLElement;
+						if(isElementTarget){
+							//说明是静态资源加载错误
+						}else{
+							//说明是js错误
+						}
+						
+					}
+			},true)
+			
+		</script>
+		<img src='../xx/aa.png'>
+	</body>
+</html>
