@@ -8,34 +8,43 @@
 		<script type="text/javascript">
 			let objectFlat = (obj)=>{
 				let result= {};
-				let handle = (key,value) =>{
-					//处理简单数据类型
+				let handle = (key,value) => {
 					if(Object(value) !== value){
-						console.log(value);
+						//基本数据类型
 						if(key){
 							result[key] = value;
 						}
-					//数组形式
 					}else if(Array.isArray(value)){
-						if(value.length == 0){
+						//如果是数组的情况下
+						if(value.length == 0 && key){
 							result[key] = [];
 						}else{
-							for(let i = 0;i<value.length;i++){
+							for(let i;i<value.length;i++){
 								handle(`${key}[${i}]`,value[i]);
 							}
 						}
+					}else if(typeof(value) == 'function'){
+						//函数类型
+						if(key){
+							result[key] = value;
+						}
 					}else{
-						//对象
-						let objArr= Object.keys(value);
-						if(objArr.length == 0 && key){
+						//说明是个对象
+						let objKeys = Object.keys(value);
+						if(objKeys.length == 0 && key){
 							result[key] = {}
 						}else{
-							objArr.map((item)=>{
-								handle(key?`${key}.${item}`:`${item}`,value[item])
+							objKeys.map((name)=>{
+								if(key){
+									handle(`${key}.${name}`,value[name]);
+								}else{
+									handle(`${name}`,value[name]);
+								}
 							})
 						}
 					}
 				}
+				
 				handle('',obj);
 				return result;
 			}

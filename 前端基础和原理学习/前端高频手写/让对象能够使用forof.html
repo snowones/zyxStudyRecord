@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			//其实就是给对象实现一个iterator接口
+			//每一个可使用for of的对象也就是可迭代的对象一定包含一个[Symbol.iterator]的方法属性
+			
+			let obj = {
+				name:'zyx',
+				age:12
+			}
+			
+			obj[Symbol.iterator] = ()=>{
+				let keyArr = Object.keys(obj)
+				let length = keyArr.length;
+				//从第一个单位开始取值
+				let i = 0;
+				//第一次取值后 每次取值i都需要+1再取 但是第一次就是取第一位
+				let first = 1;	
+				return{
+					next:()=>{
+						if(i<length-1){
+							if(first){
+								first = 0;
+							}else{
+								i++;
+							}
+							return {done:false,value:obj[keyArr[i]]}
+						}else{
+							return {done:true,value:1}
+						}
+					}
+				}
+				
+			}
+			
+			for(let data of obj){
+				console.log(data);
+			}
+			
+		</script>
+	</body>
+</html>

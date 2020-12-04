@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			//js类型
+			//Boolean、Null、Undefined、Number、BigInt、String、Symbol
+			
+			
+			//常用的typeof和instanceof
+			//typeof 为一个一元运算 放在一个运算数之前 或是当做函数使用
+			let num = 1;
+			console.log(typeof num);
+			console.log(typeof(num));
+			//它的返回值有 number、string、boolean、object、function、undefined、bigint、symbol
+			let func = ()=>{}
+			console.log(typeof func);//function
+			//他不能识别null、array和object
+			console.log(typeof null); //object
+			console.log(typeof {}); //object
+			console.log(typeof []); //object
+			
+			//instanceof 用来测试一个对象在其原型链中是否存在一个构造函数的prototype属性
+			console.log([] instanceof Array);
+			//但是 任何一个变量 instanceof Object 都是true  因为原型链的末尾一定是Obejct
+			//数组
+			console.log([] instanceof Object);
+			//方法
+			console.log(func instanceof Object);
+			
+			//判断数组还可以用Array.isArray()
+			console.log(Array.isArray([]));
+			
+			
+			//还有一个重要的类型判断  就是Date() 、Math()类型如何判断
+			Object.prototype.toString.call().slice(8,-1).toLowerCase();
+			//slice(8,-1) 是因为取出来的是 "[object Math]"
+			//toLowerCase() 大写转小写 
+		</script>
+	</body>
+</html>

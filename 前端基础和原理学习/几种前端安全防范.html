@@ -102,5 +102,13 @@
 				
 				目前 script标签和link标签出了一个新的属性integrity，加了这个属性，浏览器就会去校验资源是否被篡改
 		-->
+		<!--
+			SQL注入
+				举例登录 
+				SELECT * FROM user WHERE username = 'zyx' AND password = '12456';
+				如果用户输入的username 为 'or 1=1 #
+				SELECT * FROM user WHERE username = ''or 1=1 #' AND password = 'xxxxx';
+				由于sql语句 #为注释 这样就变成了 SELECT * FROM user 让攻击者拿到了全部用户数据
+		-->
 	</body>
 </html>
