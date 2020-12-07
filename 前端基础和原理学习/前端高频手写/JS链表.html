@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			
+			class Node{
+				constructor() {
+				    this.data = data;//节点的数据域
+					//单链表只有next 没有 prev
+					this.prev = null;//节点的指针域
+					this.next = null;//节点的指针域
+				}
+			}
+			//单链表
+			class singleLinkList{
+				constructor() {
+				    this.size = 0;//单链表的长度
+					this.head = new Node('head');//表头节点
+					this.currNode = '';//当前节点的指向
+				}
+				//在链表中寻找item元素
+				find(item){
+					let currNode = this.head;
+					while(currNode &&(currNode.data !== item)){
+						currNode = currNode.next;
+					}
+					return currNode;
+				}
+				//向单链表中插入元素
+				insert(item,element){
+					let itemNode = this.find(item);
+					//如果不存在
+					if(!itemNode){
+						return;
+					}
+					let newNode = new Node(element);
+					newNode.next = itemNode.next;
+					itemNode.next  = newNode;
+					
+					this.size++;
+				}
+				//在链表中删除一个节点
+				remove(item){
+					if(!this.find(item)){
+						return;
+					}
+					//如果删除的是头结点
+					if(item === 'head'){
+						if(!(this.isEmpty())){
+							//如果链表不是空的 不能删除头结点
+							return;
+						}else{
+							//如果链表是空的 让头结点指向空
+							this.head.next = null;
+						}
+					}
+					
+					let currNode = this.head;
+					while(currNode.next.data !== item){
+						if(!currNode.next){
+							return;
+						}
+						currNode = currNode.next;
+					}
+					
+					currNode.next = currNode.next.next;
+					this.size--;
+				}
+				//在单链表的尾部添加元素
+				append(element){
+					//直接使用fandLast找到最后一个节点
+					let newNode = new Node(element);
+					let currNode = this.findLast();
+					currNode.next = newNode;
+					this.size++;
+				}
+				//获取单链表的最后一个节点
+				findLast(){
+					let currNode = this.head;
+					while(currNode.next){
+						currNode = currNode.next;	
+					}
+					return currNode;
+				}
+				////判断单链表是否为空
+				isEmpty(){
+					return this.size === 0;
+				}
+				show(){}//显示当前节点
+				getLength(){}//获取单链表的长度
+				//从当前节点向前移动n个位置
+				advance(n,currNode){
+					this.currNode = currNode;
+					while((n--) && this.currNode.next){
+						this.currNode = this.currNode.next;
+					}
+					return this.currNode;
+				}
+				display(){}//单链表的遍历显示
+				//清空链表
+				clear(){
+					this.head.next = null;
+					this.size = 0;
+				}
+			}
+			//链表有可能会有环 就是最后一个元素的next指向了链表前面的元素 导致链表一直循环
+			//如何判断链表是否有环
+			function isLoop(linList){
+				//通过快慢指针
+				let p = list.head;
+				let q = list.head;
+				
+				while(q){
+					p = p.next;
+					if(p.next){
+						q = q.next.next;
+					}
+					if(q === p){
+						console.log('有环');
+						return;
+					}
+				}
+				console.log('没环')
+			}
+			
+			//双向链表
+			class doubleLinkList extends singleLinkList{
+				constructor() {
+					//调用父类的构造函数
+				    super();
+				}
+				//插入
+				insert(item,newElement){
+					let currNode = this.find(item);
+					let newNode = new Node(newElement);
+					
+					if(currNode.next){
+						//插入位置在中间
+						newNode.next = currNode.next;
+						currNode.next.prev = newNode;
+						currNode.next = newNode;
+						newNode.prev = currNode;
+					}else{
+						//插入位置在末尾
+						currNode.next = newNode;
+						newNode.prev = currNode;
+					}
+				}
+				//移除
+				remove(item){
+					let currNode = this.find(item);
+					let lastNode = this.findLast();
+					
+					//约定 如果删除头节点 默认把整个链表删除
+					if(item == 'head'){
+						this.head.next = null;
+						this.head.prev = null;
+						this.size = 0;
+						return
+					}
+					//如果要删除的节点存在
+					if(currNode){
+						if(currNode == lastNode){
+							//如果是最后一个节点
+							currNode.prev.next = null;
+						}else{
+							currNode.prev.next = currNode.next;
+							currNode.next.prev = currNode.prev;
+						}
+						currNode = null;
+						this.size--;
+					}
+				}
+				//反向遍历
+				reverseDisplay{
+					let result = '';
+					let currNode = this.findLast();
+					while(currNode.data !== 'head'){
+						result += `${currNode.data}->`;
+						currNode = currNode.prev;
+					}
+					result += `head`;
+					console.log(result);
+				}
+				//在尾部添加数据
+				append(element){
+					let lastNode = this.findLast();
+					let newNode = new Node(element);
+					lastNode.next = newNode;
+					newNode.prev = lastNode;
+					
+					this.size++;
+				}
+				//查找最后一个节点
+				findLast(){
+					let currNode = this.head;
+					let count = 0;
+					
+					while(count++ !== this.size){
+						currNode = currNode.next;
+					}
+					return currNode;
+				}
+				//遍历单项循环列表
+				display(){
+					let result = 'head';
+					let currNode = this.head;
+					let lastNode = this.findLast();
+					
+					while(currNode !== lastNode){
+						currNode = currNode.next;
+						result += `->${currNode.data}`;
+					}
+					console.log(result);
+				}
+			}
+		</script>
+	</body>
+</html>
