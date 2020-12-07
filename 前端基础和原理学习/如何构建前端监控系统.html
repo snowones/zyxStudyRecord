@@ -218,8 +218,97 @@
 			https://developer.mozilla.org/zh-CN/docs/Web/API/Performance
 			
 			
+			经常使用的几个节点
+			1确定统计起始点
+				通常是使用navigationStart 或是 fetchStart
+				navigationStart:表示上一个文件卸载的时间
+				fetchStart:浏览器准备好使用HTTP请求抓取文档的时间，发生在检查本地缓存之前
+				
+				如果没有上一个文档 这两个值就是相同的，实际统计中上一个页面卸载耗时对页面性能分析并无大作用(页面卸载时不是白屏，
+				不影响用户体验，所以一般直接使用fetchStart就行了)
+				
+			
+			2 首字节
+				1 responseStart：Http开始接收响应的时间（获取第一个字节的时间，包括读取缓存）
+				 这个节点用户基本是没有任何感知的，但对于性能加载比较重要。（这个节点指首字节）
+				 
+				在responeseStart之前还有一个节点是requestStart 
+				开始发送请求获取dom文档的时间(这个和平时说的开始发送请求不同，这个指的是重定向做完、DNS查询结束、TCP链接建立完成开始获取资源)
+				
+			3 白屏时间
+				用户看到页面展示出现第一个元素的时间。(很多文档直接使用的首字节的时间，实际并不精确，因为头部资源没加载完时，页面也是白屏)
+				domInteractive - fetchStart 
+				
+				domInteractive:完成解析DOM树的时间，document.readyState变为interactive，并抛出readyStateChange相关事件。
+				注意:只是DOM树解析完成，这时候并没有开始加载网页资源
+				
+				domInteractive是新版提出的，旧版时是使用domLoading
+				domLoading是domInteractive前一个事件，表示开始解析渲染DOM树的时间，此时document.readyState变为loading,并抛出readystatechange事件
+				
+			4 首屏时间
+				首屏时间指页面第一屏所有资源完整展示的时间。
+				这个指标对于用户是一个非常重要的体验指标，并且由于我们使用的都是vue、react构建的SPA应用，首屏加载时间慢是一个很现实的问题。
+				但是这个指标没有一个标准的监控方式
+				通常我们使用domContentLoadedEventEnd - fetchStart
+				或是说使用loadEventStart - fetchStart
+				
+				domContentLoadedEventEnd:DOM解析完成后，网页内资源加载完成时间。
+				loadEventStart:load事件发送给文档，也即load回调函数开始执行的时间。
+				
+			还有就是performance.navigation 可以提供一些用户行为信息	
+			
+				1 performance.navigation.type 
+					返回一个整数表示网页加载来源，四种情况
+					0:通过点击链接、地址栏输入、表单提交、脚本操作等方式加载
+					1:网页通过重新加载按钮或是location.reload()
+					2:网页通过前进后退按钮加载
+					255:任何其他来源的加载
+				
+				2 performace.navigation.redirectCount
+					该属性表示当前网页经过了多少次重定向跳转。
+				
+			但是通过window.performance.timing 所获得的页面渲染相关数据，在SPA应用中改变了url但不刷新页面的情况下是不会更新的。因此仅仅
+			通过这个API是无法获得每一个子路由所对应的页面渲染时间，如果需要上报切换路由情况下每一个子页面重新render的时间，需要自定义上报。
 		-->
+		
+		
 		<script type="text/javascript">
+			//性能监控代码
+			let times = {};
+			let t = window.performance.timing;
+			
+			//读取页面第一个字节时间
+			times.ttfbTime = t.responseStart - t.fetchStart;
+			
+			//页面白屏时间
+			times.blankTime = t.domInteractive - t.fetchStart;
+			
+			//首屏加载时间
+			times.domReadyTime = t.domContentLoadedEventEnd - t.fetchStart;
+			
+			//重定向时间
+			times.redirectTime = t.redirectStart - t.redirectEnd;
+			
+			//DNS查询时间
+			times.dnsTime = t.domainLookupEnd - t.domainLookupStart;
+			
+			//页面卸载时间
+			times.unloadTime = t.unloadEventEnd - t.unloadEventStart;
+			
+			//tcp链接耗时
+			times.tcpTime = t.connectEnd - t.connectStart;
+			
+			//request请求耗时
+			times.reqTime = t.responseEnd - t.responseStart;
+			
+			//解析dom耗时
+			times.analysisTime = t.domComplete - t.domInteractive;
+			
+			console.log(times);
+			
+		</script>
+		<script type="text/javascript">
+			//异常监控代码
 			window.addEventListener('error',function(e){
 				console.log(e);
 				console.log(11111);
