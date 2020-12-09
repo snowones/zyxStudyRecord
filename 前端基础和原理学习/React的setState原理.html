@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			setState(upDater,callback) 这个方法用来告诉react组件数据有更新，有可能需要重新渲染，它是异步的，
+			react通常会集齐一批需要更新的组件，然后一次性更新来保证渲染性能
+			
+			upDater 有两种形式 一种是对象一种是数组
+			
+			比如 我们onClick里连续累加两次
+			onClick = ()=>{
+				this.setState({index:this.state.index + 1})
+				this.setState({index:this.state.index + 1})
+			}
+			在React严重 这个方法最终会变成
+			Object.assign(
+				previousState,
+				{index:state.index+1},
+				{index:state.index+1},
+			)
+			后面的数据更新会覆盖前面的更改，得到的结果和我们预想的结果是不同的
+			所以 如果setState依赖前一个setState的结果 推荐upDater使用的function
+			onclick = () =>{
+				this.setState((prevState,props)=>{
+					return {index:prevState.index + 1}
+				})
+				this.setState((prevState,props)=>{
+					return {index:prevState.index + 1}
+				})
+			}
+			
+			setState更新过程
+			1 获取当前组件的实例
+			2 把需要更新的state事务放到_pendingStateQueue里(储存更新state的队列里)
+			3 然后把实例交给enqueueUpdate处理
+			4 enqueueUpdate判读是否处于批量更新阶段，如果处于把实例放到待更新实例队列里
+			5 如果判断不是 再调用bachingUpdates，把react的处于批量更新的状态的属性设为true 然后把要更新的组件放到待更新队列里
+			6 最后当实例全部处理完 把批量更新状态设为false 循环全部dirtyComponent(前面说的待更新组件队列)，调用updataComponent，里面含有调用生命周期的方法来更新组件
+		
+			但要注意react只是模拟实现异步过程 在react的声明周期中或是合成事件中(比如onclick就是react的合成事件代理了原生的onclick)
+			setState才会把isBatchingUpdates设为true(是否处于批量更新创建过程)，如果在原生方法里比如setTimeout或是异步请求中，这个值
+			会一直为false，此时setState就为同步状态
+		-->
+		<script type="text/javascript">
+			//源码
+			ReactComponent.prototype.SetState = function(partialState,callback){
+				//把SetState事务放进队列里
+				this.upDater.enqueueSetState(this,partialState);
+				if(callback){
+					this.updater.queueCallback(this,callback,'setState');
+				}
+			}
+			//enqueueSetState做了两件事 1把新的state放进数组里 2用enqueueUpdate来处理将要更新的示例对象
+			enqueueSetState:function(publicInstance,partialState) {
+				//获取当前组件的instance
+				var internalInstance = getInternalInstanceReadyForUpdate(publicInstance,'setState');
+				
+				//把需要更新的state放到一个数组里
+				var queue = internalInstance._pendingStateQueue || (internalInstance._pendingStateQueue = []);
+				queue.push(partialState);
+				
+				//将需要更新的instance也放到一个队列里
+				enqueueUpdate(internalInstance);
+			},
+			
+			
+			function enqueueUpdate(component){
+				//如果没有处于批量创建、更新组件的的阶段，则处理update state事务
+				if(!batchingStrategy.isBatchingUpdates) {
+					batChingStrategy.batcheUpdates(enqueueUpdate,component);
+					return;
+				}
+				//如果正处于批量创建、更新组件的过程中，将当前组件放在dirtyComponent数组中
+				dirtyComponent.push(component);
+			}
+			//从这段代码可以看到，当前如果正处于创建、更新组件的过程，就不会立即去更新组件，而是先把当前组件放到
+			//dirtyComponent里,所以不是每一次的setState都会更新组件
+			
+			//然后就是batchingStrategy
+			var batchingStrategy = {
+				//用于标记当前是否处于批量更新
+				isBatchingUpdates:false,
+				//当调用这个方法时，正式开始批量更新
+				batchedUpdates:funciton(callback,a,b,c,d,e){
+					var alreadyBatchingUpdates = ReactDefaultBatchingStrategy.isBatchingUpdates;
+					ReactDefaultBatchingStrategy.isBatchingUpdates = true;
+				    // 如果当前事务正在更新过程在中，则调用callback，既enqueueUpdate
+					if (alreadyBatchingUpdates) {
+					  return callback(a, b, c, d, e);
+					} else {
+					// 否则执行更新事务
+					  return transaction.perform(callback, null, a, b, c, d, e);
+					}
+					
+				}
+			}
+			//如果当前事务正在更新过程中，则继续要实例放到dirtyComponent里
+			//如果不在则执行更新事务
+			
+			
+		</script>
+	</body>
+</html>

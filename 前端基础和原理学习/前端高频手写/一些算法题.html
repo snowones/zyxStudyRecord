@@ -6,7 +6,115 @@
 	</head>
 	<body>
 		<script type="text/javascript">
-			//1 阶乘
+			// 二分法查找
+			let halfArr = [1,2,6,8,15,20,24,27];
+			let halfSearch = (arr,data)=>{
+				let begin = 0;
+				let end = arr.length-1;
+				let half;
+				while(begin <= end){
+					half = Math.floor((end + begin)/2);
+					if(arr[half] == data) return half;
+					if(arr[half] > data) end = half - 1;
+					if(arr[half] < data) begin = half + 1;
+				}
+				return -1;
+			};
+			console.log('二分法查找'+halfSearch(halfArr,24));
+			let arr = [3,1,9,5,15,2,1,4];
+			
+			
+			//选择排序
+			function chooseSort(arr){
+				// Infinity JS属性 无穷大 加上-号就是无穷小
+				//复制一份出来 不操作原数组
+				let list = [...arr];
+				let result = [];
+				while(list.length){
+					//设置最小值为正无穷
+					//每次都要设置一下  
+					let max = -Infinity;
+					//最小值的下标000
+					let maxIndex;
+					list.map((data,index)=>{
+						if(data > max){
+							max = data;
+							maxIndex = index;
+						}
+					})
+					result.push(list[maxIndex]);
+					list.splice(maxIndex,1);
+				}
+				return result;
+			};
+			
+			console.log('选择排序:'+ chooseSort(arr));
+			
+			
+			
+			//创建一个长度为10 且全是0的数组
+			//Array.from 把一个类数组的结构转为数组 类数组的基本结构就是有一个length 
+			//arr.fill(value,begin,end);填充数组  后两个参数可以省略 value为填充的数值
+			let newArr = Array.from({length:10}).fill(0);
+			
+			//桶排序 //桶排序有局限性 必须要知道桶中最大的数的大小
+			function bucketSort(arr,max){
+				//创建一个对应长度的新数组
+				let newArr = Array.from({length:max+1}).fill('0');
+				arr.map((data)=>{
+					newArr[data]++;
+				})
+				let result = [];
+				newArr.map((data,index)=>{
+					while(data > 0){
+						result.push(index);
+						--data;
+					}
+				})
+				return result;
+			}
+			console.log('桶排序:'+ bucketSort(arr,15));
+			
+			//快速排序的平均复杂度是O(n*log n) 最糟糕的复杂度是O(n^2)
+			//快速排序
+			function quickSort(arr){
+				if(arr.length<2){
+					console.log(arr);
+					return arr;
+				}else{
+					//设定第一个数为基础 但是实际基数很影响算法效率
+					let BaseNum = arr[0];
+					//小于基数的
+					let lessArr = [];
+					//等于基数的
+					let equalArr = [];
+					//大于基数的
+					let moreArr = [];
+					arr.map((data)=>{
+						if(data < BaseNum){
+							lessArr.push(data);
+						}else if(data == BaseNum){
+							equalArr.push(data);
+						}else if(data > BaseNum){
+							moreArr.push(data);
+						}
+					})
+					//equalArr为相同的值 需要再排序了
+					return quickSort(lessArr).concat(equalArr).concat(quickSort(moreArr))
+				}
+			}
+			
+			console.log('快速排序:'+ quickSort(arr));
+			
+			
+			// 斐波那契数列
+			//[0,1,1,2,3,5]
+			let fib = (n)=>{
+				if(n == 1 || n == 2) return n - 1
+				return fib(n-1) + fib(n-2);
+			}
+			
+			// 阶乘
 			let factorial = (n)=>{
 				if(n == 1) {
 					return 1
@@ -16,31 +124,6 @@
 			factorial(5);//120
 			
 			
-			//2 二分法查找
-			let arr = [1,3,5,9,15,23,24,33];
-			let halfSearch = (arr,data)=>{
-				let begin = 0;
-				let end = arr.length-1;
-				let half;
-				while(begin <= end){
-					console.log(end);
-					console.log(begin);
-					half = Math.floor((end + begin)/2);
-					if(arr[half] == data) return half;
-					if(arr[half] > data) end = half - 1;
-					if(arr[half] < data) begin = half + 1;
-				}
-				return -1;
-			}
-			halfSearch(arr,24);
-			
-			
-			//3 斐波那契数列
-			//[0,1,1,2,3,5]
-			let fib = (n)=>{
-				if(n == 1 || n == 2) return n - 1
-				return fib(n-1) + fib(n-2);
-			}
 			
 			
 		</script>
