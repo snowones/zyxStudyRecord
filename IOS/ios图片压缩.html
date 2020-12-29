@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+		//质量压缩加大小压缩
+		- (NSData *)compressQualityWithMaxLength:(NSInteger)maxLength :(float)scaleSize :(UIImage *)image  {
+		    //设置图片尺寸
+		    UIGraphicsBeginImageContext(CGSizeMake(image.size.width*scaleSize,image.size.height*scaleSize));
+		    [image drawInRect:CGRectMake(0, 0, image.size.width * scaleSize, image.size.height *scaleSize)];
+		    UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
+		    UIGraphicsEndImageContext();
+		  
+		    CGFloat compression = 1;
+		    NSData *data = UIImageJPEGRepresentation(scaledImage, compression);
+		    NSLog(@"压缩前大小:%d",data.length);
+		    while (data.length > maxLength && compression > 0) {
+		        NSLog(@"我进去了压缩");
+		        compression -= 0.1;
+		        data = UIImageJPEGRepresentation(scaledImage, compression);
+		        NSLog(@"压缩后大小:%d",data.length);
+		    }
+		    return data;
+		}
+		-->
+	</body>
+</html>
