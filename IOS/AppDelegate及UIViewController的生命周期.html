@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+		IOS程序启动执行顺序
+			1 程序的入口
+				进入main函数，设置AppDelegate称为函数的代
+			2 程序完成加载
+				-[AppDelegate application:disFinishLaunchingWithOptions:]
+			3 创建window窗口
+			4 程序被激活
+				-[AppDelegate applicationDidBecomeActive:]
+			5 当点击command + H时
+				程序取消被激活
+				-[AppDelegate applicationWillResignActive:]
+				程序进入后台
+				-[AppDelegate applicationDidEnterBackground:]
+			6 点击进入工程
+				程序进入前台
+				-[AppDelegate applicationWinllEnterForeground:]
+				程序被激活
+				-[AppDelegate applicationDidBecomeActive:]
+				
+			对于applicationWillResignActive（非活动）和applicationDidEnterBackgroud（后台）的区别
+				1 applicationWillResignActive（非活动）:
+					比如当有电话进来或短信进来，在或者锁屏等，这时你的应用程序挂起进入非活动状态，
+					也就是你的手机其实界面还是显示着你当前App窗口，只不过被别的任务强制占用了，或者
+					后台状态（因为要先进入非活动状态，然后再进入后台）。
+				2 applicationDidEnterBackground（后台）:
+					指当前窗口不是你的App，大多数程序进入这个后台后会在这个状态上停留一会儿，时间到了会进入
+					挂起状态（Suspended）。如果你程序特殊处理后可以长期处于后台状态即在后台状态也可以运行。
+					Suspended（挂起）：程序在后台不能执行代码。系统会自动把程序变成这个状态而且不会发出通知。
+					当挂起时，程序还是停留在内存中的，当系统内容低时，系统就会把挂起的程序清除掉，为前台程序
+					提供更多的内存。
+					
+			入口函数
+			int main(int argc, char * argv[]) {  @autoreleasepool {  
+			      return UIApplicationMain(int argc, char *argv[], NSString *principalClassName, NSString *delegateClassName);
+			} }
+		
+		UIApplicationMain 函数解释 
+		参数
+			1argc金额argv参数是为了与C语言保持一致，这里没用到，不详述
+			2后面两个参数principalClassName(主要类名)和delegateClassName(委托类名)
+				1 如果principalClassname是nil，那么它的值将从info.plist中获取，如果info.plist中没有，
+				则默认为UIApplication。principalClass这个类除了管理整个程序的生命周期之外什么都不做，它只负责
+				监听事件然后交给delegateClass去做。
+				3 delegateClass将工程新建时实例化一个对象。NSStringFromClass([AppDelegate class])//相当于@"AppDelegate"
+				
+		
+		AppDelegate类实现文件
+			- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOption{
+				放一些初始化的内容
+				return YES;
+			}
+			- (void)applicationWillResignActive:(UIApplication *)application { 
+				当程序冲活动状态（active）变到非活动状态（inactive）时被触发调用，这可能发生一些临时中断下
+				（例如来电话、来短信）又或是程序退出时，他会先过渡后台然后terminate使用这方法去暂停正在进行的任务。
+				比如禁用计时器，节流OpenGL ES帧率。在游戏中应该在这个方法里暂停游戏
+			}
+			- (void)applicationDidEnterBackground:(UIApplication *)application {
+				使用这个方法来释放公共资源，保存用户数据，无效计时器，储存足够多的应用程序状态信息来恢复您的
+				应用程序的当前状态。以防止它终止丢失数据。如果您的程序支持后台运行，那么当用户退出时不会调用
+				ApplicationWillTerminate。
+			}
+			
+			- (void)applicationWillEnterForeground:(UIApplication *)application { 
+				//从后台切换进入非活动状态，然后进入活动状态
+			}
+			
+			- (void)applicationDidBecomeActive:(UIApplication *)application {
+				//重启全部任务，不管是从非活动状态还是刚启动程序，还是后台状态
+			}
+			
+			- (void)applicationWillTerminate:(UIApplication *)application{
+				//程序终止
+			}
+				
+			
+		UIViewController的生命周期
+		//UIViewController指定的初始化方法（其他初始化方法最终是要调用这个初始化方法）
+		- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
+			NSLog(@"%s", __FUNCTION__);
+			    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+			    if (self) {
+			        // Custom initialization
+			    }
+			    return self;
+		}
+		
+		//视图控制器中的视图加载完成，viewController自带的view加载完成
+		- (void)viewDidLoad {
+			[super viewDidLoad]
+		}
+				
+		//视图将要出现
+		- (void)viewWillAppear:(BOOL)animated {
+			[super viewWillAppear:animated];
+		}
+		
+		//内容泄露
+		- (void)didReceiveMemoryWarning {
+			[super didReceiveMemoryWarning];
+		}
+		
+		//视图已经出现
+		- (void)viewDidAppear:(Bool)animated{
+			[super viewDidAppear:animated];
+		}
+		
+		//视图将要消失
+		- (void)viewDidDisappear:(BOOL)animated {
+			[super viewWillDisapper:animated]
+		}
+		
+		//视图已经消失
+		- (void)viewDidDisappear:(BOOL)animated {
+		    [super viewDidDisappear:animated];
+		}
+		
+		
+		当一个视图控制器被创建 代码执行顺序
+		alloc-》init-》loadView-》viewDidload-》viewWillAppear-》viewDidAppear-》viewWillDisappear-》viewDidDisappear-》dealloc
+		
+		
+		
+		
+					
+					
+					
+		-->
+	</body>
+</html>
