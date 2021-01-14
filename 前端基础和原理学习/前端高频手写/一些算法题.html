@@ -122,9 +122,25 @@
 				return n * factorial(n-1);
 			}
 			factorial(5);//120
-			
-			
-			
+
+			//打乱一个数据
+			function newRandomArr(arr){
+				//数组交换
+				function swap(i,j){
+					let temp  = arr[i];
+					arr[i] = arr[j];
+					arr[j] = temp;
+				}
+				
+				for(let i = 0;i<arr.length;i++){
+					let randomIndex  = parseInt(Math.random()*arr.length);
+					swap(i,randomIndex);
+				}
+				
+				return arr;
+				
+			}
+			console.log(newRandomArr([1,2,3,4,5]));
 			
 		</script>
 	</body>

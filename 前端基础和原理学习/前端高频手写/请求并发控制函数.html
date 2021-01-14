@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			题目
+			请实现如下的函数，可以批量请求数据，所有URL地址在urls参数中，同时可以通过max参数控制请求的并发度，
+			当所有请求结束以后，需要执行callbak回掉函数。发请求的函数可以直接使用fetch即可。
+			
+			function sendRequest(urls:string[],max:number,callback:()=>void){
+				
+			}
+		-->
+		
+		<script type="text/javascript">
+			function handleFetchQueue(urls, max, callback) {
+				//总的请求数量
+				const urlCount = urls.length;
+				//正在请求的队列 只用来计算下现在请求的数量 用number不行 会有闭包保存值
+				const requestsQueue = [];
+				//结果队列
+				const results = [];
+				//正在请求的url
+				let i = 0;
+				const handleRequest = (url) => {
+					const req = fetch(url).then(res => {
+						console.log(requestsQueue);
+						requestsQueue.shift();
+						const len = results.push(res);
+						if (len < urlCount && i + 1 < urlCount) {
+							handleRequest(urls[++i])
+						} else if (len === urlCount) {
+							'function' === typeof callback && callback(results)
+						}
+						}).catch(e => {
+							results.push(e)
+						});
+					requestsQueue.push(req);	
+					if (requestsQueue.length < max) {
+						handleRequest(urls[++i])
+					}
+				};
+				handleRequest(urls[i])
+			}
+			
+			
+			//Array.from 把一个类数组对象转为数组 一定要有一个length属性
+			//Array生成数字范围
+			// function range(end){
+			// 	return Array.from({length:end},(_,index)=>index);
+			// }
+			//数组去重 也需要使用Array.from Array.from(new Set(array))
+			
+			const urls = Array.from({length: 10}, (v, k) => k);
+			console.log(urls);
+			
+			const fetch  = function(idx) {
+				return new Promise((resolve)=>{
+					console.log(`start request ${idx}`);
+					const timeout = parseInt(Math.random()*3 * 1000);
+					console.log(timeout);
+					setTimeout(()=>{
+						console.log(`end request ${idx}`);
+						resolve(idx)
+					},timeout)
+				})
+			}
+			
+			const max = 4;
+			
+			const callback = () => {
+			  console.log('run callback');
+			};
+			
+			handleFetchQueue(urls, max, callback);
+		</script>
+	</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			实现一个promise.all方法，要求保留错误并且并发数为3
+		-->
+		<script type="text/javascript">
+			function promiseAll(promises){
+				return new Promise(resolve=>{
+					let result = [];
+					let flag = 0;
+					let taskQueue = promises.slice(0,3);//任务队列，初始最大并发数为3
+					let others = promises.slice(3);//排队的任务
+	
+					taskQueue.forEach((promise, i) => {
+						//因为是并发执行 前三个先并发执行  每当有一个执行完就将排队的任务添加进去一个
+					    singleTaskRun(promise, i);
+					});
+					
+					let i = 3; //新的任务从索引3开始
+					function next(){
+						if(others.length === 0){
+							return;
+						}
+						const newTask = others.shift();
+						//每当当前promise执行完 执行队列的下一个promise
+						singleTaskRun(newTask, i++);
+					}
+					
+					function check(){
+						//每次promise结束 flag++ 这个方法用来检查 是否这个promiseAll该结束了
+						flag++;
+						if(flag === promises.length) {
+							resolve(result);
+						}
+					}
+					
+					//单个执行
+					function singleTaskRun(promise,i){
+						console.log(promise);
+						console.log('我在执行第：'+(i+1)+'个');
+						promise
+						.then(res=>{
+							check();
+							result[i] = res;
+							next();
+						})
+						.catch(error=>{
+							check();
+							result[i] = error;
+							next();
+						})
+					}
+					
+					
+				})
+			}
+			
+			//测试代码
+			function getRandomPromise(result){
+				return new Promise((resolve,reject)=>{
+					let time = parseInt(Math.random()*2*1000);//1-2秒
+					//并且这里做个随机 如果time>1 就返回resolve 否则返回错误
+					setTimeout(()=>{
+						if(time > 1000){
+							resolve('正确'+result);
+						}else{
+							reject('错误'+result);
+						}
+					},time)
+				})
+			}
+			
+			let data = [getRandomPromise(1),getRandomPromise(2),getRandomPromise(3),getRandomPromise(4),getRandomPromise(5),getRandomPromise(6)]
+			let all = promiseAll(data)
+			all.then((data)=>{
+				console.log('结果'+data);
+			})
+		</script>
+	</body>
+</html>
