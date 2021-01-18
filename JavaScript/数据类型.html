@@ -13,11 +13,96 @@
 
 			基本数据类型：Number，String，Boolean，Undefined，Null，BigInt，Symbol
 			
-			复杂数据类型：Object，Array，Function，RegExp，Date，Error
+			复杂数据类型：Object，Array，Function，RegExp，Date，Error ，Math(都叫Object)
 			
-			全局数据类型：Math
+			Array.__proto__ == Function.prototype 
+			Array.__proto__.__proto__ == Object.prototype
+			Array.__proto__.__proto__.__proto__ == null
+			
+			类型的主要的几个问题
+			1 Null和Undefined有什么区别？前端判空有哪些需要注意的？
+			2 typeof null 为什么是object？
+			3 为什么ES6要提出Symbol？
+			4 BigInt解决了什么问题？
+			5 为什么0.1 + 0.2 !== 0.3?
+			6 如何判断一个值是数组？
 			
 			
+			1 null和undefined
+				undefined表示未定义的变量 null值表示一个空对象指针
+				
+				（历史: 一开始的时候，JavaScript设计者其实只定义了null，null像在Java里一样，被当做一个对象。
+				  但因为JavaScript中有两种数据类型，原始数据类型和引用数据类型。设计者觉得'无'的值最好不是对象）
+			
+				所以JavaScript的设计是null是一个表示'无'的对象，转换为数值时是0；undefined是一个表示'无'的
+				原始值，转换为数字时是NaN。
+				比如
+				parseInt(null + 1)//1
+				parseInt(undefined + 1)//NaN
+				
+				应用
+				 null表示没有对象，即此处不应该有值
+				 1.作为函数的参数，表示该函数的参数不是对象(没明白)
+				 2.原型链的终点
+				 
+				 undefined表示缺少值，就是此处应该有一个值，但是还没有定义
+				 1 变量被声明了，但没有赋值是，就等于undefined
+				 2 调用函数时，应该提供的参数没有提供，该参数等于undefined。
+				 3 对象没有复制的属性，该属性的值为undefined
+				 4 函数没有返回值时，默认返回undefined
+				 
+				判空时要注意
+				undefined、null、false、""、0 都会被算作空值
+				现在可以用新出的判空运算符 ??
+				
+			2 typeof null
+				这个是一个历史遗留的错误
+				JavaScript中的值是由一个标识类型的标签和实际数据值表示的。第一版的javascript
+				是用32位比特来储存值的，且是通过值的低1位或是3位来识别类型的，对象的类型标签是000
+				如下
+				1：整形
+				000：引用类型object
+				010：双精度浮点数
+				100：字符串类型string
+				110：布尔值boolean
+				
+				两个特殊值
+				undefined 用整数−2^30（负2的30次方，不在整型的范围内） typeof undefined //''undefined
+				null 机械码空指针(c/c++宏定义)，低三位也是000
+				
+				这个算是 JavaScript 设计的一个错误，但是也没法修改，毕竟修改的话，会影响目前现有的代码
+			
+			3 0.1+0.2 !==0.3 0.30000000000000004
+				因为我们在对浮点数进行运算时，需要将十进制转为二进制
+				而浮点数的存储本身有缺陷 会造成精度缺失
+				
+				解决办法
+				编写一个函数就行了  先把浮点数根据最大的倍数转为整数 运算完再转换回去
+				number.toString().split('.')[1].length;//算出需要计算的浮点数转为整数最小需要乘的倍数 1就是10倍2就是100倍
+				
+				//数学计算  Math.pow(10,Math.max(length1,length2))
+				
+			4 BigInt  突破最大的限制
+				JavaScript中最大的值为2^53  
+				如果想创建一个BigInt超过这个范围的整数 可以在数字后面加个n  let bigNum = 156464646n; 
+				
+			5 Symbol
+				1 定义一组常量，保证这组常量都是不相等的。消除魔法字符串
+				2 对象中保证不同的属性名
+				
+				let mySymbol = Symbol('我是一个属性')：
+				let a = {};
+				a[mySymbol] = 'hello';
+				
+			6 判断数组的方法 
+				1 Object.prototype.toString.call();
+				2 Array.isArray();
+				3 instanceof [] instanceof Array
+				
+				instanceof 运算符可以用来判断某个构造函数的prototype属性所指向的对象是否存在于另一个要检测对象的原型链上
+				（所以需要注意 [] instanceof Object 也是true）
+				
+				
 			JavaScript的值类型和引用类型
 			
 			JavaScript有两种类型的数据，值类型和引用类型，
