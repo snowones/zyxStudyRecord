@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<style type="text/css">
+		#flexbox {
+			display: flex;
+			flex-wrap: wrap;
+			width: 300px;
+			gap: 20px 5px;
+		}
+		
+		#flexbox > div {
+			flex: 1 1 auto;
+		}
+		.divStyle{
+			border: 1px solid green;
+			background-color: lime;
+			width: 100px;
+			height: 50px;
+		}
+		.normal{
+			width: 300px;
+			gap: 20px 5px;
+		}
+		#grid {
+		  display: grid;
+		  height: 200px;
+		  grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+		  gap: 20px 5px;
+		}
+		
+		#grid > div {
+		  background-color: lime;
+		}
+		.item {
+		    padding: 5px;
+		    font-size: 14px;
+		    box-sizing: border-box;
+		    color: #929796;
+		    background-color: #333;
+		    border-radius: 5px;
+		}
+		/*  1 grid-template-columns 每列的宽度 100px 100px 100px
+			2 grid-template-rows 每行的行高
+			3 	
+				repeat表示重复   repeat(5, 117px) 五列 每列117px
+				repeat重复某种模式也可以 
+				grid-template-columns: repeat(2, 100px 20px 80px);  表示定义了六列
+			4 
+				minmax函数产生一个长度范围，表示长度就在这个范围之中，他接收两个参数 分别为最小值和最大值
+				minmax(40px, auto)
+			5  
+				auto-fill 关键字
+				有时，单元格大小是固定的，但是容器大小不确定。
+				如果希望每一行或是每一列容纳尽可能多的单元格，这时可以用auto-fill关键字表示自动填充
+				grid-template-columns:repeat(auto-fill,100px)
+			6 	
+				fr关键字
+				为了方便表示比例关系，网格布局提供了fr关键字。如果两列的宽度分别是ifr和2fr，就表示后者是前者的两倍
+				grid-template-columns:1fr 2fr;
+				并且fr可以和长度单位结合使用 比如
+				grid-template-columns:150px 1fr 2fr; //这里表示第一列是150px 剩下两列自动填充剩余空间 第三列是第二列的两倍
+			7 
+				网格线还可以定义名字 
+				grid-template-columns属性和grid-template-rows属性里 还可以使用方口号来指定每一根网格线的名字，方便以后引用
+				grid-template-columns:[c1]100px [c2]100px;
+				grid-template-rows:[r1]100px [r2]100px;
+				并且 网格布局允许同一根线有多个名字比如[xxx xxxx]
+			8
+				定义区域 
+				.container{
+					display:grid;
+					grid-template-columns:100px 100px 100px;
+					grid-template-rows:100px 100px 100px;
+					grid-template-areas:'a b c'
+										'e e f'
+										'g h i';
+					如果某些区域不需要定义 可以用.代替
+					grid-template-areas:'a . c'
+										'. e .'
+										'g . i';
+					上面代码中 表示点的为没有用到该单元格，或者该单元格不属于任何区域
+				}
+			9
+				填充顺序
+				划分网格以后，容器的子元素会按照顺序，自动排列在在每一个网格处 
+				默认顺序为先行后列
+				这个顺序有 grid-auto-flow属性决定
+				grid-auto-flow:column;改为先列后行
+				
+				还有两个属性 row dense和column dense 表示某些项目指定位置以后，剩下项目怎么自动放置(先不做演示)
+			10 
+				justify-items属性、align-items属性、place-items属性
+				
+				justify-items和align-item的属性完全一样
+				start：对齐单元格的其实边缘
+				end：对齐单元格的结束边缘
+				center：单元格内部居中
+				stretch：拉伸，沾满单元格整个宽度（默认值）
+				
+				justify-item 表示每个单元格的横向排列位置 左中右 默认填充
+				align-item 表示纵向 上中下 默认填充
+				
+				place-items 是上面两个属性的合并简写方式
+				place-items:<align-items><justify-items>;
+			11
+				grid-auto-columns 和 grid-auto-rows 
+				子项可以指定他的行位置和列位置，但是父元素会规定一共几行几列，如果超出父元素规定的行数，
+				子项的宽高就会根据子项自己的宽高来设定，而这个两个属性就是来处理这个事情的，这两个属性
+				规定超出部分的宽高。
+		*/
+		/* 
+			子项属性
+			1
+				grid-columns-start 左边框所在的垂直网格线
+				grid-columns-end 右边框所在的垂直网格线
+				grid-row-start 上边框所在的水平网格线
+				grid-row-end 下边框所在的水平网格线
+				
+				比如.item-1 {
+						grid-column-start: 1;
+						grid-column-end: 3;
+						grid-row-start: 2;
+						grid-row-end: 4;
+					}
+					除了用数字 还可以用父元素指定的网格线的名字
+					还可以使用关键字 span
+					span 2 就是跨越两个格子
+					grid-column-start: span 2;
+					
+					使用这个四个属性 如果发生了重叠 使用z-index属性指定重叠顺序
+				
+				grid-column 是grid-column-start和grid-column-end的合并
+				grid-row 是grid-row-start和grid-row-end的合并
+				
+				.item-1 {
+					grid-column: 1 / 3;
+					grid-row: 1 / 2;
+				}
+				
+			2
+				grid-area指定项目放在哪个区域里 之前命名的
+			3
+				可单独指定 子项在区域中的具体位置
+				justify-self 指定水平位置 和父元素的justify-items用法完全一样
+				align-self 指定垂直位置 和父元素的align-items用法完全一致
+				
+				place-self是上面两个属性的合并
+		 */
+		.container2 {
+			display: grid;
+			grid-template-columns: repeat(5, 117px); 
+			grid-auto-rows: minmax(50px, auto);
+			gap:10px 10px;
+		}
+		.item-4 {
+		    grid-area: 1 / 4 / 3 / 6;
+		}
+		.item-5 {
+			grid-column-start: span 2;
+		}
+		body{
+			margin: 40px;
+		}
+		.container3{
+			margin-top: 30px;
+			display: grid;
+			grid-template-columns: 150px 1fr 2fr;
+			gap: 20px 30px;
+		}
+		.container4{
+			display:grid;
+			grid-template-columns:100px 100px 100px;
+			grid-template-rows:100px 100px 100px;
+			grid-template-areas:'a . c'
+								'e . f'
+								'g . i';
+			gap:10px;
+			margin-top: 30px;
+		}
+	</style>
+	<body>
+		<h2>flex布局的gap</h2>
+		<div id="flexbox">
+			<div class="divStyle"></div>
+			<div class="divStyle"></div>
+			<div class="divStyle"></div>
+			<div class="divStyle"></div>
+			<div class="divStyle"></div>
+			<div class="divStyle"></div>
+		</div>
+		<h2>grid布局的gap</h2>
+		<div id="grid">
+			<div class="divStyle"></div>
+			<div class="divStyle"></div>
+			<div class="divStyle"></div>
+			<div class="divStyle"></div>
+			<div class="divStyle"></div>
+			<div class="divStyle"></div>
+			<div class="divStyle"></div>
+			<div class="divStyle"></div>
+			<div class="divStyle"></div>
+		</div>
+		<h2>grid布局学习</h2>
+		<div class="container2">
+			<div class="item">
+			</div>
+			<div class="item">
+			</div>
+			<div class="item">
+			</div>
+			<div class="item item-4">
+			</div>
+			<div class="item item-5 ">
+			</div>
+			<div class="item">
+			</div>
+		</div>
+		<div class="container3">
+			<div class="item">
+			</div>
+			<div class="item">
+			</div>
+			<div class="item">
+			</div>
+			<div class="item">
+			</div>
+			<div class="item">
+			</div>
+			<div class="item">
+			</div>
+		</div>
+		<div class="container4">
+			<div class="item">
+			</div>
+			<div class="item">
+			</div>
+			<div class="item">
+			</div>
+			<div class="item">
+			</div>
+			<div class="item">
+			</div>
+			<div class="item">
+			</div>
+			<div class="item">
+			</div>
+			<div class="item">
+			</div>
+			<div class="item">
+			</div>
+		</div>
+	</body>
+</html>

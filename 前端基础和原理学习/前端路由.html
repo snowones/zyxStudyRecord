@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			前端路由
+			1 为什么会出现前端路由
+			2 前端路由解决了什么问题
+			3 前端路由实现的原理是什么
+		-->
+		
+		<!--
+			1 传统页面(这里的传统页面为我自己定义的概念)，简单说就是每次再浏览器上输入网址后发起请求，
+			拿到对应的html资源和css、js资源然后呈现，并且每次跳转到其他页面都会重新拿到对应的Html资源
+			的统称为传统页面。(这些就是正常使用跳转，没有路由这一概念)
+			
+			而到了现在的前端技术，大家使用的都是React、Vue、Angular等单页面应用框架。这些框架有一个共同
+			的特点就是"通过js来渲染页面"。整个网站只有一个Dom入口 index.html，所有页面都渲染在
+			<div id="root"></div>这个节点内部
+			每当我们切换页面时，js就自动将 对应需要渲染的节点 渲染到这个节点内部
+		-->
+		<script type="text/javascript">
+			//伪代码
+			const root = document.getElementById('root');
+			const divNode = document.createElement('div');
+			divNode.innerText = 'Hello World';
+			root.appendChild(divNode)
+		</script>
+		<!--
+			而单页面应用有很多个页面，前端路由就是为了解决单页面很多个页面切换的问题。
+			前端路由通过切换浏览器的地址路径，来为root这个div挂载不同的组件
+			
+			前端路由会根据浏览器地址栏的pathname的变化，去匹配响应的页面组件。然后将其通过创建
+			Dom节点的形式，塞入根节点<div id=root""></div>.这就达到了无刷新页面切换的效果。
+			从侧面也能说明正因为无刷新，所以React、Vue、Angula等现代框架在创建组件的时候，每个
+			组件都有自己的生命周期。
+		-->
+		<script type="text/javascript">
+			//分析一下HashRouter和BrowserRouter(historyRouter)
+			
+			
+			//HashRouter
+			//浏览器地址上#后面的变化是可以被监听到的，浏览器为我们提供了原生的监听事件hashchange
+			//它可以监听到  1点击a标签改变了浏览器地址 2浏览器前进后退行为 3通过window.location方法改变地址
+			
+			//简单实现 真正的hash模式还要考虑很多种负责的情况
+			//第一次加载的时候，不会执行hashchange监听事件，默认执行一次
+			//DOMContentLoaded为浏览器DOM加载完成时触发
+			window.addEventListener('DOMContentLoaded',Load);
+			window.addEventListener('hashchange',HashChange);
+			var routeView = null;
+			function Load(){
+				//route加载完时 给routeView赋值
+				routeView = document.getElementById('route-view');
+				HashChange();
+			}
+			function HashChange(){
+				// 每次触发hashchange 事件，通过location.hash拿到当前浏览器地址的hash值
+				switch(location){
+					case '#xxxx':
+						routeView.innerHTML = 'xxx';
+						return
+					default:
+						routeView.innerHTML = 'index';
+						return
+				}
+			}
+			
+		</script>
+		<script type="text/javascript">
+			//BrowserRouter 模式 browser模式比hash会麻烦一些 因为history模式依赖的是原生事件popstate
+			//1 history.pushState() 或history.replaceState()不会触发popstate事件。只有在做出浏览器
+			//动作时，才会触发该事件，如果用户点击浏览的回退按钮（或者在JavaScript代码中代用history.back()
+			//或者history.forward()方法）
+			//2 小知识点：pushState和replaceState都是HTML5的新API，他们的作用很强大，可以做到改变浏览器
+			//地址确不刷新页面。这是实现该百年地址栏却不刷新页面的重要方法。
+			//3 a标签的点击事件也不会被popState监听
+			
+			//解决思路
+			//我们可以遍历页面上的全部a标签，阻止a标签的默认 事件的同时，加上点击事件的回调函数，在回调函数内获取a标签的
+			//href属性，再通过pushState去改变浏览器的location.pathname属性值。然后手动执行popstate事件回调函数，
+			//去匹配响应的路由
+			
+			window.addEventListener('DOMContentLoaded',Load);
+			window.addEventListener('popstate',PopChange);
+			var routeView = null;
+			function Load(){
+				routeView = document.getElementById('route-view');
+				//默认执行一次popstate的回调函数，匹配一次页面组件
+				PopChange()
+				//获取所有带href属性的a标签节点
+				var aList = document.querySelectorAll('a[href]');
+				//遍历全部a标签节点数组，阻止默认事件，添加点击事件回调函数
+				aList.forEach(aNode =>aNode.addEventListener('click',function(e){
+					e.preventDefault();//阻止a标签的默认事件
+					var href = aNode.getAttribute('href');
+					// 手动修改浏览器地址栏
+					history.pushState(null,'',href);
+					//通过history.pushState手动修改地址栏
+					//popState是监听不到地址栏的变化的，这里需要手动执行回调函数PopChange
+					PopChange();
+				}))
+			}
+			
+			function PopChange(){
+				switch(location.pathname) {
+					case '/page1':
+						routeView.innerHTML = 'page1'
+						return
+					case '/page2':
+						routeView.innerHTML = 'page2'
+						return
+					default:
+						routeView.innerHTML = 'page1'
+						return
+					}
+				}
+			
+		</script>
+	</body>
+</html>
