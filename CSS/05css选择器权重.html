@@ -4,14 +4,39 @@
 		<meta charset="UTF-8">
 		<title></title>
 	</head>
+	<style type="text/css">
+		/* 这个问题不太明白  很神奇 
+			下面那俩div都现实的黄色
+			正常来说 .a .b
+			是指父元素.a 的子元素.b 显示颜色yellow 这里不明白为什么
+		*/
+		.a {
+		    color: red;
+		}
+		.b {
+		    color: blue;
+		}
+		
+		.a.b {
+		    color: orange;
+		}
+		.b.a {
+		    color: yellow;
+		}
+	</style>
 	<body>
 		<!--
 			选择器权重
-			
+			!important > 行内 > id 
 			id选择器  +100
 			类 属性 伪类 +10
 			元素 伪元素 +1
 			不会进位
 		-->
+		<div class="a">Text</div>
+		<div class="b">Text</div>
+		
+		<div class="a b">Text</div> 
+		<div class="b a">Text</div>
 	</body>
 </html>

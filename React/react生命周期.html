@@ -6,47 +6,71 @@
 	</head>
 	<body>
 		<!--
-        	初始化阶段
-        	//default  是默认 预设的意思   init是初始化  这两个单词含义不同
-        	getDefaultProps() 设计初始的props   getInitialState() 可以定义this.state 并且此时可以访问this.props
-        	其实都可以在里construstor设置 这两个钩子函数很少用
-        	
-        	componentWillMount  此时可以修改status  但是千万不要在这里拿数据     render()
-        	componentDidMount  很重要的钩子函数 此时已经讲组件渲染出来了 推荐在这里拿数据并更新
-        	
-			其实上面这个阶段可以分为  inti阶段和Mounting阶段
+			React16 的新的生命周期
+				  [dɪˈraɪvd]派生起源
+				getDerivedStateFromProps(props, state)
+				发生在初始化阶段和更新阶段
+				组件每次被rerender的时候，包括在组件构建之后（虚拟dom之后，实际dom挂载之前），每次获取新的props或
+				state之后，每次接受新的props之后都会返回一个对象作为新的state，返回null则说明不需要更新state；
+				配合componentDidUpdata，可以覆盖componentWillReceiveProps的所有用法
+				
+				   [ˈsnæpʃɒt]快照
+				getSnapshotBeforeUpdata(prevProps,prevState)
+				组件更新阶段，发生在render()之后 渲染之前  也就是shouldcomponentUpdata以后 componentDidUpdata之前
+				返回一个值，作为componentDidUpdata的第三参数没配合ComponentDidUpdata，可以覆盖componentWillUpdata所有用法
 			
+				componentDidCatch(error,info)
+				任何一处JavaScript报错都会触发
+				
+			1 React16新的生命周期弃用了componentWillMount、componentWillReceiveProps、componentWillUpdate
+			2 React16新增了getDerivedStateFromProps、getSnapshotBeforeUpdata来代替上面三个生命周期
+			3 React16并没有删除那三个废弃的生命周期，但是那三个废弃的生命周期不能喝新增的哪两个混用。React17会删除那三个生命周期
+			4 新增了对错误的处理（componentDidCatch）
 			
-        	更新阶段
-        	componentWillReceiveProps(nextProps)   接收新的props时用
-        	
-			!!shouldComponentUpdata(nextProps,nextState)
-        	 
-        	react性能优化非常重要的额一环。组件接收新的state或props时 调用 ，我们可以设置在此时对比前后两个props和state是否相同
-        	如果相同 则返回false阻止更新  因为相同的属性状态一定会产生相同的dom树，这样就不用创造新的dom树和旧的dom树进行diff算法对比
-        	节省大量的性能优化 尤其是在dom结构复杂的时候
-			
-			使用情景例
-			当父组建的render被调用时。被包涵在render中的子组建就会开始更新过程.
-			但从性能上来说，子组建没有必要每次都更新。这时可以使用shouldComponentUpdata():
-			
-			案例
-			再用redux进行状态管理时 很重要的一个优化就是判断状态是否改变
-			当点击商品分类时 点击不同的分配组件的数据都会更新 但是如果点击的是和现在展示的相同的分类 这时让组件再更新一遍就很浪费性能
-			就可以使用这个钩子函数 判断 状态是否改变 只有改变时 才会出发更新
-        	
-        	componentWillUpdata(nextProps,nextState)
-        	此时可以修改state
-        	render()
-        	
-        	componentDidupdata()
-        	更新完成 此时可以获取DOM节点
-        	
-        	
-        	卸载
-        	
-        	componentWillUnmount()
-        	组件要卸载时调用，一些监听和定时器需要在此时清除
+		
+		
+			旧生命周期
+				初始化阶段
+				//default  是默认 预设的意思   init是初始化  这两个单词含义不同
+				getDefaultProps() 设计初始的props   getInitialState() 可以定义this.state 并且此时可以访问this.props
+				其实都可以在里construstor设置 这两个钩子函数很少用
+				
+				componentWillMount  此时可以修改status  但是千万不要在这里拿数据     render()
+				componentDidMount  很重要的钩子函数 此时已经讲组件渲染出来了 推荐在这里拿数据并更新
+				
+				其实上面这个阶段可以分为  inti阶段和Mounting阶段
+				
+				
+				更新阶段
+				componentWillReceiveProps(nextProps)   接收新的props时用
+				
+				!!shouldComponentUpdata(nextProps,nextState)
+				 
+				react性能优化非常重要的额一环。组件接收新的state或props时 调用 ，我们可以设置在此时对比前后两个props和state是否相同
+				如果相同 则返回false阻止更新  因为相同的属性状态一定会产生相同的dom树，这样就不用创造新的dom树和旧的dom树进行diff算法对比
+				节省大量的性能优化 尤其是在dom结构复杂的时候
+				
+				使用情景例
+				当父组建的render被调用时。被包涵在render中的子组建就会开始更新过程.
+				但从性能上来说，子组建没有必要每次都更新。这时可以使用shouldComponentUpdata():
+				
+				案例
+				再用redux进行状态管理时 很重要的一个优化就是判断状态是否改变
+				当点击商品分类时 点击不同的分配组件的数据都会更新 但是如果点击的是和现在展示的相同的分类 这时让组件再更新一遍就很浪费性能
+				就可以使用这个钩子函数 判断 状态是否改变 只有改变时 才会出发更新
+				
+				componentWillUpdata(nextProps,nextState)
+				此时可以修改state
+				render()
+				
+				componentDidupdata()
+				更新完成 此时可以获取DOM节点
+				
+				
+				卸载
+				
+				componentWillUnmount()
+				组件要卸载时调用，一些监听和定时器需要在此时清除
         	
         -->
 	</body>
