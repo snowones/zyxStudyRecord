@@ -66,7 +66,47 @@
 				6 代码校验：在代码提交到仓库前需要检测代码是否符合规范，以及单元测试是否通过
 				7 自动发布：更新完代码后，自动构建出线上发布代码并传输给发布系统
 				
+			7 热更新的速度
+				热更新速度指的是本地开发热更新的速度
+				热更新速度首先要排除几个问题再做优化
+				1 路由懒加载，当路由懒加载变多后，会大大影响热更新速度，在开发环境下没有必要配置路由懒加载，正式环境需要的话，就做下区分环境的处理
+				2 没有正确的使用exclude/inculde处理了不需要处理的node_modules
+				3 在开发环境下需要压缩代码UglifyJS、提取css、bable Polyfill，计算文件hash等不需要的操作
+				4 source-map，开发环境下可以不需要souce-map，这样也能提高编译速度，并且如果source-map配置的不合理，也会很大的影响编译速度。
 			
+			8 打包速度
+				首先可以用 speed-measure-webpack-plugins 这个插件  它可以监控webpack每一步操作的耗时
+				
+				在绝大多数情况下 打包的大部分时间都花在Ugligfyjs，和前面的热更新切入点差不多，
+				查看source map是否正确 exclude、include是否正确使用等等
+				还有就是新版的UglifyJsPlugin可以使用cache:true和parall:true，增加文件缓存和启动并发，来提高代码打包速度
+				
+				还有就是第三方库，有些第三方库非常大，比如echarts等，我们可以设置忽略它，
+				然后再index.html里已cdn的方式引入(或是正常script引入)，这也也可以提高很多打包速度
+				
+				还有就是升级下node或是webpack可能大大提高打包速度，有些修改了很多东西其实影响不是很大，而升级node或是webpack能带来巨大的改变
+				
+				Tree-Shaking
+				树摇，它可以帮助我们把js里没有用到的代码晒出掉，和正常webpack找依赖不同，webpack会根据依赖构建，但不会深入到每一行代码是否用到。
+				
+			9 webpack4一个重大的改动 分包策略
+				
+				自我感觉，其实spa应用的首屏加载的性能很大一部分都要看这里的分包策略是否是对的
+			
+				webpack4最大的改动就是废除了commonsChunkPlugin 引入了 optimization.splitChunks
+				并且webpack增加了默认配置（以前webpack让人诟病了就是入门难，没有默认配置，一切都需要自己去配置）
+				webpack4 帮助我们默认配置了，当我们的mode是production时，webpack4就会开启Code Splitting
+				
+				在我们没有任何配置的情况下，webpack就会为我们做了智能分包，入口文件依赖的文件都被打包到了app.js，那些大于30kb的第三方包
+				，入echarts、xlsx、dropzone等都被打包成了一个个独立的budle.
+				
+				他的内置代码分割策略是这样的
+				1 新的chunk是否被共享或是来自node_modules模块
+				2 新的chunk体积在被压缩之前是否大于30kb
+				3 按需加载chunk的并发请求数量小于等于五个
+				4 页面初始加载时的并发请求小于等于3个
+				
+
 		-->
 	</body>
 </html>

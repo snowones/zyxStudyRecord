@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<style type="text/css">
+		input::-webkit-input-placeholder {
+		    color: red;
+		}
+		.elem {
+		    position: relative;
+		    width: 200px;
+		    height: 80px;
+		}
+		.elem::after {
+		    position: absolute;
+		    left: 0;
+		    top: 0;
+		    border: 1px solid #f66;
+		    width: 200%;
+		    height: 200%;
+		    content: "";
+		    transform: scale(.5);
+		    transform-origin: left top;
+		}
+		
+	</style>
+	<body>
+		<!-- 学习记录来源于 https://juejin.cn/post/6921886428158754829-->
+		<!--
+		HTML方面
+			1 通过<a>标签能快递调用移动设备的电话、短信、邮件三大通讯功能，使用<input>能快递调用移动设备的图库和文件
+				关键在于格式一定要准确
+				
+				拨打电话
+				<a href="tel:10086">拨打电话给10086小姐姐</a>
+				发送短信
+				<a href="sms:10086">发送短信给10086</a>
+				发送邮件
+				<a href="mailto:1978246522@qq.com"></a>
+				
+				选择照片或拍摄照片
+				<input type='file' accept="image/*">
+				选择视频或是拍摄视频
+				<input type='file' accept="video/*">
+				多选文件
+				<input type='file' multiple>  [ˈmʌltɪpl]倍数
+			
+			2 忽略自动识别
+				有些移动端浏览器会自动将数字字母符号识别为电话和邮箱，并将其自动渲染为上面a标签的效果 
+				去除自动识别的方法
+				
+				忽略自动识别电话  [dɪˈtekʃn] 侦查
+				<meta name="format-detection" content="telephone=no">
+				忽略自动识别邮箱
+				<meta name="format-detection" content="email=no">
+				忽略自动识别电话和邮箱
+				<meta name="format-detection" content="telephone=no,email=no">
+			
+			3 弹出数字键盘
+				//弹出的数字键盘会带上#和* 适合电话输入
+				<input type="tel">
+				//弹出纯数字键盘   [ˈpætn]模式
+				<input pattern="\d*">  
+				
+			4 URL Scheme [skiːm] 
+				通过location.href和原生应用建立通讯，基本格式为 scheme://[path][?query]
+				scheme:应用标识 path:应用行为 query:应用参数
+				
+				唤醒应用的前提是必须在移动端设备安装了对应的参数。并且有些移动端浏览器会禁止URL Scheme，因为他
+				认为这是一个危险的事。微信浏览器就会禁用，但是可以开启白名单让其有效。
+				
+				//打开微信
+				<a href="weixin://">打开微信</a>
+				//打开支付宝
+				<a href="alipays://">打开支付宝</a>
+				//打开支付宝扫一扫
+				<a href="alipays://platformapi/startapp?asId=10000007">打开支付宝扫一扫</a>
+				//打开支付宝蚂蚁森林
+				<a href="alipays://platformapi/startapp?appId=60000002">打开支付宝蚂蚁深林</a>
+				
+				上述链接可以通过抓包来获取
+			
+			5 禁止页面缩放
+				<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximun-scale=1">
+			
+			6 禁止页面缓存
+				<meta http-equiv="Cache-Control" content="no-cache">
+			
+			7 禁止字母大写
+				//有时在输入框里输入文本会默认开启字母大写矫正，就是输入字母小写会被自动矫正改为大写。
+				//声明autocapitalize=off关闭首字母大写功能和autocorrect=off关闭矫正功能
+				<input autocapitalize="off" autocorrect="off">
+				
+			8 针对Safari配置
+				不常用
+				//Safari全屏，在ios7+无效
+				<meta name='apple-mobile-web-app-capable' content='yes'>
+				
+				//改变Safari状态栏样式，全屏模式才有用。 可选default、balck、black-translucent
+				<meta name='apple-mobile-web-app-status-bar-style' content='black'>
+				
+				//添加页面启动占位符
+				<link rel='apple-touch-startup-image' href='pig.png' media='(device-width:375px)'>
+				
+				//保存网站到桌面时添加图标
+				<link rel='apple-touch-icon' sizes='76*76' href='pig.png'>
+				
+			9 针对其他浏览器的配置
+				//强制qq浏览器竖屏
+				<meta name="x5-orientation" content="protrait">
+				
+				//强制qq浏览器全屏
+				<meta name="x5-fullscreen" content="true">
+				
+				//开启qq浏览器应用模式
+				<meta name="x5-page-mode" content="app">
+				
+				//强制UC浏览器竖屏
+				<meta name="screen-orientation" content="protrait">
+				
+				//强制UC浏览器全屏
+				<meta name="full-screen" content="yes">
+				
+				//开始UC浏览器应用模式
+				<meta name="browsermode" content="application">
+				
+				//开启360浏览器急速模式
+				<meta name="renderer" content="webkit">
+				
+			10 让active有效 让hover无效
+				有些元素的:active可能会无效，而元素的:hover在点击后会一直处于点击状态，需点击其他位置才能解除点击状态
+				给<body>注册一个空的touchstart事件可将两种状态反转
+				
+				<body ontouchstart></body>
+		-->
+		<!--
+		css方面
+			1 自动适应布局
+				flexible方案
+				核心原理就是使用rem 将页面宽度的十分之一作为1rem
+				核心代码 
+				function setRemUnit(){
+					var rem = document.body.clientWidth/10;
+					document.body.fontSize = rem+'px';
+				}
+				在不同的屏幕宽度下 1rem的大小是不同的 
+				然后并不需要我们去写rem 我们只需要根据设计稿的宽度正常写px
+				然后通过postcss里工具帮助我们换算 比如设计稿是750px 一个75px的宽度的元素 对应的宽就应该是1rem
+				然后我们写只需要写75px就行了，postcss会帮助我们转换为1rem
+				然后在不同宽度的屏幕下 flexible会帮助我们转化body的font-size的大小，也就是调整1rem的大小，从而实现自适应
+				
+				还有其他基于vhvw的方案和rem的原理差不多。
+			
+			2 自适应背景
+				使用rem布局声明一个背景，多数会将background-size声明为cover。这样在设计图对应的分辨率的移动设备下，背景
+				是ok的，但是在其他分辨率的设备下就可能出现左右空出1px到npx 的空隙。
+				此时可以将background-size声明为100% 100%
+				例
+				.elm{
+					width:1rem;
+					height:1rem;
+					background:url('xx.png') no-repeat center/100% 100%;
+				}
+				
+			3 监听屏幕旋转
+				//竖屏
+				@media all and(orientation:portrait){
+					
+				}
+				//横屏
+				@media all and(orientation:landscape){
+					
+				}
+			
+			4 支持弹性滚动
+				在苹果系统上非<body>元素的滚动操作可能会造成卡顿，但安卓系统不会出现该情况，通过声明
+				overflow-scrolling:touch调用系统原生滚动时间优化弹性滚动，增加页面滚动的流畅度。
+				body{
+					-webkit-overflow-scrolling:touch
+				}
+				.elem{
+					overflow:auto;
+				}
+			
+			5 禁止滚动传播
+				与桌面浏览器不一样，移动端浏览器有一个奇怪的行为。当页面包含多个滚动区域是，滚完一个区域若还存在滚动
+				动量则会将这些动量传播到下一个滚动区域，造成该区域也滚动起来，这种行为叫做滚动传播
+				
+				若不想产生这种奇怪的行为可直接禁止
+				overscroll-behavior:contain;
+			
+			6 禁止屏幕抖动 
+				对于一些突然出现滚动条的页面，可能会产生左右抖动的不良影响。在一个滚动容器里，打开弹窗就隐藏滚动条，
+				关闭弹窗就显示滚动条，来回操作会让屏幕抖动起来，提前声明滚动容器的padding-right为滚动条宽度，就
+				能消除这个影响。
+				//计算滚动条宽度 因为每个浏览器的滚动条宽度不一定，甚至不一定占位置
+				可以通过100vh -100%
+				padding-right:calc(100vw-100%)
+				//js也可以计算 js有属性是元素包含滚动条的宽度和元素不包含滚动条的宽度这俩属性
+			
+			7 禁止长按和复制操作
+				有时不想用户长按呼出菜单进行 点链接、打电话、发邮件、保存图片或扫描二维码等操作
+				声明touch-callout:none禁止用户长按操作
+				有时不希望用户复制粘贴盗文案，声明user-select:none禁止用户长按操作或选择操作
+				*{
+					/* pointer-event:none;  微信浏览器还需要附加该属性才有效*/
+					user-select:none; /* 禁止长按选择文字*/
+					-webkit-touch-callout:none;
+				}
+				
+				但是声明user-selec:none会让<input>和<textarea>无法输入文本，可对其声明user-select:auto排除在外
+				input,textarea{
+					user-select:auto;
+				}
+				
+			8 禁止字体调整
+				旋转屏幕可能会改变字体大小，声明text-size-adjust:100%让字体大小保持不变
+				*{
+					text-size-adjust:100%;
+				}
+			
+			9 禁止高亮显示
+				//触摸元素会出现半透明灰色遮罩
+				*{
+					-webkit-tap-highlight-color:transparent;
+				}
+				
+			10 禁止动画闪屏
+				在移动设备上添加动画，多数情况会出现闪屏，给动画的父元素构造一个3D环境就能让动画稳定运行了
+				.animationContainter{
+					perspective:1000;
+					backface-visibility:hidden;
+					transform-style:preserve-3d;
+				}
+				
+			11 美化表单外观
+				//appearance 属性允许您使元素看上去像标准的用户界面元素。
+				button,input,select,textarea{appearance:none;}//这个css的属性支持性不好
+			
+			12美化滚动条占位
+				滚动条样式太丑可以通过::-webkit-scrollbar-* 来自定义样式
+				1 ::-webkit-scrollbar:滚动条整体部分
+				2 ::-webkit-scrollbar-track:滚动条轨道部分
+				3 ::-webkit-scrollbar-thumb:滚动条滑块部分
+				
+				::-webkit-scrollbar{
+					width:6px;
+					height:6px;
+					backgroud-color:transparent;
+				}
+				::-webkit-scrollbar-track{
+					backgroud-color:transparent;
+				}
+				::-webkit-scrollbar-thumb{
+					border-radius:3px;
+					background-image:linear-gradient(135deg,#09f,#3c9)
+				}
+				
+			13 美化输入占位
+				输入框占位文本太丑，::-webkit-input-placeholder
+				input::-webkit-input-placeholder{
+					color:#66f;
+				}
+			
+			14 对齐输入框
+				有强迫症的同学总会觉得输入框文本位置整体偏上，感觉未居中。桌面浏览器里声明line-height等于height就行
+				但是移动端浏览器不行需要设置line-height为normal
+				input{
+					line-height:normal;
+				}
+			
+			15 右对齐下拉框
+				select option{
+					direction:rtl;
+				}
+			
+			16修复点击无效
+				在苹果系统上有些情况下非可点击元素监听click事件可能会无效，针对该情况只需要不触发click事件的元素
+				声明cursor:poninter
+				.ele{
+					//小手
+					cursor:pointer;
+				}
+				
+			17 识别文本换行
+				有时接口返回的文本换行是使用\n或是<br>，这时我们无需替换，可声明white-space:pre-line交给浏览器做断行处理
+			
+			18开启硬件加速
+				让动画更流畅开启CPU硬件加速
+			
+			19 重点 描绘1px边框  需要单独去了解下
+				下面这方案没有看懂
+				.elem{
+					position:relative;
+					width:200px;
+					height:80px
+					&::after{
+						position:absolute;
+						left:0;
+						top:0;
+						border:1px solid #f66;
+						width:200%;
+						height:200%;
+						content:"";
+						transform:scale(.5);
+						transform-origin:left top;
+					}
+				}
+			
+			20 重点，控制文本单行溢出和多行溢出
+				text-overflow  控制文本溢出
+					clip 修建文本
+					ellipsis 用省略号来代表被修剪的文本
+					string 用给定的字符串来代表被修剪的文本
+				
+				white-space 设置如何处理元素中的空白
+					normal:默认。空白会被浏览器忽略
+					pre:空白会被浏览器保留。类似HTML中的<pre>标签 
+					（<pre></pre>标签内的文本会按照内部书写形式渲染文本，比如空格正常情况下会被删掉，但用这个标签会保留）
+					nowarp:文本不会换行，文本会在同一行上继续，直到遇到<br>标签位置
+					pre-warp:保留空白符序列，但是正常进行换行
+					pre-line:合并空白符，但是会正常的进行换行
+					inherit:规定应该从父元素集成white-space属性的值
+			
+				.elem{
+					width:400px;
+					line-height:30px;
+					font-size:20px;
+					//控制单行文本溢出
+					&.sl-ellipsis:{
+						overflow:hidden;
+						text-overflow:ellipsis;
+						white-space:nowrap;
+					}
+					//控制多行文本移除
+					//下面这个display以及最下面俩属性都是新属性，并且没有受到各大浏览器支持，所以加-webkit  暂时不看这个
+					&.ml-ellipsis{
+						display: -webkit-box;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						-webkit-line-clamp: 3;
+						-webkit-box-orient: vertical;
+					}
+				}
+		-->
+		<input type="text" value="" placeholder="占位" />
+		<div class="elem"></div>
+		<script type="text/javascript">
+			//js方向
+			// 1 禁止点击穿透
+			/*		点击穿透出现的原因  
+					移动端浏览器里点击操作会存在300ms延迟，往往会造成点击延迟甚至点击无效。这个是众所周知的
+					原因是 很多浏览器为了实现双击缩放功能，会为用户的第一次点击预留300ms来检测用户是否再次点击
+					若是则执行缩放，否则才会执行这个点击操作。而该方案引发的点击延迟则被称为点击穿透。
+					
+					而在移动端浏览器上不适用click事件而使用touch时间就是因为click事件有明显的延迟
+					后续出现了fastClick 该方案监听了用户是否做了双击操作，可正常使用click事件，而点击穿透就交给了fastClick自行判断。
+					(比如说antd-mobile集成时，就让咱们在index.html引入fastClick)
+			 */
+			import Fastclick from "fastclick"
+			FastClick.attach(document.body);
+			
+			// 2禁止滑动穿透
+			/*		现象:移动端浏览器出现弹窗时，若在屏幕上上下滑动，能触发弹窗下的内容跟着滚动
+					首先明确解决滑动穿透需保持哪些交互行为，那就是除了弹窗内容能点击或滚动，其他内容都不能点击或滚动
+					目前很多解决方案都不太行，全部的解决方案都能够禁止body的滚动，但是会引发其他问题
+					比如 
+					1弹窗打开后内部内容无法滚动  
+					2弹窗关闭后页面滚动位置丢失
+					3Webview能上下滚动漏出底色
+					
+					一个解决方案
+					每次点击时，将body设置为fixed固定布局 这样body就不会滚动一直固定在屏幕上了
+					设置时通过 document.scrollingElement.scrollTop 拿到文档现在的位置
+					然后设置 body向上移动到当前位置 这样body就实现了原封不动的固定
+					
+					
+					body.static{
+						postion:fixed;
+						left:0;
+						width:100%;
+					}
+			*/		
+					const body = document.body;
+					const openBtn = document.getElementById('oepn-btn');
+					const closeBtn = document.getElementById('close-btn');
+					
+					openBtn.addEventListener("click",e =>{
+						// [ˌprɒpə'ɡeɪʃ(ə)n] 
+						e.stopPropagation();
+						//document.scrollingElementf返回滚动文档element的引用
+						const scrollTop  = document.scrollingElement.scrollTop;//当前滚动到的位置的头部
+						body.classList.add("static");
+						//就是设置body整体未固定布局 这样无论怎么滚动body都不会动了 然后让当前页面位置为用户之前滚动到的位置 
+						//top设置为负的scrollTop  这样body就被固定到了原始位置
+						body.style.top=`-${scrollTop}px`
+					})
+					
+					closeBtn.addEventListener("click",e =>{
+						e.stopPropagation();
+						body.classList.remmove("static");
+						body.style.top = "";
+					})
+			
+			//3 支持往返刷新
+			/*
+				点击移动端浏览器的前进后退按钮，有时不会自动执行旧页面代的js代码，这与往返缓存有关。这种情况再Safari特别明显。
+				
+				往返缓存指浏览器为了在页面执行前进后退操作时能又有更流畅体验的一种策略，以下简称BFCache。该策略表现为：当用户
+				前往新页面时将旧页面的DOM状态保存在BFCache里，当用户返回旧页面将旧页面的DOM状态从BFCache里取出来并加载。大
+				部分移动端浏览器都会部署BFCache。可大大节省接口请求的时间和宽带。
+				//新页面监听页面销毁事件
+				window.addEventListener("onunload",()=>{
+					//执行旧页面代码
+				})
+				对于单页面应用无所谓，单页面应用的路由的框架重写的，是通过js时间的路由变化，并配有新的生命周期。
+				RN也会有这个问题，但是可以通过RN特定的路由的生命周期来解决
+				或是通过发送和接收事件的变化来做
+				this.listener = DeviceEventEmitter.addListener('xxxx', () => {
+
+				});
+			*/
+		   
+		    //4 解析有效日期
+		    /*
+				在苹果系统上解析YYYY-MM-DD HH:mm:ss会报错Invalid Date,但在安卓系统上解析这种日期格式完全没问题
+			*/
+				new Date("2019-03-31 21:30:03");//Invalid Date
+			/*
+				查看Safari相关手册发现可用YYYY/MM/DD HH:mm:ss这种日期格式，也就是我们需要使用/来做衔接代替-，
+				并且安卓系统也支持/这种格式。所以我们直接把-替换成/就行了
+			*/
+				var data = "2019-03-31 21:30:03";
+				new Date(data.replace(/\-/g,"/");
+			
+			//5 修复高度塌陷 
+			/*
+				这个出现原因和理由没看懂 但解决方案比较简单 遇见了在看吧
+				当页面同时出现以下三个条件时，键盘占位会把页面高度压缩一部分。当输入完成键盘占位消失后，页面高度有可能回不到
+				原来的高度了，产生塌陷导致webview底色漏脸，简单概括就是就是输入框失焦后页面未回弹。
+				1 页面高度过小
+				2 输入框在页面底部或视窗中下方
+				3 输入框聚焦输入文本
+				
+				只要保持前后滚动条偏移量一致就OK了
+			*/
+				const input = document.getElementById('input');
+				let scrollTop = 0;
+				input.addEventListener('focus',()=>{
+					//input聚焦时记录页面所处高度
+					scrollTop = document.scrollingElement.scrollTop;
+				})
+				input.addEventListener("blur",()=>{
+					//input失焦后 再恢复页面高度
+					document.scrollingElement.scrollTop(0,scrollTop);
+				})
+				
+				
+			//6 修复输入监听 
+			/*
+				这个没见过 感觉没啥用
+				keyup/keyPress/keyup（键盘输入事件 在各种浏览器 还有英文输入法或是中文输入法中的触发规律都不一样需要用时单独再看下）
+				在苹果系统上输入框输入文本，这三个事件可能回无效，当输入框监听keyup事件时，输个输入英文和数字会有效，但逐个输入中文不行，需要回车才有效
+				
+				此时尅用input时间代替这三个事件
+			*/
+		   
+		   
+		    // 7简化回到顶部
+			/* 
+				有一个简便的方法可以一行代码做到回到顶部这个功能
+				scrollIntoView 他会滚动目标元素的父容器使之对用户可见，简单概括就是相对视窗让容器滚动到目标元素的位置
+				它有三个参数能让scrollIntoView滚动起来更优雅
+					behavior:动画过渡效果，默认anto无，可选smooth平滑
+					inline:水平对齐方式，默认nearest就近对齐，可选start顶部对齐、center中间对齐和end底部对齐
+					block:垂直对齐方式，默认start顶部对齐，可选center中间对齐、end底部对齐和nearest就近对齐
+			*/
+		   
+		   //document.body.scrollIntoView({behavior:"smooth",block:"end"}) 去底部
+		   //document.body.scrollIntoView({behavior:"smooth"}) 去顶部
+		   const gotoBtn = document.getElementById('goto-btn');
+		   openBtn.addEventListener('click',()=>{
+				document.body.scrollIntoView({
+					behavior:"smooth",
+					block:"start",//默认就是start
+				})
+		   })
+		   
+		   
+		   // 8简化懒性加载
+		   /*
+				和上述简化回到顶部一样（非简化也需要下面三个配合），编写一个懒加载也同样需要scrollTop、定时器、条件判断三者配置。
+				其实DOM对象里隐藏了一个很好用的函数可以完成上述功能，该函数无需监听容器的scroll时间，通过浏览器自身机制完成滚动监听；
+				该函数就是intersectionObserver，它提供一种异步观察目标元素及其祖先元素或顶级文档视窗交叉状态的方法。
+				（传统办法是 监听到scroll事件后，调用目标元素的getBoundingClientRect()方法，得到它对应视口左上角的坐标
+				  再判断是否在视口之内，这种方式的缺点是犹豫scroll事件密集发生，计算量很大，容易造成性能问题）
+				IntersectionObserver API 可自动观察元素是否可见，由于可见的本质是目标元素与视口产生一个交叉区，所以这个API叫做
+				交叉观察器。
+				
+				懒性加载的第一种使用场景:图片懒加载。只需确认图片进入可视区域加载复制图片，赋值完成还需对图片停止监听
+				<img data-src="pig.jpg" class="lazyload">
+		   */
+			//IntersectionObserver API的用法
+			var ios  = new IntersectionObserver(callback,option);  
+			//两个参数 option 和callback option可以省略
+			//开始观察
+			io.observe(document.getElementsByClassName('lazyload'));
+			//停止观察
+			io.unobserve(element);
+			//关闭观察器
+			io.disconnect();
+			//如果需要观察多个结点 直接调用多次ios.observe()方法就行
+			
+			//callback参数 
+			//当目标元素发生可见性变化时，就会调用callback
+			//callback会触发两次 一次目标元素进入视口，一次离开视口
+			//callback的参数 是一个数组，每个值都是一个被观察的节点，如果数组有两个值说明此时有两个被观察的节点进入了视口或离开了视口
+			
+			
+			//下面写一个图片懒加载
+			//获取全部节点
+			const imgs = document.querySelectorAll('img.lazyload');
+			//初始化观察器
+			const observer = new intersectionObserver(nodes => {
+				//循环全部触发观察期的节点
+				nodes.forEach(v=>{
+					//如果这个节点是进入视口
+					if(v.isIntersecting) {//判断是否进入可视区域
+						//给她赋值图片
+						v.target.src = v.target.dataset.src;//赋值加载图片
+						//然后停止观察这个节点
+						observer.unobserve(v.target);//停止监听已加载的图片
+					}
+				})
+			})
+			//让全部的节点被观察
+			imgs.forEach(v=>observer.observe(v));
+			
+			//下拉加载
+			/*
+				<ul>
+					<li></li>
+				</ul>
+				<div id="liBottom"></div>
+			*/
+			//最后这个div也可以以li的形式放到ul里，这无所谓，只要保证他在最下面
+			//下拉加载，在列表的最底部部署一个占位元素 就是liBottom,
+			//且这个元素没有任何高度或实体外观，只需要确认占位元素进入可视区域就请求接口加载数据
+			const bottom = document.getElementById('liBottom');
+			const observer = new IntersectionObserver(nodes=>{
+				const tgt = nodes[0];//因为我只观察了这一个元素 所以一定是nodes[0]
+				if(tgt.isIntersecting){
+					//这里去做请求渲染等操作
+				}
+			})
+			observer.observe(bottom)
+			
+			
+			//9 优化扫码识别
+			/*
+				这里指的是长按二维码图片识别功能
+				从网易MTL测试数据来看，大部分移动端浏览器只能识别<img>渲染生成的二维码，所以我们不要用<svg>或是<canvas>来渲染
+				二维码，若使用这两种图片也需要转为base64再赋值到<img> src上
+				还有就是一个页面可能存在多个二维码，若长按只能识别最后一个，所以控制一个页面只存在一个二维码
+			*/
+		   
+		   
+		   //10 自动播放媒体
+		   /*
+				常见的媒体元素包括音频<audio>和视频<video>，为了让用户得到更好的媒体播放体验并且不浪费用户流量，大部分移动端浏览器
+				都明确规定不能自动播放或是默认屏蔽autoplay。为了解决这个问题只能声明显式播放
+		   */
+				const audio = document.getElementById("audio");
+				const video = document.getElementById("video");
+				audio.play();
+				video.play();
+			
+			// 对于微信浏览器这种浏览器需要监听其SDK是否加载完成 完成后才能触发该代码
+			document.addEventListener("WeixinJSBridgeReady",()=>{
+				//执行上述代码
+			})
+			
+			//而苹果浏览器明确规定用户交互动作开始时才能出发媒播放，用户如果还没摸屏幕操作前触发会被拦截。所以需要监听用户第一次操作
+			document.body.addEventListener("touchstart",()=>{
+				//执行上述代码
+			},{once:true})
+		</script>
+	</body>
+</html>
