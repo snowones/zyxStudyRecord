@@ -46,6 +46,21 @@
 				<input type='file' accept="video/*">
 				多选文件
 				<input type='file' multiple>  [ˈmʌltɪpl]倍数
+				
+				录像知识点
+					开启录像 accept="video/*"
+					开始前置摄像头 capture="user"
+					开始后置摄像头 capture="environment" 
+					
+					这里还有个坑 就是capture在react中是无效的 他被react给强制清空的 在原生和vue中都不会有这个现象
+					解决方案 强制capture属性值
+					componentDidMount(){
+						document.getElementById('video-input').setAttribute('capture','user');
+					}
+					
+					还有个问题就是内核的兼容性 IOS系统比较遵循HTML5规范 所有 capture="user"都会生效
+					但是安卓系统的webview基本都会忽略capture这个属性
+				
 			
 			2 忽略自动识别
 				有些移动端浏览器会自动将数字字母符号识别为电话和邮箱，并将其自动渲染为上面a标签的效果 
@@ -503,7 +518,7 @@
 				<img data-src="pig.jpg" class="lazyload">
 		   */
 			//IntersectionObserver API的用法
-			var ios  = new IntersectionObserver(callback,option);  
+			var io = new IntersectionObserver(callback,option);  
 			//两个参数 option 和callback option可以省略
 			//开始观察
 			io.observe(document.getElementsByClassName('lazyload'));

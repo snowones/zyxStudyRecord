@@ -237,7 +237,7 @@
 				
 			3 白屏时间
 				用户看到页面展示出现第一个元素的时间。(很多文档直接使用的首字节的时间，实际并不精确，因为头部资源没加载完时，页面也是白屏)
-				domInteractive - fetchStart 
+				fetchStart - domInteractive 
 				
 				domInteractive:完成解析DOM树的时间，document.readyState变为interactive，并抛出readyStateChange相关事件。
 				注意:只是DOM树解析完成，这时候并没有开始加载网页资源
@@ -249,8 +249,8 @@
 				首屏时间指页面第一屏所有资源完整展示的时间。
 				这个指标对于用户是一个非常重要的体验指标，并且由于我们使用的都是vue、react构建的SPA应用，首屏加载时间慢是一个很现实的问题。
 				但是这个指标没有一个标准的监控方式
-				通常我们使用domContentLoadedEventEnd - fetchStart
-				或是说使用loadEventStart - fetchStart
+				通常我们使用fetchStart - domContentLoadedEventEnd
+				或是说使用fetchStart - loadEventStart
 				
 				domContentLoadedEventEnd:DOM解析完成后，网页内资源加载完成时间。
 				loadEventStart:load事件发送给文档，也即load回调函数开始执行的时间。
