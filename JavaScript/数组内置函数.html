@@ -6,6 +6,32 @@
 	</head>
 	<body>
 		<script type="text/javascript">
+			// map()的使用    
+			// map函数定义在javaScript中的Array中，它返回一个新的数组，数组中的元素为原始数组调用函数处理后的值
+			// 注意  map() 不会对空数组进行检测   map()不会改变原始数组 返回的是一个全新的数组
+			
+			//语法 
+			// 
+			let array = [1,2,3]
+			array.map(function(currentValue,index,arr),thisIndex)
+			/*
+				currentValue 必须 当前元素的值
+				index 可选 当前元素的索引
+				arr 可选 当前元素的数组对象
+				
+				thisIndex 可选  对象作为该执行回调时使用，传递给函数，用作this的值
+			*/
+		   // 一道面试题 [1,2,3].map(parseInt)what & why 
+			/*
+				这里parseInt为 map的第一个参数  一个参数会传入 一个currentValue和index
+				也就是 parseInt(1,0) parseInt(2,1) parseInt(3,2)
+				当的第二个参数为0时 且string不以0x 和0开头时默认为10进制 也就是1
+				第二个 最大1进制为1 返回NaN 第三个最大二进制位2 返回NaN
+				也就是 [1,NaN.NaN]
+			*/
+		   
+		</script>
+		<script type="text/javascript">
 			//1 
 			//向数组中添加值
 			//向末尾  push()

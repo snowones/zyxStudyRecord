@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			.scroll-test{
+				height: 3000px;
+				width: 100%;
+				border: 1px solid red;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="scroll-test">
+		</div>
+		<script type="text/javascript">
+			//1 节流防抖
+			function debounce(func,time=500,...data){
+				//传入需要执行的函数以及防抖触发时间
+				let timeout = null;
+				return function(){
+					clearTimeout(timeout);
+					timeout = setTimeout(()=>{
+						func&&func(...data)
+					},time)
+				}
+			}
+			
+			function test(a,b,c){
+				console.log(a);
+				console.log(b);
+				console.log(c);
+			}
+			
+			// window.addEventListener('scroll',debounce(test,1000,1,2,3))
+		
+			function throttle(func,time=500,...data){
+				let canRun = true;
+				return function(){
+					if (!canRun) return
+					canRun = false
+					setTimeout(() => {
+					  func&&func(...data)
+					  canRun = true
+					}, time)
+				}
+			}
+			
+			window.addEventListener('scroll',throttle(test,1000,1,2,3))
+		</script>
+		<script type="text/javascript">
+			//2 介绍下Set Map WeakSet WeakMap有什么区别
+			/*
+				set要求存储的是唯一值 如果是引用类型 则要求引入的地址不能是相同的
+				map 存储是值和值的集合
+				weakSet 要求成员都是引用类型
+				webMap 则要求键名都是引用类型
+			*/
+		</script>
+		<script type="text/javascript">
+			//ES5和ES6的继承处理写法以外还有什么区别
+			/*
+				ES5的继承实际上是先创建子类的实例对象，然后再讲父类的方法添加到this上（parenst.apply(this)）
+				而ES6的继承机制完全不同，实质上是先创建了父类的示例对象this（所以必须先调用父类的super方法），
+				然后再用子类的构造函数修改this
+				
+				ES5的继承通过原型或是构造函数机制来实现
+				ES6通过class关键字定义类，里面有构造方法。类之间通过extends关键字来实现继承
+				
+				子类必须在constructor方法中调用super方法，否则新建示例报错，因为子类没有自己的this对象，
+				而是继承父类的this对象，然后对其进行加工，子类得不到this对象。
+				注意super 关键字指代父类的实例即父类的this对象
+				在子类的构造函数中调用super后，才可使用this关键字否则报错
+			*/
+		</script>
+		
+		<script type="text/javascript">
+			//宏任务微任务
+			/*
+				宏任务包括整体代码script、setTimeout、setInterval
+				微任务包括 Promise.then() procsss.nextTick
+				
+				事件是先执行宏任务在执行微任务，遇见宏任务推到宏任务队列里等待执行，遇见微任务再把微任务推荐队列里等待执行
+				这个是基础，然后任务可以分异步任务和同步任务，同步任务直接执行，异步任务进入EventTable并注册函数，当异步事件
+				完成后会被放入Event Queue中，宏任务和微任务各有一个event Queue，同步任务完成后开始吧event queue放回主进程。
+				宏任务执行完毕 继续执行微任务 也是这个过程，然后去执行下个宏任务全部重复上述内容。
+				
+				主要是async await
+				await会阻塞async内部的同步进程，也就是阻塞await后面的代码，这时会去继续执行async外面的同步代码
+			*/
+		   async function async1() { 
+			   console.log('async1 start') 
+			   await async2() 
+			   console.log('async1 end')
+			}
+			async function async2() {
+				console.log('async2')
+			}
+			console.log('script start')
+			setTimeout(function() {
+				console.log('setTimeout')}
+			, 0) 
+			async1()
+			new Promise(function(resolve) 1) { 
+				console.log('promise1') 
+				resolve()
+			})
+			.then(function() {
+				console.log('promise2')
+			})
+			console.log('script end')
+			
+			// script start
+			// async1 start
+			// async2
+			// promise1
+			// script end
+			// async1 end
+			// promise2
+			// setTimeout
+		</script>
+		<script type="text/javascript">
+			//arr.flat(depth)   数组扁平化 flat 按照指定的深度，将元素和遍历到的子元素合并到一个新数组中返回
+			//depth表示深度 默认为1
+			//我们可以使用arr.flat(Infinity) 表示展开任意深度的嵌套数组
+			//已知如下数arr = [ [1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14] ] ] ], 10];组，编写一个程序将数组扁平化去并除其中重复部分数据，最终得 到一个升序且不重复的数组
+			let arr = [ [1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14] ] ] ], 10];
+			[...new Set(arr.flat(Infinity).sort((a,b)=>{return a - b}))]
+		</script>
+		<script type="text/javascript">
+			//js异步解决方案的发展历程以及优缺点
+			/*
+				1 回调函数 解决了同步的问题 但是程序需要排队 后面的任务需要等待前面的任务，回调地狱
+				2 Promise 解决了回调地狱的问题 无法取消promise 错误需要通过回调函数来捕获
+				3 Generator 可以控制函数执行
+				4 Async/await 代码清晰 但是await如果处理很多没有以来的异步函数 会造成性能上的浪费
+			*/
+		</script>
+		<script type="text/javascript">
+			//http2多路复用
+			/*
+				HTTP2 采用二进制格式传输，取代了HTTP1.x的文本格式，二进制格式解析更高效 这也是多路复用的基础
+				再一条http连接下 可以有多个请求 并且可以交错请求和响应互不干扰
+			*/
+		</script>
+		<script type="text/javascript">
+			//介绍下npm模块的安装机制 为什么输入npminstall就可以自动安装对应的模块
+			/*
+				发出npm install 后插叙node_modules目录中是否已安装了指定模块 
+				如果存在不在安装
+				如果不存在 npm 向 registry查询模块压缩包的地址
+				下载压缩包 存放在根目录下的.npm目录下
+				解压压缩包 到当前项目的node_modules目录里
+			*/
+		</script>
+		<script type="text/javascript">
+			//聊一下Redux和Vuex的设计思想
+			/*
+				无论是Vue还是React，都需要管理状态（state），比如组件之间都有共享状态的需要。什么是共享状态？
+				比如一个组件需要使用另一个组件的状态，或者一个组件需要改变另一个组件的状态，都是共享状态。父子组件
+				之间，兄弟组件之间共享状态，往往需要写很多没有必要的代码，比如把状态提升到父组件中，或者给兄弟组件
+				写一个父组件，实际实行起来这样很麻烦。如果不对状态进行有效的管理，状态在什么时候，由于什么原因，如
+				何变化的就会不受控制，就很难追踪和测试了。
+				在软件开发中有些通用的思想，比如隔离变化，约定优于配置等，隔离变化就是做好抽象，把一些容易变化的地方
+				找到共性，隔离出来，不要去影响其他代码。约定优于配置就是很多东西我们不一定要写一大堆配置，比如我们几
+				个人约定，view文件夹里只能放视图，不能放过滤器，过滤器必须放到filter文件夹里，那这就是一种约定，约
+				定好之后我们就不用写一大堆配置文件了，我们要找到全部的视图就直接从view文件夹里找就行了。
+				根据这些思想，对于状态管理的解决思路就是：把组件之间需要共享的状态抽取出来，遵循特定的约定。统一来管理，
+				让状态的变化可以预测。根据这个思想，产生很多的模式和库。
+			*/
+		</script>
+	</body>
+</html>
