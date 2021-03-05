@@ -102,7 +102,7 @@
 				console.log('setTimeout')}
 			, 0) 
 			async1()
-			new Promise(function(resolve) 1) { 
+			new Promise(function(resolve) { 
 				console.log('promise1') 
 				resolve()
 			})
@@ -169,6 +169,160 @@
 				根据这些思想，对于状态管理的解决思路就是：把组件之间需要共享的状态抽取出来，遵循特定的约定。统一来管理，
 				让状态的变化可以预测。根据这个思想，产生很多的模式和库。
 			*/
+		</script>
+		<script type="text/javascript">
+			// cookie和token都放在header中，为什么不会劫持token
+			/*	1 攻击者通过xss拿到用户的cookie然后就可以伪造cookie了。
+				2 或者通过csrf在同个浏览器下面通过浏览器会自动带上cookie的特性，在通过 用户网站-攻击者网站-攻击者请求用户
+				网站的方式，浏览器会自动带上cookie
+				但是token
+				1 不会被浏览器带上 （解决问题2）
+				2 token是放在jwt里面下发给客户端的 而且不一定储存在哪里 不能通过document.cookie直接拿到，通过jwt+ip的方式，
+				可以防止被劫持，即使劫持也是无效的cookie
+				*/
+		</script>
+		<script type="text/javascript">
+			//练习题
+			// 改造以下代码 使之输出0-9 写出你能想到的所有解法  这里方便控制台看 写0-3
+			for(var i = 0;i<3;i++){
+				setTimeout(()=>{
+					console.log(i);
+				},1000)
+			}
+			
+			for(let i = 0;i<3;i++){
+				setTimeout(()=>{
+					console.log(i)
+				},1000)
+			}
+			
+			for(var i = 0;i<3;i++){
+				((i)=>{
+					setTimeout(()=>{
+						console.log(i);
+					},1000)
+				})(i);
+			}
+		</script>
+		<script type="text/javascript">
+			//下面代码会输出什么
+			// var b = 10;
+			// (function b(){
+			// 	b=20;
+			// 	console.log(b);
+			// })();
+			
+			//答案 f b(){
+			// 	b=20;
+			// 	console.log(b)
+			// }
+			
+			//如果方法里是 var b = 20 输出20
+			//原因 函数声明比变量要高 声明的时候 还没有var b = 10 ,其次函数内是b = 20 获取的是window外层定义的变量
+			//js作用域先找最近的 就是b fn 直接打印了如果是var b = 20 打印的就是20
+			
+			//改造这些代码 使之打印20、10
+			//打印20的方法上面写了
+			
+			//第一种方法
+			var b = 10;
+			(function b(){
+				console.log(window.b);
+			})()
+			
+			//第二种方法
+			var b = 10;
+			(function (){
+				console.log(b);
+			})()
+		</script>
+		
+		<script type="text/javascript">
+			//问什么情况下输出 1
+			// var a = ?;
+			// if(a == 1 && a == 2 && a==3 ){
+			// 		console.log(1);
+			// }
+			var a = { 
+				i: 1, 
+				toString() { 
+					return a.i++; 
+				}
+			}
+			if( a == 1 && a == 2 && a == 3 ) { console.log(1); }
+			let a = [1,2,3]; 
+			a.toString = a.shift;
+			if( a == 1 && a == 2 && a == 3 ) { console.log(1);}
+		</script>
+		<script type="text/javascript">
+			//介绍下bfc及其应用
+			/*
+				BFC 块级格式上下文 是页面盒模型布局中的一种css渲染模式，相当于一个独立容器，里的的元素和外面的元素互不影响
+				创建BFC的方式有
+					html根元素
+					float 浮动
+					绝对定位
+					行内元素 dispaly inline-block 
+					over-flow 部位visiable
+					diaplay 为表格布局或弹性布局
+				主要作用
+					清除浮动
+					防止margin穿透margin重叠
+			*/
+		</script>
+		<script type="text/javascript">
+			//HTTPS 握手过程中，客户端如何验证证书的合法性
+			/*
+				1 校验证书的颁发机构是否受客户端信任。
+				2 通过CRL活OCSP的方式教养证书是否被吊销。
+				3 对比系统时间，校验证书是否在有效期内。
+				4 通过校验对方是否存在证书的私钥，判断证书的网站域名是否与证书颁发域名一致。
+			*/
+		</script>
+		<script type="text/javascript">
+			//call被apply的区别是什么 那个性能更好
+			/*
+				Function.prototype.apply 和 Function.prototype.apply的作用是一样的区别在于传入的参数不同
+				1.第一个参数一样，指定函数体内this指向
+				2.第二个参数开始不同，apply传入的是一个数组或是类数组，apply把他传递给函数作为参数，call传入的参数
+				数量是不固定的，从第二个开始剩下的参数都会传递给函数作为参数
+				3.call比apply的性能要好，平时可以多用call，call传入的参数格式正式内部所需要的格式
+			*/
+		</script>
+		<script type="text/javascript">
+			//为什么通常在发送数据埋点请求的时候使用的是1x1像素的透明gif?
+			/*
+				1 没有跨域问题，一般这种上报数据,代码要求是通用的
+				2 不会阻塞页面加载，影响用户的体验。（只需要new Image对象就行了）
+				3 在所有图片中，体积最小 比较png、jpg
+			*/
+		   /*
+				英语术语来说叫 image beacon
+				主要应用于只需要向服务器发送数据（日志数据）的场合，且无需服务器有消息体回应。比如埋点统计信息
+				一般法做法是服务器用一个1x1的git图片来作为相应，当然这有点浪费服务器资源。因此用header来响应
+				比较合适，目前比较合适的做法是服务器发送
+				204 No Content 即服务器成功处理了 请求，但不需要返回任何实体内容
+				另外该脚本的位置一般放在页面的最后以免阻塞页面渲染，并且一般情况下也不需要append到DOM中。通过
+				他的onerror和onload事件来检测发送状态
+		   */
+		  var thisPage = location.href;
+		  var referringPage = (document.referrer) ? document.referrer : "none";
+		  var beacon = new Image();
+		  beacon.src = "http://www.example.com/logger/beacon.gif?page=" + encodeURI(thisPage)
+		   + "&ref=" + encodeURI(referringPage);
+		</script>
+		<script type="text/javascript">
+			var a = {n: 1}; 
+			var b = a;
+			a.x = a = {n: 2}; 
+			console.log(a.x);
+			console.log(b.x);
+			//两点  1 运算从右到左 也就是先算 a ={n:2} 2 但是.的优先级比=号高 先创建了a.x = undefined
+			//但是 运算 a = { n:2 } 时 a的指向改变 了 a = { n:2 } 
+			//原先的 a.x = {n:2}实际只改变了b.x = {n:2}
+			//也就是undefined {n:2}
+		</script>
+		<script type="text/javascript">
 		</script>
 	</body>
 </html>

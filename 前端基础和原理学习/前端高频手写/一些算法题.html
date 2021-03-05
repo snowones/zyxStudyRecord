@@ -143,5 +143,101 @@
 			console.log(newRandomArr([1,2,3,4,5]));
 			
 		</script>
+		<!-- <script type="text/javascript">
+			//冒泡排序优化
+			function maopao(arr){ 
+				const array = [...arr] 
+				let isOk = true 
+				for(let i = 0, len = array.length; i < len - 1; i++){
+					for(let j = i + 1; j < len; j++) {
+						console.log(j)
+						if (array[i] > array[j]) { 
+							let temp = array[i] 
+							array[i] = array[j] 
+							array[j] = temp 
+							isOk = false 
+						} 
+					}
+					if(isOk){ 
+						Break;
+					} 
+				}
+				return array
+			}
+		</script> -->
+		<script type="text/javascript">
+			//箭头函数和普通函数的区别是什么？构造函数可以用new生成实力，那么箭头函数可以吗？
+			/*
+				箭头函数和普通函数的区别
+				1 函数体内的this指向定义时所在的对象，而不是使用时所在的对象
+				2 不可以使用arguments对象，该对象在函数体内不存在。如果要用，可以使用rest函数代替。
+				3 不可以使用yield命名，因为箭头函数不能作为Generator函数。可以为async
+				4 不可以使用new命令
+					因为  
+					1 没有自己的this，无法调用call、apply
+					2 没有prototype属性，而new命令再执行时需要将构造函数的prototype赋值给对象的__proto__属性
+			*/
+		   //简单写一个newArr
+		   function newFn(father,...rest){
+			   var result = {};
+			   result.__proto__  = father.prototype;
+			   var result2 = father.apply(result,rest);
+			   if(typeof result2 === 'object' || typeof result2 === 'function' && result2 !== null){
+				   return result2
+			   }
+			   return result;
+		   }
+		</script>
+		<script type="text/javascript">
+			//数组求交集
+			let arr1 = [1,2,3,5,6];
+			let arr2 = [1,2,2,1];
+			
+			// 讲解下这个方法 array.filter() 这个方法会返回一个新的数组而不会改变原数组
+			//array.filter((value,index,arr)=>{
+			//  this.value基本不用 ，arr指这个数组  这个方法只能返回true或是false 返回true把对应的value返回到新的数组里	
+			// },thisValue)
+			
+			arr1.filter((value,index,arr)=>{
+				return arr2.includes(value)
+			})
+		</script>
+		<script type="text/javascript">
+			//<img src="1.jpg" style="width:480px!important;”> 如何修改图片样式让宽度为300px
+			//max-width:300px transform:scale(0.625,0.625)
+		</script>
+		<script type="text/javascript">
+			// a.b.c.d 和a['b']['c']['d']哪个性能好  第一个 因为第二个还需要考虑括号里是变量的情况，显然第一个更容易解析
+		</script>
+		<script type="text/javascript">
+			//ES6 转 ES5
+			//1 解析代码字符串 转为AST
+			//2 修改AST
+			//3  转回去
+		</script>
+		<script type="text/javascript">
+			//数组里面有10w个数据 取第一个和取第十万元素时间相差多少
+			//没有区别 都是通过索引查找O(1)
+		</script>
+		<script type="text/javascript">
+			//对象的键名只能是 字符串或是symbol类型 a[123] 123会转为字符串
+		</script>
+		<script type="text/javascript">
+			//HTTPS中间人攻击
+			/*
+				1 服务器向客户端发送公钥
+				2 攻击者截获公钥
+				3 然后攻击者自己生成一个伪造的公钥，发给客户端
+				4 客户端收到伪造的公钥后，生成加密的hash值发给服务器
+				5 攻击者获得加密的hash值，用自己的私钥解密获得真秘钥
+				6 同时生成假的加密hash，发给服务器
+				7 服务器用私钥解密获得假秘钥
+				8 服务用加秘钥加密传输信息
+				防范方法
+				服务端在发送浏览器的公钥中加入ca证书，浏览器可以验证ca证书的有效性
+			*/
+		</script>
+		
+		
 	</body>
 </html>
