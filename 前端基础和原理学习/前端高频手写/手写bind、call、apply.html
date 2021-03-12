@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		
+		<script type="text/javascript">
+			Function.prototype.call = funciton(context){
+				const env = context || window;//不传默认为window
+				env.func = this;
+				const args = Array.from(Arguments).slice(1);
+				const res = enc.func(...args);
+				delete env.func;
+				return res;
+			}
+		</script>
+	</body>
+</html>

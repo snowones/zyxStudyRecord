@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			高阶组件HOC(Higher Order Component)
+			高阶组件就是一个React组件包裹着另一个React组件
+			这种模式通常使用函数来实现 ，基本上是一个类工厂,它的函数签名可以用类似haskell的伪代码表示
+			hocFactory::W:React.Component => E:React.Component
+			W 被包裹的React组件
+			E 返回的React组件 指新的高阶组件
+			
+			Props Proxy(PP)的最简单实现
+			function ppHOC(WComponent){
+				return class PP extends React.Component {
+					render(){
+						return <WComponent {...this.props}>
+					}
+				}
+			}
+			
+			
+			我们在高阶函数中返回一个Wcompoennt类型的React组件，并且将高阶函数额props传递给了返回的组件，所以叫Props Proxy
+			
+			重点 使用Props Proxy可以做什么
+			1 操作props(你可以读取、添加、编辑、删除 传给WarppedComponent的props)
+			2 通过Refs访问到组件实例
+			3 提取state
+			4 用其他元素包裹传入的组件
+			
+		-->
+	</body>
+</html>

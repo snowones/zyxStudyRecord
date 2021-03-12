@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			贪心算法，是寻找最优解问题的常用算法，这种方法模式一般将求解的过程分为若干个步骤，但每个步骤都应用贪心原则，选取
+			当前状态下最好、最优的选择，并以此希望最后堆叠出的结果也是最好最优的选择。
+			步骤1 从某个初始解出发
+			步骤2 采用迭代的过程，当可以向目标前进一步时，就根据局部最优策略，得到一部分解，缩小问题规模
+			步骤3 将所有解综合起来
+		-->
+		<script type="text/javascript">
+			//找零钱问题 有25、10、5、1四种硬币 需要找给用户41 如何安排才能保证给用户的钱币数量最少
+			//俺上面的步骤 首先数量最少就应该用最大面值的硬币
+			//第一轮 25  41>25  41-25 =16
+			//第二轮 25 >16 10<16 所以用10  16-10 = 6
+			//第三轮 用5<6 所以用5 然后用1 
+			
+			function getNumber(money){
+				let allMoney = money;//剩余的钱
+				let arrMoney = [25,10,5,1];
+				let result = [];
+				for(let i = 0;i < 4;i++){
+					while(allMoney > arrMoney[i]){
+						result.push(arrMoney[i]);
+						allMoney = allMoney - arrMoney[i];
+						console.log(allMoney);
+					}
+					if(allMoney == arrMoney[i]){
+						result.push(arrMoney[i]);
+						return result;
+					}
+				}
+				return false;
+			}
+			 let a = getNumber(41);
+			 console.log(a);
+			
+		</script>
+		<script type="text/javascript">
+			//背包价值最大问题
+			//有一个背包最多能承载重量为C=150物品，现在有7个物品，编号为1~7，重量分别为wi=[35,30,60,50,40,10,25],
+			//价值分别为[10,40,30,50,35,40,30] 现在从7个物品中选择一个或是多个装入背包，总重量不能超过C，且价值最高。
+			
+			//贪心算法 三种策略
+			//1 价值主导 每次都选最贵的
+			//2 重量主导 每次都选最轻的
+			//3 价值密度主要 每次选选价值除以重量最大的
+			
+			//这个题选择贪心算法得到的不一样的最正确的答案
+		</script>
+		
+		
+	</body>
+</html>
