@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			//输入一棵二叉树和一个整数，打印出二叉树中节点值的和为输入整数的所有路径。从树的根节点开始往下一直到叶节点所经过的节点形成一条路径。
+			function pathsum(root,sum){
+				if(root == null ) return [];
+				let res = [];
+				const DFS = (root,sum,tmp)=>{
+					if(root.val === sum && !root.left &&!root.right){
+						res.push(tmp)
+					}
+					tmp.push(root.val);
+					if(root.left){
+						DFS(root.left ,sum -root.val,tmp.slice())
+					}
+					if(root.right){
+						DFS(root.right,sum-root.val,tmp.slice)
+					}
+				}
+				DFS(root,sum,[]);
+				return res;
+			}
+			
+			//寻找二叉树深度
+			function findDep(root){
+				if(!root){
+					return 0;
+				}
+				let max = 0;
+				let find = (node,dep){
+					if(!node){
+						return;
+					}
+					max = Math.max(max,dep+1);
+					if(node.left){
+						find(node.left,dep+1);
+					}
+					if(node.right){
+						find(node.right,dep+1);
+					}
+				}
+				find(root,0)
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			var isValidSudoku = function (board) {
+			  for (let i = 0; i < 9; i++) {
+			    for (let j = 0; j < 9; j++) {
+			      let item = board[i][j];
+			      if (item !== '.') {
+			        for (let k = 0; k < 9; k++) {
+			          if (item === board[i][k] && k !== j) {
+			            return false;
+			          }
+			        }
+			        for (let k = 0; k < 9; k++) {
+			          if (item === board[k][j] && k !== i) {
+			            return false;
+			          }
+			        }
+			        let xIndex = parseInt(i / 3) * 3;
+			        let yIndex = parseInt(j / 3) * 3;
+			        for (let x = xIndex; x < xIndex + 3; x++) {
+			          for (let y = yIndex; y < yIndex + 3; y++) {
+			            if (item === board[x][y] && x !== i && y !== j) {
+			              return false;
+			            }
+			          }
+			        }
+			      }
+			    }
+			  }
+			  return true;
+			};
+			
+		</script>
+	</body>
+</html>

@@ -77,6 +77,16 @@
 			   }
 		   }
 
+			//爬楼梯问题
+			//每次只能爬1或两个台阶
+			function getall(n){
+				if(n ==1 || n== 2){
+					return n;
+				}
+				return getall(n-1) + getall(n-2)
+			}
+			
+			
 
 		</script>
 	</body>
