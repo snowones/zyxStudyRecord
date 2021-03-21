@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			var treeToDoublyList = function(root) {
+			    if (!root) {
+			        return;
+			    }
+			    let head = null;
+			    let pre = head;
+			    inorder(root);
+			    // 完成中序遍历后，pre指向了最后一个节点
+			    // 将其闭合成环状结构
+			    head.left = pre;
+			    pre.right = head;
+			    return head;
+			
+			    /**
+			     * @param {Node} node
+			     */
+			    function inorder(node) {
+			        if (!node) return;
+			        // 遍历左子树
+			        inorder(node.left, pre);
+			
+			        // 处理当前节点
+			        if (!pre) {
+			            // 遍历到最左边节点，此时节点就是双向链表的head
+			            head = node;
+			        } else {
+			            pre.right = node;
+			        }
+			        node.left = pre;
+			        pre = node;
+			
+			        // 遍历右子树
+			        inorder(node.right, pre);
+			    }
+			}
+			
+		function node(value){
+			this.value = value;
+			this.left =null;
+			this.right = null;
+		}
+		
+		let node1 = new node(4);
+		let node2 = new node(2);
+		let node3 = new node(5);
+		let node4 = new node(1);
+		let node5 = new node(3);
+		
+		node1.left = node2;
+		node1.right = node3;
+		node2.left = node4;
+		node2.right = node5;
+			
+		
+		treeToDoublyList(node1);
+		</script>
+	</body>
+</html>
