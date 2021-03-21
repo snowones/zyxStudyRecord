@@ -46,6 +46,56 @@
 				}
 				find(root,0)
 			}
+			//1 层次遍历
+			function traversal(root){
+				let res = [];
+				if(root = null){
+					return res;
+				}
+				
+				let traversalArr = [];
+				traversalArr.push(root);
+				
+				while(traversalArr.length !== 0){
+					const currentSize = traversalArr.length;
+					let root =  traversalArr.shift();
+					res.push(root);
+					if(root.left){
+						traversalArr.push(root.left)
+					}
+					if(root.right){
+						traversalArr.push(root.right)
+					}
+					
+				}
+				
+			}
+			
+			//2  树的前序遍历
+			let list = []
+			function preTraveral(root){
+				if(root !== null){
+					list.push(root);
+					if(root.left !== null){
+						preTraveral(root.left )
+					}
+					if(root.right !== null){
+						preTraveral(root.right )
+					}
+				}
+			}
+			
+			//3  中序遍历
+			
+			funciton middleTraversal(){
+				
+			}
+			
+			//后续遍历
+			function afterTraversal(){
+				
+			}
+			
 		</script>
 	</body>
 </html>

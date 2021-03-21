@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			//1 判断指针有环
+			// 通过快慢指针的方式
+			function judge(list){
+				if(list.next == null || list.next.next == null){
+					return false
+				}
+				let fast = list.next.next;
+				let slow = list.next;
+				
+				while(fast){
+					if(fast === slow){
+						return true
+					}
+					fast = fast.next;
+					slow = slow.next;
+				}
+			}
+			
+			class Node{
+				constructor() {
+				    this.data = data;
+					this.next = null;
+				}
+			}
+			
+			//2 链表合并
+			function listContact(l1,l2){
+				let head = new Node('head');
+				let result = head;
+				while(l1&&l2){
+					if(l1.val < l2.val){
+						head.next = l1;
+						l1 = l1.next;
+					}else{
+						head.next = l2;
+						l2=l2.next;
+					}
+					head = head.next;
+				}
+				if(l1){
+					head.next = l1;
+				}
+				if(l2){
+					head.next = l2;
+				}
+				return result.next;
+			}
+		</script>
+	</body>
+</html>
