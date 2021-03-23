@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			//二叉树s形输出
+			function traversal(root){
+				let res = [];
+				let type = 1;//1正序输出 0倒叙输出
+				if(root = null){
+					return res;
+				}
+				
+				let traversalArr = [];
+				traversalArr.push(root);
+				
+				while(traversalArr.length !== 0){
+					let arr = traversalArr.slice();
+					if(type ==1){
+						type = 0;
+						arr.map((data)=>{
+							console.log(data);
+						})
+					}else if(type == 0){
+						type =1 ;
+						arr = arr.reverse();
+						arr.map((data)=>{
+							console.log(data);
+						})
+					}
+					const currentSize = traversalArr.length;
+					for(let i =0;i<traversalArr.length;i++){
+						let node =  traversalArr.shift();
+						if(node.left){
+							traversalArr.push(node.left)
+						}
+						if(node.right){
+							traversalArr.push(node.right)
+						}
+					}
+				}
+			}
+		</script>
+	</body>
+</html>
