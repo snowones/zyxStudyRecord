@@ -6,38 +6,127 @@
 	</head>
 	<body>
 		<script type="text/javascript">
+			window.onload = function() {
+				console.log('执行'); //执行会在sum 输出完毕 也就是js是会堵塞window.onload的触发的
+			}
+			//这种也是 如果js中添加图片、css等资源 window.onload会等待资源加载完成后执行
+			// document.body.innerHTML = '<img src="a.png"> .... <img src="z.png">';
+			
+			let sum = 0;
+			for (let i = 0; i < 100000000; i++) {
+			    sum = sum + i;
+			}
+			console.log(sum);
+			
+			//setTimeout不会堵塞onload执行
+			setTimeout(()=>{
+				console.log(111)
+			},2000)
+			
+			//ajax会影响
+			
+			//onload和客户端方法的对应
+			/*
+				IOS中判断webview加载完成的是 webViewDidFinishLoad Android中判断webview加载完成的
+				onPageFinished方法本质触发时机上都对应window.onload,一般来说会稍晚于window.onload
+				（某些特殊情况会早于window.onload，比如页面里有iframe等情况）。
+				也就是说对onload有影响的因素也同样会影响这些Native方法。而在Hybrid开发中，一些Native和
+				Web之间的交互和调用往往需要再webViewDidFinishLoad、onPageFinished之后。因此如果onload
+				的触发被推迟了，那么这些Native相关的调用也都会被推迟。
+			*/
+			
 			//1window.onload和DocumentContentLoaded
 			/*
-				DocumentContentLoaded 在dom树加载完之后立即触发，dom树加载完成之后，继续加载图片等外部结构，
-				加载完成之后 window.onload事件触发
+				//http://eux.baidu.com/blog/fe/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3window.onload
+				window.onload触发时机 
+				结论：JS加载完并执行完毕页面中所有外链资源加载完成大概3-4ms(这个值和机型浏览器有关)
+				DocumentContentLoaded 在dom树加载完之后立即触发，dom树加载完成之后，继续加载图片等外部结构。
+				官方上说就是 当初始HTML文档被完全加载和解析完成之后，DOMContentLoaded事件被触发，而无需等待样式表
+				、图像和子框架完全加载。
+				
+				
 			*/
 		   
 		   //2 git rebase 和 merge 有什么区别?
+				/*
+					https://zhuanlan.zhihu.com/p/75499871
+					https://www.zhihu.com/question/36509119/answer/131513261
+					
+					首先推荐使用rebase 这样主分支的代码更清晰 避免混乱
+					比如主分支Master A-B-C-D
+					我的分支 A-E-F 
+					这时我git rebase  其实是线板B-C-D拉了过来
+					也就是我的分支变为A-B—C-D—E-F结果完冲突 直接合并主分支就好了
+					
+					然后git merge 是直接把我的代码加到主分支里面 然后解决冲突
+					比如主分支Master A-B-C-D
+					我的分支 A-E-F 
+					合并生成G 然后解决冲突到H  强制给主分支增加了一次交汇 实际上是不需要的
+					A-B-C-D-G-H
+					
+					总的来说就是rebase合并时 会先拉代码 把自己的rebase顶到最前面
+					
+					
+					其他常用的 git reset  git stash  git log
+				*/
+		   
 		   
 		   //3 数组的reduce方法和filter方法
 		   
-		   
-		   // 讲解下这个方法 array.filter() 这个方法会返回一个新的数组而不会改变原数组
-		   //array.filter((value,index,arr)=>{
-		   //  this.value基本不用 ，arr指这个数组  这个方法只能返回true或是false 返回true把对应的value返回到新的数组里	
-		   // },thisValue)
-		   //数组求交集
-		   let arr1 = [1,2,3,5,6];
-		   let arr2 = [1,2,2,1];
-		   arr1.filter((value,index,arr)=>{
-		   	return arr2.includes(value)
-		   })
-		   
-		   //arr.reduce()方法 两个参数 callback,[initiaValue]  
-		   //callback四个参数
-		   //1 previousValue  上一次调用回调返回的值 或是第二个参数提供的初始值
-		   //2 currentValue 数组中当前被处理的元素
-		   //3 index 当前元素在数组中的索引
-		   //4 array 调用reduce的数组
-		   //initiavalue作为第一次调用时 callback 的第一个参数
-				
-				
+
+			// 讲解下这个方法 array.filter() 这个方法会返回一个新的数组而不会改变原数组
+			//array.filter((value,index,arr)=>{
+			//  this.value基本不用 ，arr指这个数组  这个方法只能返回true或是false 返回true把对应的value返回到新的数组里	
+			// },thisValue)
+			//数组求交集
+			let arr1 = [1,2,3,5,6];
+			let arr2 = [1,2,2,1];
+			arr1.filter((value,index,arr)=>{
+				return arr2.includes(value)
+			})
+	
+			//arr.reduce()方法 两个参数 callback,[initiaValue]  
+			//callback四个参数
+			//1 previousValue  上一次调用回调返回的值 或是第二个参数提供的初始值
+			//2 currentValue 数组中当前被处理的元素
+			//3 index 当前元素在数组中的索引
+			//4 array 调用reduce的数组
+			//initiavalue作为第一次调用时 callback 的第一个参数
+
+			console.log(arr1);
+			console.log(arr2);
+			// 注意当我们不传initiaValue 遍历会从第二个下标开始 第一个下标直接作为pre  
+			//也就是第一次循环的值是 pre= 1 data = 2 index =1 
+			let reduce1 =  arr1.reduce((pre,data,index,arr)=>{
+				console.log(pre);
+				console.log(data);
+				// console.log(index);
+				return data 
+			})
+			//当传入initiaValue时  就会从第一个值开始循环 pre = 初始化传入参数 data = 1 index =0
+			let reduce2 =  arr2.reduce((pre,data,index,arr)=>{
+				// console.log(pre);
+				// console.log(data);
+				// console.log(index);
+				return data + pre
+			},0)
 			
+			//reduce() 回调的返回值
+			//从第一个分析 其实每次循环return 返回出来的值就是下次循环的pre 
+			//当我们没有return时 每次pre 就等于undefined 第一个循环的pre 等于init 或是数组的第一个值
+			// 最后整个reduce() 的返回值不是一个数组 是最后一次循环返回的值
+			
+			console.log(reduce1)
+			console.log(reduce2)
+			
+			//通过reduce去重
+			let newReduceArr = arr1.reduce((pre,cur,index)=>{
+				if(!pre.includes(cur)){
+					return pre.concat(cur)
+				}else{
+					return pre
+				}
+			},[])
 		</script>
 	</body>
 </html>

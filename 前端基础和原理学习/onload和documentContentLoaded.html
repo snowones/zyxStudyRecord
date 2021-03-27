@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			//onload
+			//http://eux.baidu.com/blog/fe/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3window.onload
+			// 结论：JS加载完并执行完毕页面中所有外链资源加载完成大概3-4ms(这个值和机型浏览器有关)
+			
+			
+				window.onload = function() {
+					console.log('执行'); //执行会在sum 输出完毕 也就是js是会堵塞window.onload的触发的
+				}
+				
+				//第一种情况 js的执行  结论  需要等待js执行完毕后才会执行onload 堵塞
+				let sum = 0;
+				for (let i = 0; i < 100000000; i++) {
+					sum = sum + i;
+				}
+				console.log(sum);
+				
+				//setTimeout 结论 不会堵塞onload执行
+				setTimeout(()=>{
+					console.log(111)
+				},2000)
+				
+				//第三种js中动态添加css、img等资源 结论 会堵塞 需要等待这些资源全部下载完毕
+				// document.body.innerHTML = '<img src="a.png"> .... <img src="z.png">';
+				
+				//第四种ajax 结论会堵塞 需要等待ajax执行完毕
+				
+				//onload和客户端方法的对应
+				/*
+					IOS中判断webview加载完成的是 webViewDidFinishLoad Android中判断webview加载完成的
+					onPageFinished方法本质触发时机上都对应window.onload,一般来说会稍晚于window.onload
+					（某些特殊情况会早于window.onload，比如页面里有iframe等情况）。
+					也就是说对onload有影响的因素也同样会影响这些Native方法。而在Hybrid开发中，一些Native和
+					Web之间的交互和调用往往需要再webViewDidFinishLoad、onPageFinished之后。因此如果onload
+					的触发被推迟了，那么这些Native相关的调用也都会被推迟。
+				*/
+			
+		</script>
+		<script type="text/javascript">
+			//DOMContentLoaded 
+			
+			//结论 在初始文档下载解析好的时候触发，不用等待图片、样式表、iframe加载完成
+			
+			document.addEventListener('DOMContentLoaded', function() {
+				// ...dosomeing
+			}, false);
+		</script>
+	</body>
+</html>
