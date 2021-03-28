@@ -60,7 +60,79 @@
 		node2.right = node5;
 			
 		
-		treeToDoublyList(node1);
+		// treeToDoublyList(node1);
+
+		//寻找二叉树是否包含某两个节点
+		
+		// var lowestCommonAncestor = function(root, p, q) {
+		//     let ans;
+		//     const dfs = (root, p, q) => {
+		//         if (root === null) return false;
+		//         const lson = dfs(root.left, p, q);
+		//         const rson = dfs(root.right, p, q);
+		//         if ((lson && rson) || ((root.val === p.val || root.val === q.val) && (lson || rson))) {
+		//             ans = root;
+		//         } 
+		//         return lson || rson || (root.val === p.val || root.val === q.val);
+		//     }
+		//     dfs(root, p, q);
+		//     return ans;
+		// };
+	
+	
+	// var kthLargest = function(root, k) {
+	//     let nodeList = [];
+	//     function middleTreval(node){
+	//         if(node == null){
+	//             return false
+	//         }
+	//         middleTreval(node.left);
+	//         nodeList.push(node);
+	//         middleTreval(node.right);
+	//     }
+	//     middleTreval(root);
+	// 	console.log(nodeList.length);
+	// 	console.log(nodeList.length - k)
+	//     return nodeList[nodeList.length - k -1]
+	// };
+	
+	// console.log(kthLargest(node1,2)) 
+	
+	
+	var pathSum = function(root, target) {
+	    let result = [];
+	
+	    function getPath(root,temp=[]){
+			temp = JSON.parse(JSON.stringify(temp));
+	        if(root.left == null || root.right == null){
+				temp.push(root);
+				console.log(temp)
+	            let sum = 0;
+	            temp.map((data)=>{
+	                sum = sum +data;
+	            })
+	            if(sum == target ){
+	                result.push(temp);
+	            }
+	            return false;
+	        }
+	        temp.push(root);
+			if(root.left){
+				getPath(root.left,temp);
+			}
+			if(root.right){
+				getPath(root.right,temp);
+			}
+	        
+	    }
+	
+	    getPath(root,[])
+	
+	    return result;
+	};
+	
+	pathSum(node1,6)
+
 		</script>
 	</body>
 </html>
