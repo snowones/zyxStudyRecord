@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			//接收四个参数 acc累计器 cur当前值 idx当前索引 src数据源
+			let test = [1,2,3,4].reduce((acc,cur,idx) => {
+				console.log('acc:' + acc);
+				console.log('cur:' + cur);
+				console.log('idx' + idx);
+				console.log('===========')
+				return acc + cur;
+			},0)
+			console.log(test);
+			
+		</script>
+	</body>
+</html>

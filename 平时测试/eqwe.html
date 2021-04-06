@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			.test{
+				height: 200px;
+				width: 200px;
+				border: 1px solid red;
+				background-color: #0000FF!important;
+			}
+		</style>
+	</head>
+	<div class="test" style="background-color: aqua;">
+		
+	</div>
+	<body>
+		<script type="text/javascript">
+			let keyGroup = {
+				key1:Symbol('我是第一个key'),
+				key2:Symbol('我是第二个key'),
+			}
+			
+			console.log(keyGroup);
+			
+			
+			let test = Symbol('123');
+			const person = {
+			    [test]: 123,
+			}
+			console.log(person[test]);
+			console.log(person);
+		</script>
+	</body>
+</html>

@@ -158,3 +158,127 @@ console.log(a);//123
 
 //并不是全部库都可以使用typeScript
 //比如 jquery 这时我们可以 declare var $: any
+
+//@types
+//@types帮助我们声明好我们依赖的库的类型声明  这个东西平时就比较常见
+//平时我们安装各种包的依赖的 node_modules里会有一个@types文件 里面有 react、react-dom、bable-core等等各种声明文件
+//具体打开react 下的global.d.ts文件看看
+
+//一般我们定义对JavaScript各种环境变量的声明 都在 lib.d.ts文件里
+
+interface HTMLHeadElement extends HTMLElement { }
+interface HTMLHRElement extends HTMLElement { }
+interface HTMLHtmlElement extends HTMLElement { }
+interface HTMLIFrameElement extends HTMLElement { }
+interface HTMLImageElement extends HTMLElement { }
+interface HTMLInputElement extends HTMLElement { }
+interface HTMLModElement extends HTMLElement { }
+interface HTMLLabelElement extends HTMLElement { }
+interface HTMLLegendElement extends HTMLElement { }
+interface HTMLLIElement extends HTMLElement { }
+interface HTMLLinkElement extends HTMLElement { }
+
+//extend继承 implement实现
+
+//省略。。 等于其实已经帮我们声明好了很多react专有的类型 我们如果写ts直接拿来用就行
+
+//interface 接口重复声明会合并 并且声明提前
+interface Point {
+	x:number,
+	y:number
+}
+
+//比如再这里 我们就可以声明z 并且 必须声明z 否则会报错
+const a:Point = {
+	x:1,
+	y:2,
+	z:'zyx'
+}
+console.log(a)
+
+interface Point {
+	z:string,
+}
+
+//类实现接口
+class MyPoint implements Point{
+	x:number;
+	y:number;
+	z:string;
+}
+
+//因为interface的可扩展性 如果下面任何地方继续声明interface 都可能导致上面的代码报错
+//定于constructor内的变量
+
+interface Crazy{
+	new(props:Point):{
+		hello:number
+	}
+}
+
+class CrazyClass implements Crazy extends MyPoint{
+	constructor(props){
+		return{ hello:123 }
+	}
+}
+
+
+//枚举 enum
+// 有数字枚举 字符串枚举 常见枚举
+//比如
+enum Color {
+	a = 2,
+	b,//3
+	c//4
+}
+
+//但是常用的一般都是定义一些常量
+//比如 这种
+enum ReducerType{
+	GET_DATA:'get_data',
+	CHANGE_DATA:'change_data'
+}
+
+//java和oc我看还有给类方法传入变量 限制只能传入某些值 用枚举  但是js好像不用这么做 
+
+
+//函数 函数的返回值不一定需要定义类型 ts是可以通过编译推断的
+//比如
+function foo(sample:{a:string}){
+	return sample; //会直接被推断为{a:string}
+}
+
+//没有返回值时我们一般标准为:void,通常情况下我们可以删除void 让ts自己推导
+
+//函数重载 这里没看出来多写的这几个有什么用处
+
+function padding(all:number);
+function padding(topAddBottom:number,leftAndRight:number);
+function padding(top:number,right:number,bottom:number,left:number);
+function padding(a:number,b?:number,c?:number,d?:number){
+	
+}
+
+interface ReturnString {
+	():string;
+}
+
+declare const foo:ReturnString;
+const bar = foo();//bar被推断为一个字符串
+
+
+
+//不明白为啥定义四个函数 不是只定义最后一个
+
+//在没有提供函数实现的情况下，有两种声明函数类型的方式
+type LongHand = {
+	(a:number):number
+};
+
+type ShortHand = (a:number)=>number
+
+//上述两个例子完全相同，但是，当你想使用函数重载时，只能使用第一种方式。
+type LongHandAllowsOverLoadDeclarations = {
+	(a:number):number;
+	(a:string):string;
+}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<style>
+		.name1{
+			width:100px;
+			height:100px;
+			border:1px solid red;
+		}
+		.name2{
+			width:200px;
+			height:200px;
+			border:1px solid red;
+		}
+		.test3{
+			color:blue!important;
+		}
+	</style>
+	<body>
+		<div id='test' class="name1 name2">
+			<ul class="test2">
+				<li class="test3">1</li>
+				<li class="test3">2</li>
+				<li class="test3">3</li>
+				<li class="test3">4</li>
+			</ul>
+		</div>
+		<script type="text/javascript">
+			console.log(document.getElementsByClassName('test2')[0]);
+			console.log(document.getElementById('test'));
+			document.getElementsByClassName('test2')[0].addEventListener("click",function(e){
+				e.target.setAttribute("style","color:red!important");
+			},false);
+		</script>
+	</body>
+</html>
